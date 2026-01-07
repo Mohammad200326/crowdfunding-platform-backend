@@ -14,6 +14,7 @@ The project focuses on real-world crowdfunding workflows such as campaign creati
 
 - Osama Ibrahim Zuraid
 - Abdelqader Anwar Safi
+- Omar Nazih Qalalwa
 - Mohammad Iyad Al Khudary
 
 ---
