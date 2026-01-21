@@ -1,4 +1,4 @@
-import { redis } from '../lib/redis';
+import { redis } from '../../lib/redis';
 import { generateOtp, hashOtp } from './util/otp.util';
 
 export class OtpService {

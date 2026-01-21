@@ -3,6 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import path from 'path';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './modules/auth/auth.module';
+import { DatabaseModule } from './modules/database/database.module';
+import { FileModule } from './modules/file/file.module';
+import { DonorModule } from './modules/donor/donor.module';
+import { CampaignCreatorModule } from './modules/campaign-creator/campaign-creator.module';
 
 const envFilePath = path.join(
   __dirname,
@@ -15,6 +20,11 @@ const envFilePath = path.join(
       isGlobal: true,
       envFilePath,
     }),
+    AuthModule,
+    DatabaseModule,
+    FileModule,
+    DonorModule,
+    CampaignCreatorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
