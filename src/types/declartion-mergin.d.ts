@@ -4,9 +4,19 @@ export type EnvVariables = {
   DATABASE_URL: string;
   REDIS_URL: string;
   OTP_SECRET: string;
+  IMAGEKIT_SECRET_KEY: string;
 };
 
 declare global {
+  namespace Express {
+    namespace Multer {
+      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      interface File extends ImageKit.Files.FileUploadResponse {}
+    }
+    // interface Request {
+    //   user?: UserResponseDTO['user'];
+    // }
+  }
   namespace NodeJS {
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface ProcessEnv extends EnvVariables {}
