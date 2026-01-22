@@ -8,6 +8,7 @@ import { DatabaseModule } from './modules/database/database.module';
 import { FileModule } from './modules/file/file.module';
 import { DonorModule } from './modules/donor/donor.module';
 import { CampaignCreatorModule } from './modules/campaign-creator/campaign-creator.module';
+import { UserModule } from './modules/user/user.module';
 
 const envFilePath = path.join(
   __dirname,
@@ -25,6 +26,7 @@ const envFilePath = path.join(
     FileModule,
     DonorModule,
     CampaignCreatorModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
