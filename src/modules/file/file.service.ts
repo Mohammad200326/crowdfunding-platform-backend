@@ -3,8 +3,8 @@ import { imageKitToken } from './imagekit.provider';
 import ImageKit, { toFile } from '@imagekit/nodejs';
 import { StorageEngine } from 'multer';
 import { TransactionClient } from 'src/types/util.types';
-import { Prisma } from '@prisma/client/extension';
 import { SideEffectQueue } from 'src/utils/side-effects';
+import { Prisma } from 'generated/prisma';
 
 @Injectable()
 export class FileService {
@@ -42,12 +42,12 @@ export class FileService {
   createFileAssetData(
     file: Express.Multer.File,
     userId: number | bigint,
-  ): Prisma.AssetUncheckedCreateInput {
+  ): Prisma.AssetCreateInput {
     return {
       fileId: file.fileId!,
       fileSizeInKB: Math.floor(file.size / 1024),
       url: file.url!,
-      ownerId: userId,
+      ownerId: Number(userId),
       fileType: file.mimetype,
     };
   }

@@ -11,7 +11,10 @@ declare global {
   namespace Express {
     namespace Multer {
       // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-      interface File extends ImageKit.Files.FileUploadResponse {}
+      interface File extends ImageKit.Files.FileUploadResponse {
+        fileId?: string;
+        url?: string;
+      }
     }
     // interface Request {
     //   user?: UserResponseDTO['user'];
