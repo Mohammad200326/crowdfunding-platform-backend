@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client/extension';
+import { PrismaClient } from 'generated/prisma/client';
 import {
   PaginationQueryType,
   PaginationResponseMeta,
@@ -7,9 +7,6 @@ import {
 
 @Injectable()
 export class DatabaseService extends PrismaClient implements OnModuleInit {
-  constructor() {
-    super({ log: ['query', 'info', 'warn', 'error'] });
-  }
   async onModuleInit() {
     await this.$connect();
   }
