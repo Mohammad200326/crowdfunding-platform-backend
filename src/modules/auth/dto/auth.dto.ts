@@ -1,6 +1,10 @@
-import { IsEmail } from 'class-validator';
+import { z } from 'zod';
+import {
+  ForgotPasswordSchema,
+  ResetPasswordSchema,
+  VerifyOtpSchema,
+} from '../types/password-reset.schema';
 
-export class ForgotPasswordDto {
-  @IsEmail()
-  email: string;
-}
+export type ForgotPasswordDTO = z.infer<typeof ForgotPasswordSchema>;
+export type VerifyOtpDTO = z.infer<typeof VerifyOtpSchema>;
+export type ResetPasswordDTO = z.infer<typeof ResetPasswordSchema>;

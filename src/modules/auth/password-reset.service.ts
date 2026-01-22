@@ -55,6 +55,7 @@ export class PasswordResetService {
     if (!userId) {
       throw new BadRequestException('Reset token invalid or expired');
     }
+
     await redis.del(key);
 
     const passwordHash = await this.authService.hashPassword(newPassword);

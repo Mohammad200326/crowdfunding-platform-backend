@@ -8,8 +8,18 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ForgotPasswordDto } from './dto/auth.dto';
 import { PasswordResetService } from './password-reset.service';
+import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
+import {
+  ForgotPasswordSchema,
+  ResetPasswordSchema,
+  VerifyOtpSchema,
+} from './types/password-reset.schema';
+import type {
+  ForgotPasswordDTO,
+  ResetPasswordDTO,
+  VerifyOtpDTO,
+} from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -44,7 +54,32 @@ export class AuthController {
   }
 
   @Post('password/forgot')
-  forgotPassword(@Body() email: string) {
-    return this.passwordResetService.forgot(email);
+  async forgot(
+    @Body(new ZodValidationPipe(ForgotPasswordSchema))
+    forgotPasswordDTO: ForgotPasswordDTO,
+  ) {
+    return this.passwordResetService.forgot(forgotPasswordDTO.email);
+  }
+
+  @Post('password/verify-otp')
+  async verifyOTP(
+    @Body(new ZodValidationPipe(VerifyOtpSchema))
+    verifyOTPSchema: VerifyOtpDTO,
+  ) {
+    return this.passwordResetService.verify(
+      verifyOTPSchema.email,
+      verifyOTPSchema.otp,
+    );
+  }
+
+  @Post('password/reset')
+  async reset(
+    @Body(new ZodValidationPipe(ResetPasswordSchema))
+    resetPasswordDTO: ResetPasswordDTO,
+  ) {
+    return this.passwordResetService.reset(
+      resetPasswordDTO.resetToken,
+      resetPasswordDTO.password,
+    );
   }
 }
