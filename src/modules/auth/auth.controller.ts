@@ -10,6 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
+import { ForgotPasswordDto } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -39,4 +40,7 @@ export class AuthController {
   remove(@Param('id') id: string) {
     return this.authService.remove(+id);
   }
+
+  @Post('password/forgot')
+  forgotPassword(@Body() forgotPasswordDTO: ForgotPasswordDto) {}
 }
