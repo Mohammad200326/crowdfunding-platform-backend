@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import * as argon from 'argon2';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
+  create(createAuthDto) {
     return 'This action adds a new auth';
   }
 
@@ -16,11 +15,19 @@ export class AuthService {
     return `This action returns a #${id} auth`;
   }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
+  update(id: number, updateAuthDto) {
     return `This action updates a #${id} auth`;
   }
 
   remove(id: number) {
     return `This action removes a #${id} auth`;
+  }
+
+  hashPassword(password: string) {
+    return argon.hash(password);
+  }
+
+  verifyPassword(password: string, hashedPassword: string) {
+    return argon.verify(hashedPassword, password);
   }
 }

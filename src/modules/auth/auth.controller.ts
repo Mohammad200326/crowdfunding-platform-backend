@@ -8,16 +8,28 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-import { ForgotPasswordDto } from './dto/auth.dto';
+import { PasswordResetService } from './password-reset.service';
+import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
+import {
+  ForgotPasswordSchema,
+  ResetPasswordSchema,
+  VerifyOtpSchema,
+} from './types/password-reset.schema';
+import type {
+  ForgotPasswordDTO,
+  ResetPasswordDTO,
+  VerifyOtpDTO,
+} from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private passwordResetService: PasswordResetService,
+  ) {}
 
   @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
+  create(@Body() createAuthDto) {
     return this.authService.create(createAuthDto);
   }
 
@@ -32,7 +44,7 @@ export class AuthController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  update(@Param('id') id: string, @Body() updateAuthDto) {
     return this.authService.update(+id, updateAuthDto);
   }
 
@@ -42,5 +54,32 @@ export class AuthController {
   }
 
   @Post('password/forgot')
-  forgotPassword(@Body() forgotPasswordDTO: ForgotPasswordDto) {}
+  async forgot(
+    @Body(new ZodValidationPipe(ForgotPasswordSchema))
+    forgotPasswordDTO: ForgotPasswordDTO,
+  ) {
+    return this.passwordResetService.forgot(forgotPasswordDTO.email);
+  }
+
+  @Post('password/verify-otp')
+  async verifyOTP(
+    @Body(new ZodValidationPipe(VerifyOtpSchema))
+    verifyOTPSchema: VerifyOtpDTO,
+  ) {
+    return this.passwordResetService.verify(
+      verifyOTPSchema.email,
+      verifyOTPSchema.otp,
+    );
+  }
+
+  @Post('password/reset')
+  async reset(
+    @Body(new ZodValidationPipe(ResetPasswordSchema))
+    resetPasswordDTO: ResetPasswordDTO,
+  ) {
+    return this.passwordResetService.reset(
+      resetPasswordDTO.resetToken,
+      resetPasswordDTO.password,
+    );
+  }
 }
