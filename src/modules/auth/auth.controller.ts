@@ -8,16 +8,18 @@ import {
   Delete,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
 import { ForgotPasswordDto } from './dto/auth.dto';
+import { PasswordResetService } from './password-reset.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private passwordResetService: PasswordResetService,
+  ) {}
 
   @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
+  create(@Body() createAuthDto) {
     return this.authService.create(createAuthDto);
   }
 
@@ -32,7 +34,7 @@ export class AuthController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  update(@Param('id') id: string, @Body() updateAuthDto) {
     return this.authService.update(+id, updateAuthDto);
   }
 
@@ -42,5 +44,7 @@ export class AuthController {
   }
 
   @Post('password/forgot')
-  forgotPassword(@Body() forgotPasswordDTO: ForgotPasswordDto) {}
+  forgotPassword(@Body() email: string) {
+    return this.passwordResetService.forgot(email);
+  }
 }
