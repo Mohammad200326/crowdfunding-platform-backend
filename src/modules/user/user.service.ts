@@ -5,91 +5,29 @@ import { DatabaseService } from '../database/database.service';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: DatabaseService) { }
+  constructor(private prismaService: DatabaseService) {}
 
-  async create(createUserDto: CreateUserDto) {
-    return this.prismaService.user.create({
-      data: {
-        firstName: createUserDto.firstName,
-        lastName: createUserDto.lastName,
-        email: createUserDto.email,
-        password: createUserDto.password,
-        role: createUserDto.role,
-        country: createUserDto.country,
-        phoneNumber: createUserDto.phoneNumber,
-        avatar: createUserDto.avatar || '',
-        notes: createUserDto.notes || '',
-      },
-    });
+  create(createUserDto: CreateUserDto) {
+    return 'This action adds a new user';
   }
 
-  async findAll() {
-    return this.prismaService.user.findMany({
-      where: {
-        isDeleted: false,
-      },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        role: true,
-        country: true,
-        phoneNumber: true,
-        avatar: true,
-        isVerified: true,
-        verificationStatus: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+  findAll() {
+    return `This action returns all user`;
   }
 
-  async findOne(id: string) {
-    return this.prismaService.user.findUnique({
-      where: {
-        id,
-        isDeleted: false,
-      },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        role: true,
-        country: true,
-        phoneNumber: true,
-        avatar: true,
-        notes: true,
-        isVerified: true,
-        verificationStatus: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+  findOne(id: number) {
+    return `This action returns a #${id} user`;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    return this.prismaService.user.update({
-      where: {
-        id,
-      },
-      data: updateUserDto,
-    });
+  update(id: string, updateUserDto: UpdateUserDto) {
+    return `This action updates a #${id} user`;
   }
 
-  async remove(id: string) {
-    return this.prismaService.user.update({
-      where: {
-        id,
-      },
-      data: {
-        isDeleted: true,
-      },
-    });
+  remove(id: number) {
+    return `This action removes a #${id} user`;
   }
 
-  async findByEmail(email: string) {
+  findByEmail(email: string) {
     return this.prismaService.user.findUnique({
       where: { email },
     });
