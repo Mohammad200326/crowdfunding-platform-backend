@@ -88,13 +88,50 @@ export class UserService {
     });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    return this.prismaService.user.update({
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    avatar?: Express.Multer.File,
+  ) {
+    const user = await this.prismaService.user.update({
       where: {
         id,
       },
       data: updateUserDto,
     });
+
+    if (avatar) {
+      // Delete existing avatar if any
+      const existingAvatar = await this.prismaService.asset.findFirst({
+        where: {
+          userId: id,
+          kind: AssetKind.USER_AVATAR,
+        },
+      });
+
+      if (existingAvatar) {
+        await this.fileService.deleteFileFromImageKit(existingAvatar.fileId);
+        await this.prismaService.asset.delete({
+          where: { id: existingAvatar.id },
+        });
+      }
+
+      // Create new avatar asset
+      const assetData = this.fileService.createFileAssetData(
+        avatar,
+        id,
+        AssetKind.USER_AVATAR,
+      );
+
+      await this.prismaService.asset.create({
+        data: {
+          ...assetData,
+          userId: id,
+        },
+      });
+    }
+
+    return user;
   }
 
   async remove(id: string) {
