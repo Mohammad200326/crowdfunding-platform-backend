@@ -7,181 +7,6 @@ datasource db {
   provider = "mysql"
 }
 
-model User {
-  id                 String             @id @default(uuid()) @db.Char(36)
-  firstName          String             @db.Text
-  lastName           String             @db.Text
-  email              String             @unique
-  password           String             @db.Text
-  role               UserRole           @default(DONOR)
-  country            String             @db.Text
-  phoneNumber        String             @map("phone_number") @db.Text
-  avatar             String             @db.Text
-  notes              String             @db.Text
-  isDeleted          Boolean            @default(false) @map("is_deleted")
-  isVerified         Boolean            @default(false) @map("is_verified")
-  createdAt          DateTime           @default(now()) @map("created_at")
-  updatedAt          DateTime           @updatedAt @map("updated_at")
-  verificationStatus VerificationStatus @default(pending) @map("verification_status")
-  bankAccounts       BankAccount[]      @relation("UserBankAccounts")
-  creatorProfile     CampaignCreator?
-  campaigns          Campaign[]         @relation("CampaignCreator")
-  donations          Donation[]
-  donorProfile       Donor?
-  preferences        UserPreference[]
-  withdrawals        Withdrawal[]
-
-  @@map("users")
-}
-
-model UserPreference {
-  id         String           @id @default(uuid())
-  userId     String           @map("user_id")
-  preference CampaignCategory
-  user       User             @relation(fields: [userId], references: [id])
-
-  @@unique([userId, preference])
-  @@map("user_preferences")
-}
-
-model Campaign {
-  id                 String             @id @default(uuid()) @db.Char(36)
-  creatorId          String             @map("creator_id") @db.Char(36)
-  title              String             @db.Text
-  description        String             @db.Text
-  category           CampaignCategory   @default(WATER)
-  goal               Int
-  thumbnail          String             @db.Text
-  startDate          DateTime           @map("start_date") @db.Date
-  endDate            DateTime           @map("end_date") @db.Date
-  motivationMessage  String             @map("motivation_message") @db.Text
-  status             CampaignStatus     @default(pending)
-  createdAt          DateTime           @default(now()) @map("created_at")
-  updatedAt          DateTime           @updatedAt @map("updated_at")
-  isVerified         Boolean            @default(false) @map("is_verified")
-  verificationStatus VerificationStatus @default(pending) @map("verification_status")
-  isActive           Boolean            @default(true) @map("is_active")
-  notes              String             @db.Text
-  isDeleted          Boolean            @default(false) @map("is_deleted")
-  likes              Int                @default(0)
-  updates            CampaignUpdate[]
-  creator            User               @relation("CampaignCreator", fields: [creatorId], references: [id])
-  donations          Donation[]
-
-  @@index([creatorId], map: "campigns_creator_id_fkey")
-  @@map("campigns")
-}
-
-model Donation {
-  id            String        @id @default(uuid()) @db.Char(36)
-  userId        String        @map("user_id") @db.Char(36)
-  campaignId    String        @map("campign_id") @db.Char(36)
-  stars         Int
-  amount        Int
-  paymentToken  String        @map("payment_token") @db.Text
-  paymentStatus PaymentStatus @default(pending) @map("payment_status")
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
-  campaign      Campaign      @relation(fields: [campaignId], references: [id])
-  user          User          @relation(fields: [userId], references: [id])
-
-  @@index([campaignId], map: "donations_campign_id_fkey")
-  @@index([userId], map: "donations_user_id_fkey")
-  @@map("donations")
-}
-
-model CampaignUpdate {
-  id          String   @id @default(uuid()) @db.Char(36)
-  campaignId  String   @map("campign_id") @db.Char(36)
-  title       String   @db.Text
-  description String   @db.Text
-  media       String   @db.Text
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  campaign    Campaign @relation(fields: [campaignId], references: [id])
-
-  @@index([campaignId])
-  @@map("campaign_updates")
-}
-
-model Withdrawal {
-  id            String           @id @default(uuid()) @db.Char(36)
-  creatorId     String           @map("creator_id") @db.Char(36)
-  bankAccountId String           @map("bank_account_id") @db.Char(36)
-  amount        Int
-  status        WithdrawalStatus @default(pending)
-  notes         String           @db.Text
-  createdAt     DateTime         @default(now()) @map("created_at")
-  updatedAt     DateTime         @updatedAt @map("updated_at")
-  bankAccount   BankAccount      @relation(fields: [bankAccountId], references: [id])
-  creator       User             @relation(fields: [creatorId], references: [id])
-
-  @@index([creatorId])
-  @@index([bankAccountId])
-  @@map("withdrawals")
-}
-
-model Donor {
-  id                          String          @id @default(uuid()) @db.Char(36)
-  userId                      String          @unique @map("user_id") @db.Char(36)
-  dateOfBirth                 DateTime        @map("date_of_birth") @db.Date
-  areasOfInterest             String          @map("areas_of_interest") @db.Text
-  preferredCampaignTypes      String          @map("preferred_campaign_types") @db.Text
-  geographicScope             GeographicScope @map("geographic_scope")
-  targetAudience              String          @map("target_audience") @db.Text
-  preferredCampaignSize       Int             @map("preferred_campaign_size")
-  preferredCampaignVisibility String          @map("preferred_campaign_visibility") @db.Text
-  createdAt                   DateTime        @default(now()) @map("created_at")
-  updatedAt                   DateTime        @updatedAt @map("updated_at")
-  user                        User            @relation(fields: [userId], references: [id])
-
-  @@map("donors")
-}
-
-model CampaignCreator {
-  id                                          String      @id @default(uuid()) @db.Char(36)
-  type                                        CreatorType
-  userId                                      String      @unique @map("user_id") @db.Char(36)
-  institutionType                             String      @map("institution_type") @db.Text
-  institutionCountry                          String      @map("institution_country") @db.Text
-  institutionDateOfEstablishment              DateTime    @map("institution_date_of_establishment") @db.Date
-  institutionLegalStatus                      String      @map("ininstitution_stitution_legal_status") @db.Text
-  institutionTaxIdentificationNumber          String      @map("institution_tax_identification_number") @db.Text
-  institutionRegistrationNumber               String      @map("institution_registration_number") @db.Text
-  institutionRegistrationCertificate          String      @map("institution_registration_certificate") @db.Text
-  institutionCommercialLicense                String      @map("institution_commercial_license") @db.Text
-  institutionRepresentativeName               String      @map("institution_representative_name") @db.Text
-  institutionRepresentativePosition           String      @map("institution_representative_position") @db.Text
-  institutionRepresentativeRegistrationNumber String      @map("institution_representative_registration_number") @db.Text
-  institutionRepresentativeIdPhoto            String      @map("institution_representative_id_photo") @db.Text
-  institutionCommissionerImage                String      @map("institution_commissioner_image") @db.Text
-  institutionAuthorizationLetter              String      @map("institution_authorization_letter") @db.Text
-  institutionWebsite                          String      @map("institution_website") @db.Text
-  institutionRepresentativeSocialMedia        String      @map("institution_representative_social_media") @db.Text
-  createdAt                                   DateTime    @default(now()) @map("created_at")
-  updatedAt                                   DateTime    @default(now()) @map("upadted_at")
-  user                                        User        @relation(fields: [userId], references: [id])
-
-  @@map("campign_creators")
-}
-
-model BankAccount {
-  id            String       @id @default(uuid()) @db.Char(36)
-  creatorId     String       @map("creator_id") @db.Char(36)
-  bankName      String       @map("bank_name") @db.Text
-  iban          String       @db.Text
-  isVerified    Boolean      @default(false) @map("is_verified")
-  proofDocument String       @map("proof_document") @db.Text
-  notes         String       @db.Text
-  createdAt     DateTime     @default(now()) @map("created_at")
-  updatedAt     DateTime     @updatedAt @map("updated_at")
-  creator       User         @relation("UserBankAccounts", fields: [creatorId], references: [id])
-  withdrawals   Withdrawal[]
-
-  @@index([creatorId])
-  @@map("bank_accounts")
-}
-
 enum UserRole {
   DONOR
   CAMPAIGN_CREATOR
@@ -230,3 +55,235 @@ enum CreatorType {
   INDIVIDUAL
   INSTITUTION
 }
+
+enum StorageProviderName {
+  IMAGE_KIT
+}
+
+enum AssetKind {
+  USER_AVATAR
+
+  CAMPAIGN_THUMBNAIL
+  CAMPAIGN_UPDATE_MEDIA
+  
+  INSTITUTION_REGISTRATION_CERTIFICATE
+  INSTITUTION_COMMERCIAL_LICENSE
+  INSTITUTION_REPRESENTATIVE_ID_PHOTO
+  INSTITUTION_COMMISSIONER_IMAGE
+  INSTITUTION_AUTHORIZATION_LETTER
+
+  BANK_PROOF_DOCUMENT
+}
+
+model User {
+  id                 String             @id @default(uuid()) @db.Char(36)
+  firstName          String             @db.Text
+  lastName           String             @db.Text
+  email              String             @unique
+  password           String             @db.Text
+  role               UserRole           @default(DONOR)
+  country            String             @db.Text
+  phoneNumber        String             @map("phone_number") @db.Text
+  notes              String             @db.Text
+  isDeleted          Boolean            @default(false) @map("is_deleted")
+  isVerified         Boolean            @default(false) @map("is_verified")
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  verificationStatus VerificationStatus @default(pending) @map("verification_status")
+  bankAccounts       BankAccount[]      @relation("UserBankAccounts")
+  creatorProfile     CampaignCreator?
+  campaigns          Campaign[]         @relation("CampaignCreator")
+  donations          Donation[]
+  donorProfile       Donor?
+  preferences        UserPreference[]
+  withdrawals        Withdrawal[]
+
+  assets       Asset[] @relation("UserAssets")
+  ownedAssets  Asset[] @relation("AssetOwner")
+
+  @@map("users")
+}
+
+model UserPreference {
+  id         String           @id @default(uuid())
+  userId     String           @map("user_id")
+  preference CampaignCategory
+  user       User             @relation(fields: [userId], references: [id])
+
+  @@unique([userId, preference])
+  @@map("user_preferences")
+}
+
+model Campaign {
+  id                 String             @id @default(uuid()) @db.Char(36)
+  creatorId          String             @map("creator_id") @db.Char(36)
+  title              String             @db.Text
+  description        String             @db.Text
+  category           CampaignCategory   @default(WATER)
+  goal               Int
+  startDate          DateTime           @map("start_date") @db.Date
+  endDate            DateTime           @map("end_date") @db.Date
+  motivationMessage  String             @map("motivation_message") @db.Text
+  status             CampaignStatus     @default(pending)
+  createdAt          DateTime           @default(now()) @map("created_at")
+  updatedAt          DateTime           @updatedAt @map("updated_at")
+  isVerified         Boolean            @default(false) @map("is_verified")
+  verificationStatus VerificationStatus @default(pending) @map("verification_status")
+  isActive           Boolean            @default(true) @map("is_active")
+  notes              String             @db.Text
+  isDeleted          Boolean            @default(false) @map("is_deleted")
+  likes              Int                @default(0)
+  updates            CampaignUpdate[]
+  creator            User               @relation("CampaignCreator", fields: [creatorId], references: [id])
+  donations          Donation[]
+  assets Asset[] @relation("CampaignAssets")
+
+  @@index([creatorId], map: "campigns_creator_id_fkey")
+  @@map("campigns")
+}
+
+model Donation {
+  id            String        @id @default(uuid()) @db.Char(36)
+  userId        String        @map("user_id") @db.Char(36)
+  campaignId    String        @map("campign_id") @db.Char(36)
+  stars         Int
+  amount        Int
+  paymentToken  String        @map("payment_token") @db.Text
+  paymentStatus PaymentStatus @default(pending) @map("payment_status")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+  campaign      Campaign      @relation(fields: [campaignId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
+
+  @@index([campaignId], map: "donations_campign_id_fkey")
+  @@index([userId], map: "donations_user_id_fkey")
+  @@map("donations")
+}
+
+model CampaignUpdate {
+  id          String   @id @default(uuid()) @db.Char(36)
+  campaignId  String   @map("campign_id") @db.Char(36)
+  title       String   @db.Text
+  description String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  campaign    Campaign @relation(fields: [campaignId], references: [id])
+  assets Asset[] @relation("CampaignUpdateAssets")
+
+  @@index([campaignId])
+  @@map("campaign_updates")
+}
+
+model Withdrawal {
+  id            String           @id @default(uuid()) @db.Char(36)
+  creatorId     String           @map("creator_id") @db.Char(36)
+  bankAccountId String           @map("bank_account_id") @db.Char(36)
+  amount        Int
+  status        WithdrawalStatus @default(pending)
+  notes         String           @db.Text
+  createdAt     DateTime         @default(now()) @map("created_at")
+  updatedAt     DateTime         @updatedAt @map("updated_at")
+  bankAccount   BankAccount      @relation(fields: [bankAccountId], references: [id])
+  creator       User             @relation(fields: [creatorId], references: [id])
+
+  @@index([creatorId])
+  @@index([bankAccountId])
+  @@map("withdrawals")
+}
+
+model Donor {
+  id                          String          @id @default(uuid()) @db.Char(36)
+  userId                      String          @unique @map("user_id") @db.Char(36)
+  dateOfBirth                 DateTime        @map("date_of_birth") @db.Date
+  areasOfInterest             String          @map("areas_of_interest") @db.Text
+  preferredCampaignTypes      String          @map("preferred_campaign_types") @db.Text
+  geographicScope             GeographicScope @map("geographic_scope")
+  targetAudience              String          @map("target_audience") @db.Text
+  preferredCampaignSize       Int             @map("preferred_campaign_size")
+  preferredCampaignVisibility String          @map("preferred_campaign_visibility") @db.Text
+  createdAt                   DateTime        @default(now()) @map("created_at")
+  updatedAt                   DateTime        @updatedAt @map("updated_at")
+  user                        User            @relation(fields: [userId], references: [id])
+
+  @@map("donors")
+}
+
+model CampaignCreator {
+  id                                          String      @id @default(uuid()) @db.Char(36)
+  type                                        CreatorType
+  userId                                      String      @unique @map("user_id") @db.Char(36)
+  institutionType                             String      @map("institution_type") @db.Text
+  institutionCountry                          String      @map("institution_country") @db.Text
+  institutionDateOfEstablishment              DateTime    @map("institution_date_of_establishment") @db.Date
+  institutionLegalStatus                      String      @map("institution_legal_status") @db.Text
+  institutionTaxIdentificationNumber          String      @map("institution_tax_identification_number") @db.Text
+  institutionRegistrationNumber               String      @map("institution_registration_number") @db.Text
+  institutionRepresentativeName               String      @map("institution_representative_name") @db.Text
+  institutionRepresentativePosition           String      @map("institution_representative_position") @db.Text
+  institutionRepresentativeRegistrationNumber String      @map("institution_representative_registration_number") @db.Text
+  institutionWebsite                          String      @map("institution_website") @db.Text
+  institutionRepresentativeSocialMedia        String      @map("institution_representative_social_media") @db.Text
+  createdAt                                   DateTime    @default(now()) @map("created_at")
+  updatedAt                                   DateTime    @default(now()) @map("updated_at")
+  user                                        User        @relation(fields: [userId], references: [id])
+  assets Asset[] @relation("CreatorAssets")
+
+  @@map("campign_creators")
+}
+
+model BankAccount {
+  id            String       @id @default(uuid()) @db.Char(36)
+  creatorId     String       @map("creator_id") @db.Char(36)
+  bankName      String       @map("bank_name") @db.Text
+  iban          String       @db.Text
+  isVerified    Boolean      @default(false) @map("is_verified")
+  notes         String       @db.Text
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+  creator       User         @relation("UserBankAccounts", fields: [creatorId], references: [id])
+  withdrawals   Withdrawal[]
+  assets        Asset[]      @relation("BankAccountAssets")
+
+  @@index([creatorId])
+  @@map("bank_accounts")
+}
+
+model Asset {
+  id                  String              @id @default(uuid()) @db.Char(36)
+  storageProviderName StorageProviderName @default(IMAGE_KIT) @map("storage_provider_name")
+  fileId              String              @unique @map("file_id")
+  url                 String              @db.Text
+  fileType            String              @map("file_type") @db.Text
+  fileSizeInKB        Int                 @map("file_size_in_kb") @db.UnsignedInt
+  kind                AssetKind
+  ownerId             String              @map("owner_id") @db.Char(36)
+  owner               User                @relation("AssetOwner", fields: [ownerId], references: [id])
+
+  userId              String?             @map("user_id") @db.Char(36)
+  user                User?               @relation("UserAssets", fields: [userId], references: [id])
+
+  campaignId          String?             @map("campaign_id") @db.Char(36)
+  campaign            Campaign?           @relation("CampaignAssets", fields: [campaignId], references: [id])
+
+  campaignUpdateId    String?             @map("campaign_update_id") @db.Char(36)
+  campaignUpdate      CampaignUpdate?     @relation("CampaignUpdateAssets", fields: [campaignUpdateId], references: [id])
+
+  creatorId           String?             @map("creator_id") @db.Char(36)
+  creator             CampaignCreator?    @relation("CreatorAssets", fields: [creatorId], references: [id])
+
+  bankAccountId       String?             @map("bank_account_id") @db.Char(36)
+  bankAccount         BankAccount?        @relation("BankAccountAssets", fields: [bankAccountId], references: [id])
+
+  createdAt     DateTime     @default(now()) @map("created_at")
+  updatedAt     DateTime     @updatedAt @map("updated_at")
+  
+  @@index([ownerId])
+  @@index([userId])
+  @@index([campaignId])
+  @@index([campaignUpdateId])
+  @@index([creatorId])
+  @@index([bankAccountId])
+
+  @@map("assets")
+}
+

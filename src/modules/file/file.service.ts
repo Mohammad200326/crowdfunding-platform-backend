@@ -2,9 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { imageKitToken } from './imagekit.provider';
 import ImageKit, { toFile } from '@imagekit/nodejs';
 import { StorageEngine } from 'multer';
-import { TransactionClient } from 'src/types/util.types';
-import { SideEffectQueue } from 'src/utils/side-effects';
-import { Prisma } from 'generated/prisma';
+// import { TransactionClient } from 'src/types/util.types';
+// import { SideEffectQueue } from 'src/utils/side-effects';
+import { AssetKind } from 'generated/prisma/enums';
+import { AssetUncheckedCreateInput } from 'generated/prisma/models';
 
 @Injectable()
 export class FileService {
@@ -41,39 +42,43 @@ export class FileService {
 
   createFileAssetData(
     file: Express.Multer.File,
-    userId: number | bigint,
-  ): Prisma.AssetCreateInput {
+    userId: string,
+    kind: AssetKind,
+  ): AssetUncheckedCreateInput {
     return {
       fileId: file.fileId!,
       fileSizeInKB: Math.floor(file.size / 1024),
       url: file.url!,
-      ownerId: Number(userId),
+      ownerId: userId,
       fileType: file.mimetype,
+      kind,
     };
   }
 
-  async deleteProductAsset(
-    prismaTX: TransactionClient,
-    productId: number,
-    userId: number,
-    sideEffects: SideEffectQueue,
-  ) {
-    const whereClause = {
-      where: {
-        productId,
-        ownerId: userId,
-      },
-    };
-    const existingAssets = await prismaTX.asset.findMany(whereClause);
+  // async deleteUserAsset(
+  //   prismaTX: TransactionClient,
+  //   ownerId: string,
+  //   userId: string,
+  //   kind: AssetKind,
+  //   sideEffects: SideEffectQueue,
+  // ) {
+  //   const whereClause = {
+  //     where: {
+  //       ownerId,
+  //       userId,
+  //       kind,
+  //     },
+  //   };
+  //   const existingAssets = await prismaTX.asset.findMany(whereClause);
 
-    await prismaTX.asset.deleteMany(whereClause);
+  //   await prismaTX.asset.deleteMany(whereClause);
 
-    existingAssets.forEach((asset) => {
-      sideEffects.add('delete imagekit file', async () => {
-        await this.imagekit.files.delete(asset.fileId);
-      });
-    });
-  }
+  //   existingAssets.forEach((asset) => {
+  //     sideEffects.add('delete imagekit file', async () => {
+  //       await this.imagekit.files.delete(asset.fileId);
+  //     });
+  //   });
+  // }
 
   deleteFileFromImageKit(fileId: string) {
     return this.imagekit.files.delete(fileId);
