@@ -2,13 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from '../database/database.service';
+import { FileService } from '../file/file.service';
+import { AssetKind } from 'generated/prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: DatabaseService) { }
+  constructor(
+    private prismaService: DatabaseService,
+    private fileService: FileService,
+  ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    return this.prismaService.user.create({
+  async create(createUserDto: CreateUserDto, avatar?: Express.Multer.File) {
+    const user = await this.prismaService.user.create({
       data: {
         firstName: createUserDto.firstName,
         lastName: createUserDto.lastName,
@@ -20,6 +25,23 @@ export class UserService {
         notes: createUserDto.notes || '',
       },
     });
+
+    if (avatar) {
+      const assetData = this.fileService.createFileAssetData(
+        avatar,
+        user.id,
+        AssetKind.USER_AVATAR,
+      );
+
+      await this.prismaService.asset.create({
+        data: {
+          ...assetData,
+          userId: user.id,
+        },
+      });
+    }
+
+    return user;
   }
 
   async findAll() {
