@@ -17,7 +17,6 @@ export class UserService {
         role: createUserDto.role,
         country: createUserDto.country,
         phoneNumber: createUserDto.phoneNumber,
-        avatar: createUserDto.avatar || '',
         notes: createUserDto.notes || '',
       },
     });
@@ -36,7 +35,6 @@ export class UserService {
         role: true,
         country: true,
         phoneNumber: true,
-        avatar: true,
         isVerified: true,
         verificationStatus: true,
         createdAt: true,
@@ -59,7 +57,6 @@ export class UserService {
         role: true,
         country: true,
         phoneNumber: true,
-        avatar: true,
         notes: true,
         isVerified: true,
         verificationStatus: true,
