@@ -7,5 +7,6 @@ import { FileModule } from '../file/file.module';
   imports: [FileModule],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}
