@@ -2,10 +2,9 @@ import { Inject, Injectable } from '@nestjs/common';
 import { imageKitToken } from './imagekit.provider';
 import ImageKit, { toFile } from '@imagekit/nodejs';
 import { StorageEngine } from 'multer';
+import { AssetKind, Prisma } from '@prisma/client';
 // import { TransactionClient } from 'src/types/util.types';
 // import { SideEffectQueue } from 'src/utils/side-effects';
-import { AssetKind } from 'generated/prisma/enums';
-import { AssetUncheckedCreateInput } from 'generated/prisma/models';
 
 @Injectable()
 export class FileService {
@@ -44,7 +43,7 @@ export class FileService {
     file: Express.Multer.File,
     userId: string,
     kind: AssetKind,
-  ): AssetUncheckedCreateInput {
+  ): Prisma.AssetUncheckedCreateInput {
     return {
       fileId: file.fileId!,
       fileSizeInKB: Math.floor(file.size / 1024),

@@ -1,12 +1,17 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { PrismaClient } from 'generated/prisma/client';
+import { PrismaClient } from '@prisma/client';
 import {
   PaginationQueryType,
   PaginationResponseMeta,
 } from 'src/types/util.types';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 
 @Injectable()
 export class DatabaseService extends PrismaClient implements OnModuleInit {
+  constructor() {
+    const adapter = new PrismaMariaDb({});
+    super({ adapter, log: ['query', 'info', 'warn', 'error'] });
+  }
   async onModuleInit() {
     await this.$connect();
   }

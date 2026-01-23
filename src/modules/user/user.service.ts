@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from '../database/database.service';
 import { FileService } from '../file/file.service';
-import { AssetKind } from 'generated/prisma/client';
+import { AssetKind } from '@prisma/client';
 
 @Injectable()
 export class UserService {
