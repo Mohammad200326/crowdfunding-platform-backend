@@ -60,7 +60,7 @@ export class PasswordResetService {
 
     const passwordHash = await this.authService.hashPassword(newPassword);
 
-    this.userService.update(userId, { passwordHash });
+    this.userService.update(userId, { password: passwordHash });
 
     return { message: 'Password reset successfully' };
   }
