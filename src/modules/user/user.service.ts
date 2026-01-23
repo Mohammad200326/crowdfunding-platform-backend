@@ -2,13 +2,18 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from '../database/database.service';
+import { FileService } from '../file/file.service';
+import { AssetKind } from 'generated/prisma/client';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: DatabaseService) { }
+  constructor(
+    private prismaService: DatabaseService,
+    private fileService: FileService,
+  ) {}
 
-  async create(createUserDto: CreateUserDto) {
-    return this.prismaService.user.create({
+  async create(createUserDto: CreateUserDto, avatar?: Express.Multer.File) {
+    const user = await this.prismaService.user.create({
       data: {
         firstName: createUserDto.firstName,
         lastName: createUserDto.lastName,
@@ -17,10 +22,26 @@ export class UserService {
         role: createUserDto.role,
         country: createUserDto.country,
         phoneNumber: createUserDto.phoneNumber,
-        avatar: createUserDto.avatar || '',
         notes: createUserDto.notes || '',
       },
     });
+
+    if (avatar) {
+      const assetData = this.fileService.createFileAssetData(
+        avatar,
+        user.id,
+        AssetKind.USER_AVATAR,
+      );
+
+      await this.prismaService.asset.create({
+        data: {
+          ...assetData,
+          userId: user.id,
+        },
+      });
+    }
+
+    return user;
   }
 
   async findAll() {
@@ -36,7 +57,6 @@ export class UserService {
         role: true,
         country: true,
         phoneNumber: true,
-        avatar: true,
         isVerified: true,
         verificationStatus: true,
         createdAt: true,
@@ -59,7 +79,6 @@ export class UserService {
         role: true,
         country: true,
         phoneNumber: true,
-        avatar: true,
         notes: true,
         isVerified: true,
         verificationStatus: true,
@@ -69,13 +88,50 @@ export class UserService {
     });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    return this.prismaService.user.update({
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    avatar?: Express.Multer.File,
+  ) {
+    const user = await this.prismaService.user.update({
       where: {
         id,
       },
       data: updateUserDto,
     });
+
+    if (avatar) {
+      // Delete existing avatar if any
+      const existingAvatar = await this.prismaService.asset.findFirst({
+        where: {
+          userId: id,
+          kind: AssetKind.USER_AVATAR,
+        },
+      });
+
+      if (existingAvatar) {
+        await this.fileService.deleteFileFromImageKit(existingAvatar.fileId);
+        await this.prismaService.asset.delete({
+          where: { id: existingAvatar.id },
+        });
+      }
+
+      // Create new avatar asset
+      const assetData = this.fileService.createFileAssetData(
+        avatar,
+        id,
+        AssetKind.USER_AVATAR,
+      );
+
+      await this.prismaService.asset.create({
+        data: {
+          ...assetData,
+          userId: id,
+        },
+      });
+    }
+
+    return user;
   }
 
   async remove(id: string) {
