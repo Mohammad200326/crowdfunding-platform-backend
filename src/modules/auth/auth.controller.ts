@@ -18,8 +18,11 @@ import {
 import type {
   ForgotPasswordDTO,
   ResetPasswordDTO,
+  UserResponseDTO,
   VerifyOtpDTO,
+  registerDonorDTO,
 } from './dto/auth.dto';
+import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +30,14 @@ export class AuthController {
     private authService: AuthService,
     private passwordResetService: PasswordResetService,
   ) {}
+
+  @Post('register/donor')
+  async registerDonor(
+    @Body(new ZodValidationPipe(donorValidationSchema))
+    registerDonorDto: registerDonorDTO,
+  ): Promise<UserResponseDTO> {
+    return this.authService.registerDonor(registerDonorDto);
+  }
 
   @Post()
   create(@Body() createAuthDto) {
