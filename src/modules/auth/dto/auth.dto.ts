@@ -14,7 +14,6 @@ export type registerUserDTO = Pick<
   | 'password'
   | 'phoneNumber'
   | 'country'
-  | 'avatar'
   | 'notes'
 >;
 

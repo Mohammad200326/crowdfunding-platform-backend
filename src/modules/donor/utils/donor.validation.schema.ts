@@ -10,7 +10,7 @@ export const donorValidationSchema = z.object({
   phoneNumber: z.string().min(7).max(15),
   country: z.string().min(2).max(100),
   notes: z.string().max(500),
-  avatar: z.string().default(''),
+  // avatar: z.string().default(''),
   donorProfile: z.object({
     dateOfBirth: z
       .string()

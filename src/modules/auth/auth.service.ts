@@ -5,6 +5,7 @@ import type { registerDonorDTO, UserResponseDTO } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from 'generated/prisma/enums';
 import { UserService } from '../user/user.service';
+import { AssetKind, Prisma } from 'src/generated/prisma/client';
 @Injectable()
 export class AuthService {
   constructor(
@@ -43,18 +44,12 @@ export class AuthService {
 
   async registerDonor(
     registerDonorDto: registerDonorDTO,
-  ): Promise<UserResponseDTO> {
+    file?: Express.Multer.File,
+  ) {
     const { password, donorProfile, ...userData } = registerDonorDto;
 
     // Hash password
-    const hashedPassword = await this.hashPassword(registerDonorDto.password);
-
-    const createdUser = await this.userService.create({
-      ...userData,
-      password: hashedPassword,
-    });
-
-    const token = this.generateJwtToken(createdUser.id, UserRole.DONOR);
+    const hashedPassword = await this.hashPassword(password);
 
     // Create user with donor profile
     const user = await this.databaseService.user.create({
@@ -62,19 +57,95 @@ export class AuthService {
         ...userData,
         password: hashedPassword,
         role: UserRole.DONOR,
-        donor: {
-          create: donorProfile,
+
+        donorProfile: {
+          create: {
+            ...donorProfile,
+          },
         },
+
+        // استخدمنا ownedAssets لأن ownerId إجباري في السكيما
+        ownedAssets: file
+          ? {
+              create: {
+                // 1. تصحيح الاسم من path إلى url
+                url: file.path,
+
+                // 2. إضافة الحقول الإجبارية الناقصة
+                fileId: file.filename || `${Date.now()}-${file.originalname}`, // يجب أن يكون فريداً (Unique)
+                fileType: file.mimetype,
+                fileSizeInKB: Math.round(file.size / 1024),
+
+                // 3. تحديد النوع
+                kind: AssetKind.USER_AVATAR,
+              },
+            }
+          : undefined,
       },
       include: {
-        donor: true,
+        donorProfile: true,
+        ownedAssets: true, // إرجاع البيانات للتأكد
       },
     });
 
+    // Generate JWT token
+    const token = this.generateJwtToken(user.id, UserRole.DONOR);
+
     // Remove password from response
     const { password: _, ...userWithoutPassword } = user;
-    return userWithoutPassword;
+
+    return {
+      user: userWithoutPassword,
+      token,
+    };
   }
+  // async registerDonor(
+  //   registerDonorDto: registerDonorDTO,
+  //   file?: Express.Multer.File,
+  // ) {
+  //   const { password, donorProfile, ...userData } = registerDonorDto;
+
+  //   // Hash password
+  //   const hashedPassword = await this.hashPassword(password);
+
+  //   // Create user with donor profile
+  //   const user = await this.databaseService.user.create({
+  //     data: {
+  //       ...userData,
+  //       password: hashedPassword,
+  //       role: UserRole.DONOR,
+  //       donorProfile: {
+  //         create: {
+  //           ...donorProfile,
+  //         },
+  //       },
+  //       assets: file
+  //         ? {
+  //             create: {
+  //               url: file.path,
+  //               kind: 'USER_AVATAR', // أو أي حقل نوع لديك
+  //               // أي حقول أخرى إجبارية في جدول Asset
+  //             },
+  //           }
+  //         : undefined,
+  //     },
+  //     include: {
+  //       donorProfile: true,
+  //       assets: true,
+  //     },
+  //   });
+
+  //   // Generate JWT token
+  //   const token = this.generateJwtToken(user.id, UserRole.DONOR);
+
+  //   // Remove password from response
+  //   const { password: _, ...userWithoutPassword } = user;
+
+  //   return {
+  //     user: userWithoutPassword,
+  //     token,
+  //   };
+  // }
 
   private generateJwtToken(userId: string, role: UserRole) {
     return this.jwtService.sign(

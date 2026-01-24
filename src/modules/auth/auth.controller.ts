@@ -6,6 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UseFilters,
+  UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PasswordResetService } from './password-reset.service';
@@ -23,6 +26,9 @@ import type {
   registerDonorDTO,
 } from './dto/auth.dto';
 import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileCleanupInterceptor } from '../file/cleanup-file.interceptor';
+import { User } from 'src/utils/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -32,11 +38,13 @@ export class AuthController {
   ) {}
 
   @Post('register/donor')
+  @UseInterceptors(FileInterceptor('avatar'), FileCleanupInterceptor)
   async registerDonor(
     @Body(new ZodValidationPipe(donorValidationSchema))
     registerDonorDto: registerDonorDTO,
-  ): Promise<UserResponseDTO> {
-    return this.authService.registerDonor(registerDonorDto);
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.authService.registerDonor(registerDonorDto, file);
   }
 
   @Post()
