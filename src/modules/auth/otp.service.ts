@@ -1,7 +1,11 @@
-import { redis } from '../../lib/redis';
+import { Inject, Injectable } from '@nestjs/common';
+import Redis from 'ioredis';
+import { REDIS } from 'src/lib/redis.provider';
 import { generateOtp, hashOtp } from './util/otp.util';
 
+@Injectable()
 export class OtpService {
+  constructor(@Inject(REDIS) private readonly redis: Redis) {}
   private ttl = 300; // 5 دقائق
 
   async sendOtp(email: string, purpose: string) {
@@ -10,9 +14,9 @@ export class OtpService {
 
     const key = `otp:${purpose}:${email.toLowerCase()}`;
 
-    await redis.set(key, hash, 'EX', this.ttl);
+    await this.redis.set(key, hash, 'EX', this.ttl);
 
-    console.log('OTP:', otp);
+    console.log('OTP:', otp); // dev فقط
 
     return { expiresIn: this.ttl };
   }
@@ -20,12 +24,12 @@ export class OtpService {
   async verifyOtp(email: string, purpose: string, otp: string) {
     const key = `otp:${purpose}:${email.toLowerCase()}`;
 
-    const stored = await redis.get(key);
+    const stored = await this.redis.get(key);
 
     if (!stored) throw new Error('OTP_EXPIRED');
     if (hashOtp(otp) !== stored) throw new Error('OTP_INVALID');
 
-    await redis.del(key);
+    await this.redis.del(key);
     return true;
   }
 }
