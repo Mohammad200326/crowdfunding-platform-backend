@@ -58,7 +58,7 @@ export class AuthController {
     @Body(new ZodValidationPipe(ForgotPasswordSchema))
     forgotPasswordDTO: ForgotPasswordDTO,
   ) {
-    return this.passwordResetService.forgot(forgotPasswordDTO.email);
+    return this.authService.forgotPassword(forgotPasswordDTO.email);
   }
 
   @Post('password/verify-otp')
