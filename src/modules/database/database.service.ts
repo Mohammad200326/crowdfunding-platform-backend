@@ -9,7 +9,10 @@ import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 @Injectable()
 export class DatabaseService extends PrismaClient implements OnModuleInit {
   constructor() {
-    const adapter = new PrismaMariaDb({});
+    const url = process.env.DATABASE_URL;
+    if (!url) throw new Error('DATABASE_URL is missing');
+    const adapter = new PrismaMariaDb(url);
+
     super({ adapter, log: ['query', 'info', 'warn', 'error'] });
   }
   async onModuleInit() {
