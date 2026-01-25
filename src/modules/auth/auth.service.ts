@@ -29,6 +29,14 @@ export class AuthService {
     return `This action removes a #${id} auth`;
   }
 
+  hashPassword(password: string) {
+    return argon.hash(password);
+  }
+
+  verifyPassword(password: string, hashedPassword: string) {
+    return argon.verify(hashedPassword, password);
+  }
+
   async forgotPassword(email: string) {
     const { otp, expiresIn } = await this.otpService.sendOtp(
       email,
@@ -38,13 +46,5 @@ export class AuthService {
     await this.emailService.sendOtp(email, otp);
 
     return { expiresIn };
-  }
-
-  hashPassword(password: string) {
-    return argon.hash(password);
-  }
-
-  verifyPassword(password: string, hashedPassword: string) {
-    return argon.verify(hashedPassword, password);
   }
 }
