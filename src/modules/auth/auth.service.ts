@@ -3,9 +3,9 @@ import * as argon from 'argon2';
 import { DatabaseService } from '../database/database.service';
 import type { registerDonorDTO, UserResponseDTO } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { UserRole } from 'generated/prisma/enums';
+import { UserRole } from '@prisma/client';
 import { UserService } from '../user/user.service';
-import { AssetKind, Prisma } from 'src/generated/prisma/client';
+import { AssetKind } from '@prisma/client';
 @Injectable()
 export class AuthService {
   constructor(
