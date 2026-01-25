@@ -44,7 +44,7 @@ export class AuthController {
     registerDonorDto: registerDonorDTO,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    return this.authService.registerDonor(registerDonorDto, file);
+    return await this.authService.registerDonor(registerDonorDto, file);
   }
 
   @Post()
