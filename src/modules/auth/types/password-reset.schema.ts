@@ -16,13 +16,7 @@ export const VerifyOtpSchema = z.object({
 
 export type VerifyForgotOtpInput = z.infer<typeof VerifyOtpSchema>;
 
-export const ResetPasswordSchema = z
-  .object({
-    resetToken: z.string().uuid(),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Passwords do not match',
-    path: ['confirmPassword'],
-  });
+export const ResetPasswordSchema = z.object({
+  resetToken: z.string().uuid(),
+  password: z.string().min(8, 'Password must be at least 8 characters'),
+});

@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { EnvVariables } from 'src/types/declartion-mergin';
 import { ConfigService } from '@nestjs/config';
 import { FileModule } from '../file/file.module';
+import { EmailService } from './email.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { FileModule } from '../file/file.module';
     FileModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, PasswordResetService, OtpService],
+  providers: [AuthService, PasswordResetService, OtpService, EmailService],
 })
 export class AuthModule {}
