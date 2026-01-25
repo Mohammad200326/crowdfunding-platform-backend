@@ -64,7 +64,6 @@ export class AuthService {
           },
         },
 
-        // استخدمنا ownedAssets لأن ownerId إجباري في السكيما
         ownedAssets: file
           ? {
               create: {
@@ -72,7 +71,7 @@ export class AuthService {
                 url: file.path,
 
                 // 2. إضافة الحقول الإجبارية الناقصة
-                fileId: file.filename || `${Date.now()}-${file.originalname}`, // يجب أن يكون فريداً (Unique)
+                fileId: file.filename || `${Date.now()}-${file.originalname}`,
                 fileType: file.mimetype,
                 fileSizeInKB: Math.round(file.size / 1024),
 
@@ -84,7 +83,7 @@ export class AuthService {
       },
       include: {
         donorProfile: true,
-        ownedAssets: true, // إرجاع البيانات للتأكد
+        ownedAssets: true,
       },
     });
 
@@ -99,53 +98,6 @@ export class AuthService {
       token,
     };
   }
-  // async registerDonor(
-  //   registerDonorDto: registerDonorDTO,
-  //   file?: Express.Multer.File,
-  // ) {
-  //   const { password, donorProfile, ...userData } = registerDonorDto;
-
-  //   // Hash password
-  //   const hashedPassword = await this.hashPassword(password);
-
-  //   // Create user with donor profile
-  //   const user = await this.databaseService.user.create({
-  //     data: {
-  //       ...userData,
-  //       password: hashedPassword,
-  //       role: UserRole.DONOR,
-  //       donorProfile: {
-  //         create: {
-  //           ...donorProfile,
-  //         },
-  //       },
-  //       assets: file
-  //         ? {
-  //             create: {
-  //               url: file.path,
-  //               kind: 'USER_AVATAR', // أو أي حقل نوع لديك
-  //               // أي حقول أخرى إجبارية في جدول Asset
-  //             },
-  //           }
-  //         : undefined,
-  //     },
-  //     include: {
-  //       donorProfile: true,
-  //       assets: true,
-  //     },
-  //   });
-
-  //   // Generate JWT token
-  //   const token = this.generateJwtToken(user.id, UserRole.DONOR);
-
-  //   // Remove password from response
-  //   const { password: _, ...userWithoutPassword } = user;
-
-  //   return {
-  //     user: userWithoutPassword,
-  //     token,
-  //   };
-  // }
 
   private generateJwtToken(userId: string, role: UserRole) {
     return this.jwtService.sign(
