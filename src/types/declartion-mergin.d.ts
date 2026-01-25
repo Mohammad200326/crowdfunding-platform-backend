@@ -5,6 +5,7 @@ export type EnvVariables = {
   REDIS_URL: string;
   OTP_SECRET: string;
   IMAGEKIT_SECRET_KEY: string;
+  JWT_SECRET: string;
 };
 
 declare global {

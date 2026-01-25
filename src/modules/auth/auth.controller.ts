@@ -6,6 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
+  UseFilters,
+  UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PasswordResetService } from './password-reset.service';
@@ -18,8 +21,14 @@ import {
 import type {
   ForgotPasswordDTO,
   ResetPasswordDTO,
+  UserResponseDTO,
   VerifyOtpDTO,
+  registerDonorDTO,
 } from './dto/auth.dto';
+import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileCleanupInterceptor } from '../file/cleanup-file.interceptor';
+import { User } from 'src/utils/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +36,16 @@ export class AuthController {
     private authService: AuthService,
     private passwordResetService: PasswordResetService,
   ) {}
+
+  @Post('register/donor')
+  @UseInterceptors(FileInterceptor('avatar'), FileCleanupInterceptor)
+  async registerDonor(
+    @Body(new ZodValidationPipe(donorValidationSchema))
+    registerDonorDto: registerDonorDTO,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return await this.authService.registerDonor(registerDonorDto, file);
+  }
 
   @Post()
   create(@Body() createAuthDto) {

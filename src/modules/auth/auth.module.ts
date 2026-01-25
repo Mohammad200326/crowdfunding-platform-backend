@@ -5,10 +5,25 @@ import { PasswordResetService } from './password-reset.service';
 import { UserModule } from '../user/user.module';
 import { OtpService } from './otp.service';
 import { RedisModule } from 'src/lib/redis.module';
+import { JwtModule } from '@nestjs/jwt';
+import { EnvVariables } from 'src/types/declartion-mergin';
+import { ConfigService } from '@nestjs/config';
+import { FileModule } from '../file/file.module';
 import { EmailService } from './email.service';
 
 @Module({
-  imports: [UserModule, RedisModule],
+  imports: [
+    UserModule,
+    RedisModule,
+    JwtModule.registerAsync({
+      global: true,
+      useFactory: (configService: ConfigService<EnvVariables>) => ({
+        secret: configService.getOrThrow('JWT_SECRET'),
+      }),
+      inject: [ConfigService],
+    }),
+    FileModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService, PasswordResetService, OtpService, EmailService],
 })
