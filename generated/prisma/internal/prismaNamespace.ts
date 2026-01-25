@@ -392,8 +392,7 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   Donor: 'Donor',
   CampaignCreator: 'CampaignCreator',
-  BankAccount: 'BankAccount',
-  Asset: 'Asset'
+  BankAccount: 'BankAccount'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -409,7 +408,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "userPreference" | "campaign" | "donation" | "campaignUpdate" | "withdrawal" | "donor" | "campaignCreator" | "bankAccount" | "asset"
+    modelProps: "user" | "userPreference" | "campaign" | "donation" | "campaignUpdate" | "withdrawal" | "donor" | "campaignCreator" | "bankAccount"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1007,72 +1006,6 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
-    Asset: {
-      payload: Prisma.$AssetPayload<ExtArgs>
-      fields: Prisma.AssetFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.AssetFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.AssetFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload>
-        }
-        findFirst: {
-          args: Prisma.AssetFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.AssetFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload>
-        }
-        findMany: {
-          args: Prisma.AssetFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload>[]
-        }
-        create: {
-          args: Prisma.AssetCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload>
-        }
-        createMany: {
-          args: Prisma.AssetCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        delete: {
-          args: Prisma.AssetDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload>
-        }
-        update: {
-          args: Prisma.AssetUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload>
-        }
-        deleteMany: {
-          args: Prisma.AssetDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.AssetUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        upsert: {
-          args: Prisma.AssetUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$AssetPayload>
-        }
-        aggregate: {
-          args: Prisma.AssetAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateAsset>
-        }
-        groupBy: {
-          args: Prisma.AssetGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AssetGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.AssetCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AssetCountAggregateOutputType> | number
-        }
-      }
-    }
   }
 } & {
   other: {
@@ -1121,6 +1054,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   country: 'country',
   phoneNumber: 'phoneNumber',
+  avatar: 'avatar',
   notes: 'notes',
   isDeleted: 'isDeleted',
   isVerified: 'isVerified',
@@ -1148,6 +1082,7 @@ export const CampaignScalarFieldEnum = {
   description: 'description',
   category: 'category',
   goal: 'goal',
+  thumbnail: 'thumbnail',
   startDate: 'startDate',
   endDate: 'endDate',
   motivationMessage: 'motivationMessage',
@@ -1185,6 +1120,7 @@ export const CampaignUpdateScalarFieldEnum = {
   campaignId: 'campaignId',
   title: 'title',
   description: 'description',
+  media: 'media',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1233,9 +1169,14 @@ export const CampaignCreatorScalarFieldEnum = {
   institutionLegalStatus: 'institutionLegalStatus',
   institutionTaxIdentificationNumber: 'institutionTaxIdentificationNumber',
   institutionRegistrationNumber: 'institutionRegistrationNumber',
+  institutionRegistrationCertificate: 'institutionRegistrationCertificate',
+  institutionCommercialLicense: 'institutionCommercialLicense',
   institutionRepresentativeName: 'institutionRepresentativeName',
   institutionRepresentativePosition: 'institutionRepresentativePosition',
   institutionRepresentativeRegistrationNumber: 'institutionRepresentativeRegistrationNumber',
+  institutionRepresentativeIdPhoto: 'institutionRepresentativeIdPhoto',
+  institutionCommissionerImage: 'institutionCommissionerImage',
+  institutionAuthorizationLetter: 'institutionAuthorizationLetter',
   institutionWebsite: 'institutionWebsite',
   institutionRepresentativeSocialMedia: 'institutionRepresentativeSocialMedia',
   createdAt: 'createdAt',
@@ -1251,33 +1192,13 @@ export const BankAccountScalarFieldEnum = {
   bankName: 'bankName',
   iban: 'iban',
   isVerified: 'isVerified',
+  proofDocument: 'proofDocument',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type BankAccountScalarFieldEnum = (typeof BankAccountScalarFieldEnum)[keyof typeof BankAccountScalarFieldEnum]
-
-
-export const AssetScalarFieldEnum = {
-  id: 'id',
-  storageProviderName: 'storageProviderName',
-  fileId: 'fileId',
-  url: 'url',
-  fileType: 'fileType',
-  fileSizeInKB: 'fileSizeInKB',
-  kind: 'kind',
-  ownerId: 'ownerId',
-  userId: 'userId',
-  campaignId: 'campaignId',
-  campaignUpdateId: 'campaignUpdateId',
-  creatorId: 'creatorId',
-  bankAccountId: 'bankAccountId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1296,6 +1217,7 @@ export const UserOrderByRelevanceFieldEnum = {
   password: 'password',
   country: 'country',
   phoneNumber: 'phoneNumber',
+  avatar: 'avatar',
   notes: 'notes'
 } as const
 
@@ -1315,6 +1237,7 @@ export const CampaignOrderByRelevanceFieldEnum = {
   creatorId: 'creatorId',
   title: 'title',
   description: 'description',
+  thumbnail: 'thumbnail',
   motivationMessage: 'motivationMessage',
   notes: 'notes'
 } as const
@@ -1336,7 +1259,8 @@ export const CampaignUpdateOrderByRelevanceFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
   title: 'title',
-  description: 'description'
+  description: 'description',
+  media: 'media'
 } as const
 
 export type CampaignUpdateOrderByRelevanceFieldEnum = (typeof CampaignUpdateOrderByRelevanceFieldEnum)[keyof typeof CampaignUpdateOrderByRelevanceFieldEnum]
@@ -1372,9 +1296,14 @@ export const CampaignCreatorOrderByRelevanceFieldEnum = {
   institutionLegalStatus: 'institutionLegalStatus',
   institutionTaxIdentificationNumber: 'institutionTaxIdentificationNumber',
   institutionRegistrationNumber: 'institutionRegistrationNumber',
+  institutionRegistrationCertificate: 'institutionRegistrationCertificate',
+  institutionCommercialLicense: 'institutionCommercialLicense',
   institutionRepresentativeName: 'institutionRepresentativeName',
   institutionRepresentativePosition: 'institutionRepresentativePosition',
   institutionRepresentativeRegistrationNumber: 'institutionRepresentativeRegistrationNumber',
+  institutionRepresentativeIdPhoto: 'institutionRepresentativeIdPhoto',
+  institutionCommissionerImage: 'institutionCommissionerImage',
+  institutionAuthorizationLetter: 'institutionAuthorizationLetter',
   institutionWebsite: 'institutionWebsite',
   institutionRepresentativeSocialMedia: 'institutionRepresentativeSocialMedia'
 } as const
@@ -1387,34 +1316,11 @@ export const BankAccountOrderByRelevanceFieldEnum = {
   creatorId: 'creatorId',
   bankName: 'bankName',
   iban: 'iban',
+  proofDocument: 'proofDocument',
   notes: 'notes'
 } as const
 
 export type BankAccountOrderByRelevanceFieldEnum = (typeof BankAccountOrderByRelevanceFieldEnum)[keyof typeof BankAccountOrderByRelevanceFieldEnum]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const AssetOrderByRelevanceFieldEnum = {
-  id: 'id',
-  fileId: 'fileId',
-  url: 'url',
-  fileType: 'fileType',
-  ownerId: 'ownerId',
-  userId: 'userId',
-  campaignId: 'campaignId',
-  campaignUpdateId: 'campaignUpdateId',
-  creatorId: 'creatorId',
-  bankAccountId: 'bankAccountId'
-} as const
-
-export type AssetOrderByRelevanceFieldEnum = (typeof AssetOrderByRelevanceFieldEnum)[keyof typeof AssetOrderByRelevanceFieldEnum]
 
 
 
@@ -1504,20 +1410,6 @@ export type EnumGeographicScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$
  * Reference to a field of type 'CreatorType'
  */
 export type EnumCreatorTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CreatorType'>
-    
-
-
-/**
- * Reference to a field of type 'StorageProviderName'
- */
-export type EnumStorageProviderNameFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StorageProviderName'>
-    
-
-
-/**
- * Reference to a field of type 'AssetKind'
- */
-export type EnumAssetKindFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AssetKind'>
     
 
 
@@ -1631,7 +1523,6 @@ export type GlobalOmitConfig = {
   donor?: Prisma.DonorOmit
   campaignCreator?: Prisma.CampaignCreatorOmit
   bankAccount?: Prisma.BankAccountOmit
-  asset?: Prisma.AssetOmit
 }
 
 /* Types for Logging */

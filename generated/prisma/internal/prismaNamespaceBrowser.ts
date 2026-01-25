@@ -59,8 +59,7 @@ export const ModelName = {
   Withdrawal: 'Withdrawal',
   Donor: 'Donor',
   CampaignCreator: 'CampaignCreator',
-  BankAccount: 'BankAccount',
-  Asset: 'Asset'
+  BankAccount: 'BankAccount'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -88,6 +87,7 @@ export const UserScalarFieldEnum = {
   role: 'role',
   country: 'country',
   phoneNumber: 'phoneNumber',
+  avatar: 'avatar',
   notes: 'notes',
   isDeleted: 'isDeleted',
   isVerified: 'isVerified',
@@ -115,6 +115,7 @@ export const CampaignScalarFieldEnum = {
   description: 'description',
   category: 'category',
   goal: 'goal',
+  thumbnail: 'thumbnail',
   startDate: 'startDate',
   endDate: 'endDate',
   motivationMessage: 'motivationMessage',
@@ -152,6 +153,7 @@ export const CampaignUpdateScalarFieldEnum = {
   campaignId: 'campaignId',
   title: 'title',
   description: 'description',
+  media: 'media',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -200,9 +202,14 @@ export const CampaignCreatorScalarFieldEnum = {
   institutionLegalStatus: 'institutionLegalStatus',
   institutionTaxIdentificationNumber: 'institutionTaxIdentificationNumber',
   institutionRegistrationNumber: 'institutionRegistrationNumber',
+  institutionRegistrationCertificate: 'institutionRegistrationCertificate',
+  institutionCommercialLicense: 'institutionCommercialLicense',
   institutionRepresentativeName: 'institutionRepresentativeName',
   institutionRepresentativePosition: 'institutionRepresentativePosition',
   institutionRepresentativeRegistrationNumber: 'institutionRepresentativeRegistrationNumber',
+  institutionRepresentativeIdPhoto: 'institutionRepresentativeIdPhoto',
+  institutionCommissionerImage: 'institutionCommissionerImage',
+  institutionAuthorizationLetter: 'institutionAuthorizationLetter',
   institutionWebsite: 'institutionWebsite',
   institutionRepresentativeSocialMedia: 'institutionRepresentativeSocialMedia',
   createdAt: 'createdAt',
@@ -218,33 +225,13 @@ export const BankAccountScalarFieldEnum = {
   bankName: 'bankName',
   iban: 'iban',
   isVerified: 'isVerified',
+  proofDocument: 'proofDocument',
   notes: 'notes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type BankAccountScalarFieldEnum = (typeof BankAccountScalarFieldEnum)[keyof typeof BankAccountScalarFieldEnum]
-
-
-export const AssetScalarFieldEnum = {
-  id: 'id',
-  storageProviderName: 'storageProviderName',
-  fileId: 'fileId',
-  url: 'url',
-  fileType: 'fileType',
-  fileSizeInKB: 'fileSizeInKB',
-  kind: 'kind',
-  ownerId: 'ownerId',
-  userId: 'userId',
-  campaignId: 'campaignId',
-  campaignUpdateId: 'campaignUpdateId',
-  creatorId: 'creatorId',
-  bankAccountId: 'bankAccountId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-} as const
-
-export type AssetScalarFieldEnum = (typeof AssetScalarFieldEnum)[keyof typeof AssetScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -263,6 +250,7 @@ export const UserOrderByRelevanceFieldEnum = {
   password: 'password',
   country: 'country',
   phoneNumber: 'phoneNumber',
+  avatar: 'avatar',
   notes: 'notes'
 } as const
 
@@ -282,6 +270,7 @@ export const CampaignOrderByRelevanceFieldEnum = {
   creatorId: 'creatorId',
   title: 'title',
   description: 'description',
+  thumbnail: 'thumbnail',
   motivationMessage: 'motivationMessage',
   notes: 'notes'
 } as const
@@ -303,7 +292,8 @@ export const CampaignUpdateOrderByRelevanceFieldEnum = {
   id: 'id',
   campaignId: 'campaignId',
   title: 'title',
-  description: 'description'
+  description: 'description',
+  media: 'media'
 } as const
 
 export type CampaignUpdateOrderByRelevanceFieldEnum = (typeof CampaignUpdateOrderByRelevanceFieldEnum)[keyof typeof CampaignUpdateOrderByRelevanceFieldEnum]
@@ -339,9 +329,14 @@ export const CampaignCreatorOrderByRelevanceFieldEnum = {
   institutionLegalStatus: 'institutionLegalStatus',
   institutionTaxIdentificationNumber: 'institutionTaxIdentificationNumber',
   institutionRegistrationNumber: 'institutionRegistrationNumber',
+  institutionRegistrationCertificate: 'institutionRegistrationCertificate',
+  institutionCommercialLicense: 'institutionCommercialLicense',
   institutionRepresentativeName: 'institutionRepresentativeName',
   institutionRepresentativePosition: 'institutionRepresentativePosition',
   institutionRepresentativeRegistrationNumber: 'institutionRepresentativeRegistrationNumber',
+  institutionRepresentativeIdPhoto: 'institutionRepresentativeIdPhoto',
+  institutionCommissionerImage: 'institutionCommissionerImage',
+  institutionAuthorizationLetter: 'institutionAuthorizationLetter',
   institutionWebsite: 'institutionWebsite',
   institutionRepresentativeSocialMedia: 'institutionRepresentativeSocialMedia'
 } as const
@@ -354,32 +349,9 @@ export const BankAccountOrderByRelevanceFieldEnum = {
   creatorId: 'creatorId',
   bankName: 'bankName',
   iban: 'iban',
+  proofDocument: 'proofDocument',
   notes: 'notes'
 } as const
 
 export type BankAccountOrderByRelevanceFieldEnum = (typeof BankAccountOrderByRelevanceFieldEnum)[keyof typeof BankAccountOrderByRelevanceFieldEnum]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
-export const AssetOrderByRelevanceFieldEnum = {
-  id: 'id',
-  fileId: 'fileId',
-  url: 'url',
-  fileType: 'fileType',
-  ownerId: 'ownerId',
-  userId: 'userId',
-  campaignId: 'campaignId',
-  campaignUpdateId: 'campaignUpdateId',
-  creatorId: 'creatorId',
-  bankAccountId: 'bankAccountId'
-} as const
-
-export type AssetOrderByRelevanceFieldEnum = (typeof AssetOrderByRelevanceFieldEnum)[keyof typeof AssetOrderByRelevanceFieldEnum]
 

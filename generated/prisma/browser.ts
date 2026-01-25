@@ -62,8 +62,3 @@ export type CampaignCreator = Prisma.CampaignCreatorModel
  * 
  */
 export type BankAccount = Prisma.BankAccountModel
-/**
- * Model Asset
- * 
- */
-export type Asset = Prisma.AssetModel

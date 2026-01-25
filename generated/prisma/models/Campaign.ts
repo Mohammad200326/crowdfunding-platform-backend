@@ -43,6 +43,7 @@ export type CampaignMinAggregateOutputType = {
   description: string | null
   category: $Enums.CampaignCategory | null
   goal: number | null
+  thumbnail: string | null
   startDate: Date | null
   endDate: Date | null
   motivationMessage: string | null
@@ -64,6 +65,7 @@ export type CampaignMaxAggregateOutputType = {
   description: string | null
   category: $Enums.CampaignCategory | null
   goal: number | null
+  thumbnail: string | null
   startDate: Date | null
   endDate: Date | null
   motivationMessage: string | null
@@ -85,6 +87,7 @@ export type CampaignCountAggregateOutputType = {
   description: number
   category: number
   goal: number
+  thumbnail: number
   startDate: number
   endDate: number
   motivationMessage: number
@@ -118,6 +121,7 @@ export type CampaignMinAggregateInputType = {
   description?: true
   category?: true
   goal?: true
+  thumbnail?: true
   startDate?: true
   endDate?: true
   motivationMessage?: true
@@ -139,6 +143,7 @@ export type CampaignMaxAggregateInputType = {
   description?: true
   category?: true
   goal?: true
+  thumbnail?: true
   startDate?: true
   endDate?: true
   motivationMessage?: true
@@ -160,6 +165,7 @@ export type CampaignCountAggregateInputType = {
   description?: true
   category?: true
   goal?: true
+  thumbnail?: true
   startDate?: true
   endDate?: true
   motivationMessage?: true
@@ -268,6 +274,7 @@ export type CampaignGroupByOutputType = {
   description: string
   category: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date
   endDate: Date
   motivationMessage: string
@@ -312,6 +319,7 @@ export type CampaignWhereInput = {
   description?: Prisma.StringFilter<"Campaign"> | string
   category?: Prisma.EnumCampaignCategoryFilter<"Campaign"> | $Enums.CampaignCategory
   goal?: Prisma.IntFilter<"Campaign"> | number
+  thumbnail?: Prisma.StringFilter<"Campaign"> | string
   startDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   motivationMessage?: Prisma.StringFilter<"Campaign"> | string
@@ -327,7 +335,6 @@ export type CampaignWhereInput = {
   updates?: Prisma.CampaignUpdateListRelationFilter
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   donations?: Prisma.DonationListRelationFilter
-  assets?: Prisma.AssetListRelationFilter
 }
 
 export type CampaignOrderByWithRelationInput = {
@@ -337,6 +344,7 @@ export type CampaignOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
   goal?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   motivationMessage?: Prisma.SortOrder
@@ -352,7 +360,6 @@ export type CampaignOrderByWithRelationInput = {
   updates?: Prisma.CampaignUpdateOrderByRelationAggregateInput
   creator?: Prisma.UserOrderByWithRelationInput
   donations?: Prisma.DonationOrderByRelationAggregateInput
-  assets?: Prisma.AssetOrderByRelationAggregateInput
   _relevance?: Prisma.CampaignOrderByRelevanceInput
 }
 
@@ -366,6 +373,7 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Campaign"> | string
   category?: Prisma.EnumCampaignCategoryFilter<"Campaign"> | $Enums.CampaignCategory
   goal?: Prisma.IntFilter<"Campaign"> | number
+  thumbnail?: Prisma.StringFilter<"Campaign"> | string
   startDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   motivationMessage?: Prisma.StringFilter<"Campaign"> | string
@@ -381,7 +389,6 @@ export type CampaignWhereUniqueInput = Prisma.AtLeast<{
   updates?: Prisma.CampaignUpdateListRelationFilter
   creator?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   donations?: Prisma.DonationListRelationFilter
-  assets?: Prisma.AssetListRelationFilter
 }, "id">
 
 export type CampaignOrderByWithAggregationInput = {
@@ -391,6 +398,7 @@ export type CampaignOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
   goal?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   motivationMessage?: Prisma.SortOrder
@@ -420,6 +428,7 @@ export type CampaignScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Campaign"> | string
   category?: Prisma.EnumCampaignCategoryWithAggregatesFilter<"Campaign"> | $Enums.CampaignCategory
   goal?: Prisma.IntWithAggregatesFilter<"Campaign"> | number
+  thumbnail?: Prisma.StringWithAggregatesFilter<"Campaign"> | string
   startDate?: Prisma.DateTimeWithAggregatesFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeWithAggregatesFilter<"Campaign"> | Date | string
   motivationMessage?: Prisma.StringWithAggregatesFilter<"Campaign"> | string
@@ -440,6 +449,7 @@ export type CampaignCreateInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -455,7 +465,6 @@ export type CampaignCreateInput = {
   updates?: Prisma.CampaignUpdateCreateNestedManyWithoutCampaignInput
   creator: Prisma.UserCreateNestedOneWithoutCampaignsInput
   donations?: Prisma.DonationCreateNestedManyWithoutCampaignInput
-  assets?: Prisma.AssetCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateInput = {
@@ -465,6 +474,7 @@ export type CampaignUncheckedCreateInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -479,7 +489,6 @@ export type CampaignUncheckedCreateInput = {
   likes?: number
   updates?: Prisma.CampaignUpdateUncheckedCreateNestedManyWithoutCampaignInput
   donations?: Prisma.DonationUncheckedCreateNestedManyWithoutCampaignInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUpdateInput = {
@@ -488,6 +497,7 @@ export type CampaignUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -503,7 +513,6 @@ export type CampaignUpdateInput = {
   updates?: Prisma.CampaignUpdateUpdateManyWithoutCampaignNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCampaignsNestedInput
   donations?: Prisma.DonationUpdateManyWithoutCampaignNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateInput = {
@@ -513,6 +522,7 @@ export type CampaignUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -527,7 +537,6 @@ export type CampaignUncheckedUpdateInput = {
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   updates?: Prisma.CampaignUpdateUncheckedUpdateManyWithoutCampaignNestedInput
   donations?: Prisma.DonationUncheckedUpdateManyWithoutCampaignNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateManyInput = {
@@ -537,6 +546,7 @@ export type CampaignCreateManyInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -557,6 +567,7 @@ export type CampaignUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -578,6 +589,7 @@ export type CampaignUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -615,6 +627,7 @@ export type CampaignCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
   goal?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   motivationMessage?: Prisma.SortOrder
@@ -641,6 +654,7 @@ export type CampaignMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
   goal?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   motivationMessage?: Prisma.SortOrder
@@ -662,6 +676,7 @@ export type CampaignMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   category?: Prisma.SortOrder
   goal?: Prisma.SortOrder
+  thumbnail?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   motivationMessage?: Prisma.SortOrder
@@ -684,11 +699,6 @@ export type CampaignSumOrderByAggregateInput = {
 export type CampaignScalarRelationFilter = {
   is?: Prisma.CampaignWhereInput
   isNot?: Prisma.CampaignWhereInput
-}
-
-export type CampaignNullableScalarRelationFilter = {
-  is?: Prisma.CampaignWhereInput | null
-  isNot?: Prisma.CampaignWhereInput | null
 }
 
 export type CampaignCreateNestedManyWithoutCreatorInput = {
@@ -773,28 +783,13 @@ export type CampaignUpdateOneRequiredWithoutUpdatesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutUpdatesInput, Prisma.CampaignUpdateWithoutUpdatesInput>, Prisma.CampaignUncheckedUpdateWithoutUpdatesInput>
 }
 
-export type CampaignCreateNestedOneWithoutAssetsInput = {
-  create?: Prisma.XOR<Prisma.CampaignCreateWithoutAssetsInput, Prisma.CampaignUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutAssetsInput
-  connect?: Prisma.CampaignWhereUniqueInput
-}
-
-export type CampaignUpdateOneWithoutAssetsNestedInput = {
-  create?: Prisma.XOR<Prisma.CampaignCreateWithoutAssetsInput, Prisma.CampaignUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.CampaignCreateOrConnectWithoutAssetsInput
-  upsert?: Prisma.CampaignUpsertWithoutAssetsInput
-  disconnect?: Prisma.CampaignWhereInput | boolean
-  delete?: Prisma.CampaignWhereInput | boolean
-  connect?: Prisma.CampaignWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateToOneWithWhereWithoutAssetsInput, Prisma.CampaignUpdateWithoutAssetsInput>, Prisma.CampaignUncheckedUpdateWithoutAssetsInput>
-}
-
 export type CampaignCreateWithoutCreatorInput = {
   id?: string
   title: string
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -809,7 +804,6 @@ export type CampaignCreateWithoutCreatorInput = {
   likes?: number
   updates?: Prisma.CampaignUpdateCreateNestedManyWithoutCampaignInput
   donations?: Prisma.DonationCreateNestedManyWithoutCampaignInput
-  assets?: Prisma.AssetCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutCreatorInput = {
@@ -818,6 +812,7 @@ export type CampaignUncheckedCreateWithoutCreatorInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -832,7 +827,6 @@ export type CampaignUncheckedCreateWithoutCreatorInput = {
   likes?: number
   updates?: Prisma.CampaignUpdateUncheckedCreateNestedManyWithoutCampaignInput
   donations?: Prisma.DonationUncheckedCreateNestedManyWithoutCampaignInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutCreatorInput = {
@@ -871,6 +865,7 @@ export type CampaignScalarWhereInput = {
   description?: Prisma.StringFilter<"Campaign"> | string
   category?: Prisma.EnumCampaignCategoryFilter<"Campaign"> | $Enums.CampaignCategory
   goal?: Prisma.IntFilter<"Campaign"> | number
+  thumbnail?: Prisma.StringFilter<"Campaign"> | string
   startDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   endDate?: Prisma.DateTimeFilter<"Campaign"> | Date | string
   motivationMessage?: Prisma.StringFilter<"Campaign"> | string
@@ -891,6 +886,7 @@ export type CampaignCreateWithoutDonationsInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -905,7 +901,6 @@ export type CampaignCreateWithoutDonationsInput = {
   likes?: number
   updates?: Prisma.CampaignUpdateCreateNestedManyWithoutCampaignInput
   creator: Prisma.UserCreateNestedOneWithoutCampaignsInput
-  assets?: Prisma.AssetCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutDonationsInput = {
@@ -915,6 +910,7 @@ export type CampaignUncheckedCreateWithoutDonationsInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -928,7 +924,6 @@ export type CampaignUncheckedCreateWithoutDonationsInput = {
   isDeleted?: boolean
   likes?: number
   updates?: Prisma.CampaignUpdateUncheckedCreateNestedManyWithoutCampaignInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutDonationsInput = {
@@ -953,6 +948,7 @@ export type CampaignUpdateWithoutDonationsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -967,7 +963,6 @@ export type CampaignUpdateWithoutDonationsInput = {
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   updates?: Prisma.CampaignUpdateUpdateManyWithoutCampaignNestedInput
   creator?: Prisma.UserUpdateOneRequiredWithoutCampaignsNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutDonationsInput = {
@@ -977,6 +972,7 @@ export type CampaignUncheckedUpdateWithoutDonationsInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -990,7 +986,6 @@ export type CampaignUncheckedUpdateWithoutDonationsInput = {
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   updates?: Prisma.CampaignUpdateUncheckedUpdateManyWithoutCampaignNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignCreateWithoutUpdatesInput = {
@@ -999,6 +994,7 @@ export type CampaignCreateWithoutUpdatesInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -1013,7 +1009,6 @@ export type CampaignCreateWithoutUpdatesInput = {
   likes?: number
   creator: Prisma.UserCreateNestedOneWithoutCampaignsInput
   donations?: Prisma.DonationCreateNestedManyWithoutCampaignInput
-  assets?: Prisma.AssetCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignUncheckedCreateWithoutUpdatesInput = {
@@ -1023,6 +1018,7 @@ export type CampaignUncheckedCreateWithoutUpdatesInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -1036,7 +1032,6 @@ export type CampaignUncheckedCreateWithoutUpdatesInput = {
   isDeleted?: boolean
   likes?: number
   donations?: Prisma.DonationUncheckedCreateNestedManyWithoutCampaignInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCampaignInput
 }
 
 export type CampaignCreateOrConnectWithoutUpdatesInput = {
@@ -1061,6 +1056,7 @@ export type CampaignUpdateWithoutUpdatesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1075,7 +1071,6 @@ export type CampaignUpdateWithoutUpdatesInput = {
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   creator?: Prisma.UserUpdateOneRequiredWithoutCampaignsNestedInput
   donations?: Prisma.DonationUpdateManyWithoutCampaignNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutUpdatesInput = {
@@ -1085,6 +1080,7 @@ export type CampaignUncheckedUpdateWithoutUpdatesInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1097,115 +1093,6 @@ export type CampaignUncheckedUpdateWithoutUpdatesInput = {
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   likes?: Prisma.IntFieldUpdateOperationsInput | number
-  donations?: Prisma.DonationUncheckedUpdateManyWithoutCampaignNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCampaignNestedInput
-}
-
-export type CampaignCreateWithoutAssetsInput = {
-  id?: string
-  title: string
-  description: string
-  category?: $Enums.CampaignCategory
-  goal: number
-  startDate: Date | string
-  endDate: Date | string
-  motivationMessage: string
-  status?: $Enums.CampaignStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  isVerified?: boolean
-  verificationStatus?: $Enums.VerificationStatus
-  isActive?: boolean
-  notes: string
-  isDeleted?: boolean
-  likes?: number
-  updates?: Prisma.CampaignUpdateCreateNestedManyWithoutCampaignInput
-  creator: Prisma.UserCreateNestedOneWithoutCampaignsInput
-  donations?: Prisma.DonationCreateNestedManyWithoutCampaignInput
-}
-
-export type CampaignUncheckedCreateWithoutAssetsInput = {
-  id?: string
-  creatorId: string
-  title: string
-  description: string
-  category?: $Enums.CampaignCategory
-  goal: number
-  startDate: Date | string
-  endDate: Date | string
-  motivationMessage: string
-  status?: $Enums.CampaignStatus
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  isVerified?: boolean
-  verificationStatus?: $Enums.VerificationStatus
-  isActive?: boolean
-  notes: string
-  isDeleted?: boolean
-  likes?: number
-  updates?: Prisma.CampaignUpdateUncheckedCreateNestedManyWithoutCampaignInput
-  donations?: Prisma.DonationUncheckedCreateNestedManyWithoutCampaignInput
-}
-
-export type CampaignCreateOrConnectWithoutAssetsInput = {
-  where: Prisma.CampaignWhereUniqueInput
-  create: Prisma.XOR<Prisma.CampaignCreateWithoutAssetsInput, Prisma.CampaignUncheckedCreateWithoutAssetsInput>
-}
-
-export type CampaignUpsertWithoutAssetsInput = {
-  update: Prisma.XOR<Prisma.CampaignUpdateWithoutAssetsInput, Prisma.CampaignUncheckedUpdateWithoutAssetsInput>
-  create: Prisma.XOR<Prisma.CampaignCreateWithoutAssetsInput, Prisma.CampaignUncheckedCreateWithoutAssetsInput>
-  where?: Prisma.CampaignWhereInput
-}
-
-export type CampaignUpdateToOneWithWhereWithoutAssetsInput = {
-  where?: Prisma.CampaignWhereInput
-  data: Prisma.XOR<Prisma.CampaignUpdateWithoutAssetsInput, Prisma.CampaignUncheckedUpdateWithoutAssetsInput>
-}
-
-export type CampaignUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
-  goal?: Prisma.IntFieldUpdateOperationsInput | number
-  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  notes?: Prisma.StringFieldUpdateOperationsInput | string
-  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  likes?: Prisma.IntFieldUpdateOperationsInput | number
-  updates?: Prisma.CampaignUpdateUpdateManyWithoutCampaignNestedInput
-  creator?: Prisma.UserUpdateOneRequiredWithoutCampaignsNestedInput
-  donations?: Prisma.DonationUpdateManyWithoutCampaignNestedInput
-}
-
-export type CampaignUncheckedUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  creatorId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
-  goal?: Prisma.IntFieldUpdateOperationsInput | number
-  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  notes?: Prisma.StringFieldUpdateOperationsInput | string
-  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  likes?: Prisma.IntFieldUpdateOperationsInput | number
-  updates?: Prisma.CampaignUpdateUncheckedUpdateManyWithoutCampaignNestedInput
   donations?: Prisma.DonationUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
@@ -1215,6 +1102,7 @@ export type CampaignCreateManyCreatorInput = {
   description: string
   category?: $Enums.CampaignCategory
   goal: number
+  thumbnail: string
   startDate: Date | string
   endDate: Date | string
   motivationMessage: string
@@ -1235,6 +1123,7 @@ export type CampaignUpdateWithoutCreatorInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1249,7 +1138,6 @@ export type CampaignUpdateWithoutCreatorInput = {
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   updates?: Prisma.CampaignUpdateUpdateManyWithoutCampaignNestedInput
   donations?: Prisma.DonationUpdateManyWithoutCampaignNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateWithoutCreatorInput = {
@@ -1258,6 +1146,7 @@ export type CampaignUncheckedUpdateWithoutCreatorInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1272,7 +1161,6 @@ export type CampaignUncheckedUpdateWithoutCreatorInput = {
   likes?: Prisma.IntFieldUpdateOperationsInput | number
   updates?: Prisma.CampaignUpdateUncheckedUpdateManyWithoutCampaignNestedInput
   donations?: Prisma.DonationUncheckedUpdateManyWithoutCampaignNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCampaignNestedInput
 }
 
 export type CampaignUncheckedUpdateManyWithoutCreatorInput = {
@@ -1281,6 +1169,7 @@ export type CampaignUncheckedUpdateManyWithoutCreatorInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.EnumCampaignCategoryFieldUpdateOperationsInput | $Enums.CampaignCategory
   goal?: Prisma.IntFieldUpdateOperationsInput | number
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   endDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   motivationMessage?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1303,13 +1192,11 @@ export type CampaignUncheckedUpdateManyWithoutCreatorInput = {
 export type CampaignCountOutputType = {
   updates: number
   donations: number
-  assets: number
 }
 
 export type CampaignCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   updates?: boolean | CampaignCountOutputTypeCountUpdatesArgs
   donations?: boolean | CampaignCountOutputTypeCountDonationsArgs
-  assets?: boolean | CampaignCountOutputTypeCountAssetsArgs
 }
 
 /**
@@ -1336,13 +1223,6 @@ export type CampaignCountOutputTypeCountDonationsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.DonationWhereInput
 }
 
-/**
- * CampaignCountOutputType without action
- */
-export type CampaignCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AssetWhereInput
-}
-
 
 export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1351,6 +1231,7 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   description?: boolean
   category?: boolean
   goal?: boolean
+  thumbnail?: boolean
   startDate?: boolean
   endDate?: boolean
   motivationMessage?: boolean
@@ -1366,7 +1247,6 @@ export type CampaignSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updates?: boolean | Prisma.Campaign$updatesArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   donations?: boolean | Prisma.Campaign$donationsArgs<ExtArgs>
-  assets?: boolean | Prisma.Campaign$assetsArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaign"]>
 
@@ -1379,6 +1259,7 @@ export type CampaignSelectScalar = {
   description?: boolean
   category?: boolean
   goal?: boolean
+  thumbnail?: boolean
   startDate?: boolean
   endDate?: boolean
   motivationMessage?: boolean
@@ -1393,12 +1274,11 @@ export type CampaignSelectScalar = {
   likes?: boolean
 }
 
-export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "creatorId" | "title" | "description" | "category" | "goal" | "startDate" | "endDate" | "motivationMessage" | "status" | "createdAt" | "updatedAt" | "isVerified" | "verificationStatus" | "isActive" | "notes" | "isDeleted" | "likes", ExtArgs["result"]["campaign"]>
+export type CampaignOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "creatorId" | "title" | "description" | "category" | "goal" | "thumbnail" | "startDate" | "endDate" | "motivationMessage" | "status" | "createdAt" | "updatedAt" | "isVerified" | "verificationStatus" | "isActive" | "notes" | "isDeleted" | "likes", ExtArgs["result"]["campaign"]>
 export type CampaignInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   updates?: boolean | Prisma.Campaign$updatesArgs<ExtArgs>
   creator?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   donations?: boolean | Prisma.Campaign$donationsArgs<ExtArgs>
-  assets?: boolean | Prisma.Campaign$assetsArgs<ExtArgs>
   _count?: boolean | Prisma.CampaignCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1408,7 +1288,6 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     updates: Prisma.$CampaignUpdatePayload<ExtArgs>[]
     creator: Prisma.$UserPayload<ExtArgs>
     donations: Prisma.$DonationPayload<ExtArgs>[]
-    assets: Prisma.$AssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1417,6 +1296,7 @@ export type $CampaignPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     description: string
     category: $Enums.CampaignCategory
     goal: number
+    thumbnail: string
     startDate: Date
     endDate: Date
     motivationMessage: string
@@ -1772,7 +1652,6 @@ export interface Prisma__CampaignClient<T, Null = never, ExtArgs extends runtime
   updates<T extends Prisma.Campaign$updatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$updatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CampaignUpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   creator<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   donations<T extends Prisma.Campaign$donationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$donationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DonationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  assets<T extends Prisma.Campaign$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Campaign$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1808,6 +1687,7 @@ export interface CampaignFieldRefs {
   readonly description: Prisma.FieldRef<"Campaign", 'String'>
   readonly category: Prisma.FieldRef<"Campaign", 'CampaignCategory'>
   readonly goal: Prisma.FieldRef<"Campaign", 'Int'>
+  readonly thumbnail: Prisma.FieldRef<"Campaign", 'String'>
   readonly startDate: Prisma.FieldRef<"Campaign", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Campaign", 'DateTime'>
   readonly motivationMessage: Prisma.FieldRef<"Campaign", 'String'>
@@ -2208,30 +2088,6 @@ export type Campaign$donationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.DonationScalarFieldEnum | Prisma.DonationScalarFieldEnum[]
-}
-
-/**
- * Campaign.assets
- */
-export type Campaign$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Asset
-   */
-  select?: Prisma.AssetSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Asset
-   */
-  omit?: Prisma.AssetOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AssetInclude<ExtArgs> | null
-  where?: Prisma.AssetWhereInput
-  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
-  cursor?: Prisma.AssetWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
 }
 
 /**

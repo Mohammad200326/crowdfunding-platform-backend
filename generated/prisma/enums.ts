@@ -80,25 +80,3 @@ export const CreatorType = {
 } as const
 
 export type CreatorType = (typeof CreatorType)[keyof typeof CreatorType]
-
-
-export const StorageProviderName = {
-  IMAGE_KIT: 'IMAGE_KIT'
-} as const
-
-export type StorageProviderName = (typeof StorageProviderName)[keyof typeof StorageProviderName]
-
-
-export const AssetKind = {
-  USER_AVATAR: 'USER_AVATAR',
-  CAMPAIGN_THUMBNAIL: 'CAMPAIGN_THUMBNAIL',
-  CAMPAIGN_UPDATE_MEDIA: 'CAMPAIGN_UPDATE_MEDIA',
-  INSTITUTION_REGISTRATION_CERTIFICATE: 'INSTITUTION_REGISTRATION_CERTIFICATE',
-  INSTITUTION_COMMERCIAL_LICENSE: 'INSTITUTION_COMMERCIAL_LICENSE',
-  INSTITUTION_REPRESENTATIVE_ID_PHOTO: 'INSTITUTION_REPRESENTATIVE_ID_PHOTO',
-  INSTITUTION_COMMISSIONER_IMAGE: 'INSTITUTION_COMMISSIONER_IMAGE',
-  INSTITUTION_AUTHORIZATION_LETTER: 'INSTITUTION_AUTHORIZATION_LETTER',
-  BANK_PROOF_DOCUMENT: 'BANK_PROOF_DOCUMENT'
-} as const
-
-export type AssetKind = (typeof AssetKind)[keyof typeof AssetKind]

@@ -34,9 +34,14 @@ export type CampaignCreatorMinAggregateOutputType = {
   institutionLegalStatus: string | null
   institutionTaxIdentificationNumber: string | null
   institutionRegistrationNumber: string | null
+  institutionRegistrationCertificate: string | null
+  institutionCommercialLicense: string | null
   institutionRepresentativeName: string | null
   institutionRepresentativePosition: string | null
   institutionRepresentativeRegistrationNumber: string | null
+  institutionRepresentativeIdPhoto: string | null
+  institutionCommissionerImage: string | null
+  institutionAuthorizationLetter: string | null
   institutionWebsite: string | null
   institutionRepresentativeSocialMedia: string | null
   createdAt: Date | null
@@ -53,9 +58,14 @@ export type CampaignCreatorMaxAggregateOutputType = {
   institutionLegalStatus: string | null
   institutionTaxIdentificationNumber: string | null
   institutionRegistrationNumber: string | null
+  institutionRegistrationCertificate: string | null
+  institutionCommercialLicense: string | null
   institutionRepresentativeName: string | null
   institutionRepresentativePosition: string | null
   institutionRepresentativeRegistrationNumber: string | null
+  institutionRepresentativeIdPhoto: string | null
+  institutionCommissionerImage: string | null
+  institutionAuthorizationLetter: string | null
   institutionWebsite: string | null
   institutionRepresentativeSocialMedia: string | null
   createdAt: Date | null
@@ -72,9 +82,14 @@ export type CampaignCreatorCountAggregateOutputType = {
   institutionLegalStatus: number
   institutionTaxIdentificationNumber: number
   institutionRegistrationNumber: number
+  institutionRegistrationCertificate: number
+  institutionCommercialLicense: number
   institutionRepresentativeName: number
   institutionRepresentativePosition: number
   institutionRepresentativeRegistrationNumber: number
+  institutionRepresentativeIdPhoto: number
+  institutionCommissionerImage: number
+  institutionAuthorizationLetter: number
   institutionWebsite: number
   institutionRepresentativeSocialMedia: number
   createdAt: number
@@ -93,9 +108,14 @@ export type CampaignCreatorMinAggregateInputType = {
   institutionLegalStatus?: true
   institutionTaxIdentificationNumber?: true
   institutionRegistrationNumber?: true
+  institutionRegistrationCertificate?: true
+  institutionCommercialLicense?: true
   institutionRepresentativeName?: true
   institutionRepresentativePosition?: true
   institutionRepresentativeRegistrationNumber?: true
+  institutionRepresentativeIdPhoto?: true
+  institutionCommissionerImage?: true
+  institutionAuthorizationLetter?: true
   institutionWebsite?: true
   institutionRepresentativeSocialMedia?: true
   createdAt?: true
@@ -112,9 +132,14 @@ export type CampaignCreatorMaxAggregateInputType = {
   institutionLegalStatus?: true
   institutionTaxIdentificationNumber?: true
   institutionRegistrationNumber?: true
+  institutionRegistrationCertificate?: true
+  institutionCommercialLicense?: true
   institutionRepresentativeName?: true
   institutionRepresentativePosition?: true
   institutionRepresentativeRegistrationNumber?: true
+  institutionRepresentativeIdPhoto?: true
+  institutionCommissionerImage?: true
+  institutionAuthorizationLetter?: true
   institutionWebsite?: true
   institutionRepresentativeSocialMedia?: true
   createdAt?: true
@@ -131,9 +156,14 @@ export type CampaignCreatorCountAggregateInputType = {
   institutionLegalStatus?: true
   institutionTaxIdentificationNumber?: true
   institutionRegistrationNumber?: true
+  institutionRegistrationCertificate?: true
+  institutionCommercialLicense?: true
   institutionRepresentativeName?: true
   institutionRepresentativePosition?: true
   institutionRepresentativeRegistrationNumber?: true
+  institutionRepresentativeIdPhoto?: true
+  institutionCommissionerImage?: true
+  institutionAuthorizationLetter?: true
   institutionWebsite?: true
   institutionRepresentativeSocialMedia?: true
   createdAt?: true
@@ -223,9 +253,14 @@ export type CampaignCreatorGroupByOutputType = {
   institutionLegalStatus: string
   institutionTaxIdentificationNumber: string
   institutionRegistrationNumber: string
+  institutionRegistrationCertificate: string
+  institutionCommercialLicense: string
   institutionRepresentativeName: string
   institutionRepresentativePosition: string
   institutionRepresentativeRegistrationNumber: string
+  institutionRepresentativeIdPhoto: string
+  institutionCommissionerImage: string
+  institutionAuthorizationLetter: string
   institutionWebsite: string
   institutionRepresentativeSocialMedia: string
   createdAt: Date
@@ -263,15 +298,19 @@ export type CampaignCreatorWhereInput = {
   institutionLegalStatus?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionTaxIdentificationNumber?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRegistrationNumber?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionRegistrationCertificate?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionCommercialLicense?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativeName?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativePosition?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionCommissionerImage?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionAuthorizationLetter?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionWebsite?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativeSocialMedia?: Prisma.StringFilter<"CampaignCreator"> | string
   createdAt?: Prisma.DateTimeFilter<"CampaignCreator"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignCreator"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  assets?: Prisma.AssetListRelationFilter
 }
 
 export type CampaignCreatorOrderByWithRelationInput = {
@@ -284,15 +323,19 @@ export type CampaignCreatorOrderByWithRelationInput = {
   institutionLegalStatus?: Prisma.SortOrder
   institutionTaxIdentificationNumber?: Prisma.SortOrder
   institutionRegistrationNumber?: Prisma.SortOrder
+  institutionRegistrationCertificate?: Prisma.SortOrder
+  institutionCommercialLicense?: Prisma.SortOrder
   institutionRepresentativeName?: Prisma.SortOrder
   institutionRepresentativePosition?: Prisma.SortOrder
   institutionRepresentativeRegistrationNumber?: Prisma.SortOrder
+  institutionRepresentativeIdPhoto?: Prisma.SortOrder
+  institutionCommissionerImage?: Prisma.SortOrder
+  institutionAuthorizationLetter?: Prisma.SortOrder
   institutionWebsite?: Prisma.SortOrder
   institutionRepresentativeSocialMedia?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
-  assets?: Prisma.AssetOrderByRelationAggregateInput
   _relevance?: Prisma.CampaignCreatorOrderByRelevanceInput
 }
 
@@ -309,15 +352,19 @@ export type CampaignCreatorWhereUniqueInput = Prisma.AtLeast<{
   institutionLegalStatus?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionTaxIdentificationNumber?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRegistrationNumber?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionRegistrationCertificate?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionCommercialLicense?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativeName?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativePosition?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionCommissionerImage?: Prisma.StringFilter<"CampaignCreator"> | string
+  institutionAuthorizationLetter?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionWebsite?: Prisma.StringFilter<"CampaignCreator"> | string
   institutionRepresentativeSocialMedia?: Prisma.StringFilter<"CampaignCreator"> | string
   createdAt?: Prisma.DateTimeFilter<"CampaignCreator"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignCreator"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
-  assets?: Prisma.AssetListRelationFilter
 }, "id" | "userId">
 
 export type CampaignCreatorOrderByWithAggregationInput = {
@@ -330,9 +377,14 @@ export type CampaignCreatorOrderByWithAggregationInput = {
   institutionLegalStatus?: Prisma.SortOrder
   institutionTaxIdentificationNumber?: Prisma.SortOrder
   institutionRegistrationNumber?: Prisma.SortOrder
+  institutionRegistrationCertificate?: Prisma.SortOrder
+  institutionCommercialLicense?: Prisma.SortOrder
   institutionRepresentativeName?: Prisma.SortOrder
   institutionRepresentativePosition?: Prisma.SortOrder
   institutionRepresentativeRegistrationNumber?: Prisma.SortOrder
+  institutionRepresentativeIdPhoto?: Prisma.SortOrder
+  institutionCommissionerImage?: Prisma.SortOrder
+  institutionAuthorizationLetter?: Prisma.SortOrder
   institutionWebsite?: Prisma.SortOrder
   institutionRepresentativeSocialMedia?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -355,9 +407,14 @@ export type CampaignCreatorScalarWhereWithAggregatesInput = {
   institutionLegalStatus?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   institutionTaxIdentificationNumber?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   institutionRegistrationNumber?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
+  institutionRegistrationCertificate?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
+  institutionCommercialLicense?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   institutionRepresentativeName?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   institutionRepresentativePosition?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
+  institutionRepresentativeIdPhoto?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
+  institutionCommissionerImage?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
+  institutionAuthorizationLetter?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   institutionWebsite?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   institutionRepresentativeSocialMedia?: Prisma.StringWithAggregatesFilter<"CampaignCreator"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CampaignCreator"> | Date | string
@@ -373,15 +430,19 @@ export type CampaignCreatorCreateInput = {
   institutionLegalStatus: string
   institutionTaxIdentificationNumber: string
   institutionRegistrationNumber: string
+  institutionRegistrationCertificate: string
+  institutionCommercialLicense: string
   institutionRepresentativeName: string
   institutionRepresentativePosition: string
   institutionRepresentativeRegistrationNumber: string
+  institutionRepresentativeIdPhoto: string
+  institutionCommissionerImage: string
+  institutionAuthorizationLetter: string
   institutionWebsite: string
   institutionRepresentativeSocialMedia: string
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutCreatorProfileInput
-  assets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
 }
 
 export type CampaignCreatorUncheckedCreateInput = {
@@ -394,14 +455,18 @@ export type CampaignCreatorUncheckedCreateInput = {
   institutionLegalStatus: string
   institutionTaxIdentificationNumber: string
   institutionRegistrationNumber: string
+  institutionRegistrationCertificate: string
+  institutionCommercialLicense: string
   institutionRepresentativeName: string
   institutionRepresentativePosition: string
   institutionRepresentativeRegistrationNumber: string
+  institutionRepresentativeIdPhoto: string
+  institutionCommissionerImage: string
+  institutionAuthorizationLetter: string
   institutionWebsite: string
   institutionRepresentativeSocialMedia: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type CampaignCreatorUpdateInput = {
@@ -413,15 +478,19 @@ export type CampaignCreatorUpdateInput = {
   institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
   institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRegistrationCertificate?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommercialLicense?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommissionerImage?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionAuthorizationLetter?: Prisma.StringFieldUpdateOperationsInput | string
   institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutCreatorProfileNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
 }
 
 export type CampaignCreatorUncheckedUpdateInput = {
@@ -434,14 +503,18 @@ export type CampaignCreatorUncheckedUpdateInput = {
   institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
   institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRegistrationCertificate?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommercialLicense?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommissionerImage?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionAuthorizationLetter?: Prisma.StringFieldUpdateOperationsInput | string
   institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
 }
 
 export type CampaignCreatorCreateManyInput = {
@@ -454,9 +527,14 @@ export type CampaignCreatorCreateManyInput = {
   institutionLegalStatus: string
   institutionTaxIdentificationNumber: string
   institutionRegistrationNumber: string
+  institutionRegistrationCertificate: string
+  institutionCommercialLicense: string
   institutionRepresentativeName: string
   institutionRepresentativePosition: string
   institutionRepresentativeRegistrationNumber: string
+  institutionRepresentativeIdPhoto: string
+  institutionCommissionerImage: string
+  institutionAuthorizationLetter: string
   institutionWebsite: string
   institutionRepresentativeSocialMedia: string
   createdAt?: Date | string
@@ -472,9 +550,14 @@ export type CampaignCreatorUpdateManyMutationInput = {
   institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
   institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRegistrationCertificate?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommercialLicense?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommissionerImage?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionAuthorizationLetter?: Prisma.StringFieldUpdateOperationsInput | string
   institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -491,9 +574,14 @@ export type CampaignCreatorUncheckedUpdateManyInput = {
   institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
   institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRegistrationCertificate?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommercialLicense?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommissionerImage?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionAuthorizationLetter?: Prisma.StringFieldUpdateOperationsInput | string
   institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -521,9 +609,14 @@ export type CampaignCreatorCountOrderByAggregateInput = {
   institutionLegalStatus?: Prisma.SortOrder
   institutionTaxIdentificationNumber?: Prisma.SortOrder
   institutionRegistrationNumber?: Prisma.SortOrder
+  institutionRegistrationCertificate?: Prisma.SortOrder
+  institutionCommercialLicense?: Prisma.SortOrder
   institutionRepresentativeName?: Prisma.SortOrder
   institutionRepresentativePosition?: Prisma.SortOrder
   institutionRepresentativeRegistrationNumber?: Prisma.SortOrder
+  institutionRepresentativeIdPhoto?: Prisma.SortOrder
+  institutionCommissionerImage?: Prisma.SortOrder
+  institutionAuthorizationLetter?: Prisma.SortOrder
   institutionWebsite?: Prisma.SortOrder
   institutionRepresentativeSocialMedia?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -540,9 +633,14 @@ export type CampaignCreatorMaxOrderByAggregateInput = {
   institutionLegalStatus?: Prisma.SortOrder
   institutionTaxIdentificationNumber?: Prisma.SortOrder
   institutionRegistrationNumber?: Prisma.SortOrder
+  institutionRegistrationCertificate?: Prisma.SortOrder
+  institutionCommercialLicense?: Prisma.SortOrder
   institutionRepresentativeName?: Prisma.SortOrder
   institutionRepresentativePosition?: Prisma.SortOrder
   institutionRepresentativeRegistrationNumber?: Prisma.SortOrder
+  institutionRepresentativeIdPhoto?: Prisma.SortOrder
+  institutionCommissionerImage?: Prisma.SortOrder
+  institutionAuthorizationLetter?: Prisma.SortOrder
   institutionWebsite?: Prisma.SortOrder
   institutionRepresentativeSocialMedia?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -559,9 +657,14 @@ export type CampaignCreatorMinOrderByAggregateInput = {
   institutionLegalStatus?: Prisma.SortOrder
   institutionTaxIdentificationNumber?: Prisma.SortOrder
   institutionRegistrationNumber?: Prisma.SortOrder
+  institutionRegistrationCertificate?: Prisma.SortOrder
+  institutionCommercialLicense?: Prisma.SortOrder
   institutionRepresentativeName?: Prisma.SortOrder
   institutionRepresentativePosition?: Prisma.SortOrder
   institutionRepresentativeRegistrationNumber?: Prisma.SortOrder
+  institutionRepresentativeIdPhoto?: Prisma.SortOrder
+  institutionCommissionerImage?: Prisma.SortOrder
+  institutionAuthorizationLetter?: Prisma.SortOrder
   institutionWebsite?: Prisma.SortOrder
   institutionRepresentativeSocialMedia?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -604,22 +707,6 @@ export type EnumCreatorTypeFieldUpdateOperationsInput = {
   set?: $Enums.CreatorType
 }
 
-export type CampaignCreatorCreateNestedOneWithoutAssetsInput = {
-  create?: Prisma.XOR<Prisma.CampaignCreatorCreateWithoutAssetsInput, Prisma.CampaignCreatorUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.CampaignCreatorCreateOrConnectWithoutAssetsInput
-  connect?: Prisma.CampaignCreatorWhereUniqueInput
-}
-
-export type CampaignCreatorUpdateOneWithoutAssetsNestedInput = {
-  create?: Prisma.XOR<Prisma.CampaignCreatorCreateWithoutAssetsInput, Prisma.CampaignCreatorUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.CampaignCreatorCreateOrConnectWithoutAssetsInput
-  upsert?: Prisma.CampaignCreatorUpsertWithoutAssetsInput
-  disconnect?: Prisma.CampaignCreatorWhereInput | boolean
-  delete?: Prisma.CampaignCreatorWhereInput | boolean
-  connect?: Prisma.CampaignCreatorWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignCreatorUpdateToOneWithWhereWithoutAssetsInput, Prisma.CampaignCreatorUpdateWithoutAssetsInput>, Prisma.CampaignCreatorUncheckedUpdateWithoutAssetsInput>
-}
-
 export type CampaignCreatorCreateWithoutUserInput = {
   id?: string
   type: $Enums.CreatorType
@@ -629,14 +716,18 @@ export type CampaignCreatorCreateWithoutUserInput = {
   institutionLegalStatus: string
   institutionTaxIdentificationNumber: string
   institutionRegistrationNumber: string
+  institutionRegistrationCertificate: string
+  institutionCommercialLicense: string
   institutionRepresentativeName: string
   institutionRepresentativePosition: string
   institutionRepresentativeRegistrationNumber: string
+  institutionRepresentativeIdPhoto: string
+  institutionCommissionerImage: string
+  institutionAuthorizationLetter: string
   institutionWebsite: string
   institutionRepresentativeSocialMedia: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  assets?: Prisma.AssetCreateNestedManyWithoutCreatorInput
 }
 
 export type CampaignCreatorUncheckedCreateWithoutUserInput = {
@@ -648,14 +739,18 @@ export type CampaignCreatorUncheckedCreateWithoutUserInput = {
   institutionLegalStatus: string
   institutionTaxIdentificationNumber: string
   institutionRegistrationNumber: string
+  institutionRegistrationCertificate: string
+  institutionCommercialLicense: string
   institutionRepresentativeName: string
   institutionRepresentativePosition: string
   institutionRepresentativeRegistrationNumber: string
+  institutionRepresentativeIdPhoto: string
+  institutionCommissionerImage: string
+  institutionAuthorizationLetter: string
   institutionWebsite: string
   institutionRepresentativeSocialMedia: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCreatorInput
 }
 
 export type CampaignCreatorCreateOrConnectWithoutUserInput = {
@@ -683,14 +778,18 @@ export type CampaignCreatorUpdateWithoutUserInput = {
   institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
   institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRegistrationCertificate?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommercialLicense?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommissionerImage?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionAuthorizationLetter?: Prisma.StringFieldUpdateOperationsInput | string
   institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assets?: Prisma.AssetUpdateManyWithoutCreatorNestedInput
 }
 
 export type CampaignCreatorUncheckedUpdateWithoutUserInput = {
@@ -702,137 +801,20 @@ export type CampaignCreatorUncheckedUpdateWithoutUserInput = {
   institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
   institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRegistrationCertificate?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommercialLicense?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCreatorNestedInput
-}
-
-export type CampaignCreatorCreateWithoutAssetsInput = {
-  id?: string
-  type: $Enums.CreatorType
-  institutionType: string
-  institutionCountry: string
-  institutionDateOfEstablishment: Date | string
-  institutionLegalStatus: string
-  institutionTaxIdentificationNumber: string
-  institutionRegistrationNumber: string
-  institutionRepresentativeName: string
-  institutionRepresentativePosition: string
-  institutionRepresentativeRegistrationNumber: string
-  institutionWebsite: string
-  institutionRepresentativeSocialMedia: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutCreatorProfileInput
-}
-
-export type CampaignCreatorUncheckedCreateWithoutAssetsInput = {
-  id?: string
-  type: $Enums.CreatorType
-  userId: string
-  institutionType: string
-  institutionCountry: string
-  institutionDateOfEstablishment: Date | string
-  institutionLegalStatus: string
-  institutionTaxIdentificationNumber: string
-  institutionRegistrationNumber: string
-  institutionRepresentativeName: string
-  institutionRepresentativePosition: string
-  institutionRepresentativeRegistrationNumber: string
-  institutionWebsite: string
-  institutionRepresentativeSocialMedia: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CampaignCreatorCreateOrConnectWithoutAssetsInput = {
-  where: Prisma.CampaignCreatorWhereUniqueInput
-  create: Prisma.XOR<Prisma.CampaignCreatorCreateWithoutAssetsInput, Prisma.CampaignCreatorUncheckedCreateWithoutAssetsInput>
-}
-
-export type CampaignCreatorUpsertWithoutAssetsInput = {
-  update: Prisma.XOR<Prisma.CampaignCreatorUpdateWithoutAssetsInput, Prisma.CampaignCreatorUncheckedUpdateWithoutAssetsInput>
-  create: Prisma.XOR<Prisma.CampaignCreatorCreateWithoutAssetsInput, Prisma.CampaignCreatorUncheckedCreateWithoutAssetsInput>
-  where?: Prisma.CampaignCreatorWhereInput
-}
-
-export type CampaignCreatorUpdateToOneWithWhereWithoutAssetsInput = {
-  where?: Prisma.CampaignCreatorWhereInput
-  data: Prisma.XOR<Prisma.CampaignCreatorUpdateWithoutAssetsInput, Prisma.CampaignCreatorUncheckedUpdateWithoutAssetsInput>
-}
-
-export type CampaignCreatorUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumCreatorTypeFieldUpdateOperationsInput | $Enums.CreatorType
-  institutionType?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionCountry?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionDateOfEstablishment?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutCreatorProfileNestedInput
-}
-
-export type CampaignCreatorUncheckedUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  type?: Prisma.EnumCreatorTypeFieldUpdateOperationsInput | $Enums.CreatorType
-  userId?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionType?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionCountry?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionDateOfEstablishment?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  institutionLegalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionTaxIdentificationNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativeName?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativePosition?: Prisma.StringFieldUpdateOperationsInput | string
-  institutionRepresentativeRegistrationNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionRepresentativeIdPhoto?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionCommissionerImage?: Prisma.StringFieldUpdateOperationsInput | string
+  institutionAuthorizationLetter?: Prisma.StringFieldUpdateOperationsInput | string
   institutionWebsite?: Prisma.StringFieldUpdateOperationsInput | string
   institutionRepresentativeSocialMedia?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type CampaignCreatorCountOutputType
- */
-
-export type CampaignCreatorCountOutputType = {
-  assets: number
-}
-
-export type CampaignCreatorCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  assets?: boolean | CampaignCreatorCountOutputTypeCountAssetsArgs
-}
-
-/**
- * CampaignCreatorCountOutputType without action
- */
-export type CampaignCreatorCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CampaignCreatorCountOutputType
-   */
-  select?: Prisma.CampaignCreatorCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * CampaignCreatorCountOutputType without action
- */
-export type CampaignCreatorCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AssetWhereInput
-}
 
 
 export type CampaignCreatorSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -845,16 +827,19 @@ export type CampaignCreatorSelect<ExtArgs extends runtime.Types.Extensions.Inter
   institutionLegalStatus?: boolean
   institutionTaxIdentificationNumber?: boolean
   institutionRegistrationNumber?: boolean
+  institutionRegistrationCertificate?: boolean
+  institutionCommercialLicense?: boolean
   institutionRepresentativeName?: boolean
   institutionRepresentativePosition?: boolean
   institutionRepresentativeRegistrationNumber?: boolean
+  institutionRepresentativeIdPhoto?: boolean
+  institutionCommissionerImage?: boolean
+  institutionAuthorizationLetter?: boolean
   institutionWebsite?: boolean
   institutionRepresentativeSocialMedia?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  assets?: boolean | Prisma.CampaignCreator$assetsArgs<ExtArgs>
-  _count?: boolean | Prisma.CampaignCreatorCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaignCreator"]>
 
 
@@ -869,27 +854,29 @@ export type CampaignCreatorSelectScalar = {
   institutionLegalStatus?: boolean
   institutionTaxIdentificationNumber?: boolean
   institutionRegistrationNumber?: boolean
+  institutionRegistrationCertificate?: boolean
+  institutionCommercialLicense?: boolean
   institutionRepresentativeName?: boolean
   institutionRepresentativePosition?: boolean
   institutionRepresentativeRegistrationNumber?: boolean
+  institutionRepresentativeIdPhoto?: boolean
+  institutionCommissionerImage?: boolean
+  institutionAuthorizationLetter?: boolean
   institutionWebsite?: boolean
   institutionRepresentativeSocialMedia?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CampaignCreatorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "userId" | "institutionType" | "institutionCountry" | "institutionDateOfEstablishment" | "institutionLegalStatus" | "institutionTaxIdentificationNumber" | "institutionRegistrationNumber" | "institutionRepresentativeName" | "institutionRepresentativePosition" | "institutionRepresentativeRegistrationNumber" | "institutionWebsite" | "institutionRepresentativeSocialMedia" | "createdAt" | "updatedAt", ExtArgs["result"]["campaignCreator"]>
+export type CampaignCreatorOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "type" | "userId" | "institutionType" | "institutionCountry" | "institutionDateOfEstablishment" | "institutionLegalStatus" | "institutionTaxIdentificationNumber" | "institutionRegistrationNumber" | "institutionRegistrationCertificate" | "institutionCommercialLicense" | "institutionRepresentativeName" | "institutionRepresentativePosition" | "institutionRepresentativeRegistrationNumber" | "institutionRepresentativeIdPhoto" | "institutionCommissionerImage" | "institutionAuthorizationLetter" | "institutionWebsite" | "institutionRepresentativeSocialMedia" | "createdAt" | "updatedAt", ExtArgs["result"]["campaignCreator"]>
 export type CampaignCreatorInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
-  assets?: boolean | Prisma.CampaignCreator$assetsArgs<ExtArgs>
-  _count?: boolean | Prisma.CampaignCreatorCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $CampaignCreatorPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CampaignCreator"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
-    assets: Prisma.$AssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -901,9 +888,14 @@ export type $CampaignCreatorPayload<ExtArgs extends runtime.Types.Extensions.Int
     institutionLegalStatus: string
     institutionTaxIdentificationNumber: string
     institutionRegistrationNumber: string
+    institutionRegistrationCertificate: string
+    institutionCommercialLicense: string
     institutionRepresentativeName: string
     institutionRepresentativePosition: string
     institutionRepresentativeRegistrationNumber: string
+    institutionRepresentativeIdPhoto: string
+    institutionCommissionerImage: string
+    institutionAuthorizationLetter: string
     institutionWebsite: string
     institutionRepresentativeSocialMedia: string
     createdAt: Date
@@ -1249,7 +1241,6 @@ readonly fields: CampaignCreatorFieldRefs;
 export interface Prisma__CampaignCreatorClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  assets<T extends Prisma.CampaignCreator$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignCreator$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1288,9 +1279,14 @@ export interface CampaignCreatorFieldRefs {
   readonly institutionLegalStatus: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly institutionTaxIdentificationNumber: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly institutionRegistrationNumber: Prisma.FieldRef<"CampaignCreator", 'String'>
+  readonly institutionRegistrationCertificate: Prisma.FieldRef<"CampaignCreator", 'String'>
+  readonly institutionCommercialLicense: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly institutionRepresentativeName: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly institutionRepresentativePosition: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly institutionRepresentativeRegistrationNumber: Prisma.FieldRef<"CampaignCreator", 'String'>
+  readonly institutionRepresentativeIdPhoto: Prisma.FieldRef<"CampaignCreator", 'String'>
+  readonly institutionCommissionerImage: Prisma.FieldRef<"CampaignCreator", 'String'>
+  readonly institutionAuthorizationLetter: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly institutionWebsite: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly institutionRepresentativeSocialMedia: Prisma.FieldRef<"CampaignCreator", 'String'>
   readonly createdAt: Prisma.FieldRef<"CampaignCreator", 'DateTime'>
@@ -1635,30 +1631,6 @@ export type CampaignCreatorDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
    * Limit how many CampaignCreators to delete.
    */
   limit?: number
-}
-
-/**
- * CampaignCreator.assets
- */
-export type CampaignCreator$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Asset
-   */
-  select?: Prisma.AssetSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Asset
-   */
-  omit?: Prisma.AssetOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AssetInclude<ExtArgs> | null
-  where?: Prisma.AssetWhereInput
-  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
-  cursor?: Prisma.AssetWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
 }
 
 /**

@@ -29,6 +29,7 @@ export type CampaignUpdateMinAggregateOutputType = {
   campaignId: string | null
   title: string | null
   description: string | null
+  media: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -38,6 +39,7 @@ export type CampaignUpdateMaxAggregateOutputType = {
   campaignId: string | null
   title: string | null
   description: string | null
+  media: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -47,6 +49,7 @@ export type CampaignUpdateCountAggregateOutputType = {
   campaignId: number
   title: number
   description: number
+  media: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -58,6 +61,7 @@ export type CampaignUpdateMinAggregateInputType = {
   campaignId?: true
   title?: true
   description?: true
+  media?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -67,6 +71,7 @@ export type CampaignUpdateMaxAggregateInputType = {
   campaignId?: true
   title?: true
   description?: true
+  media?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -76,6 +81,7 @@ export type CampaignUpdateCountAggregateInputType = {
   campaignId?: true
   title?: true
   description?: true
+  media?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -158,6 +164,7 @@ export type CampaignUpdateGroupByOutputType = {
   campaignId: string
   title: string
   description: string
+  media: string
   createdAt: Date
   updatedAt: Date
   _count: CampaignUpdateCountAggregateOutputType | null
@@ -188,10 +195,10 @@ export type CampaignUpdateWhereInput = {
   campaignId?: Prisma.StringFilter<"CampaignUpdate"> | string
   title?: Prisma.StringFilter<"CampaignUpdate"> | string
   description?: Prisma.StringFilter<"CampaignUpdate"> | string
+  media?: Prisma.StringFilter<"CampaignUpdate"> | string
   createdAt?: Prisma.DateTimeFilter<"CampaignUpdate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignUpdate"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
-  assets?: Prisma.AssetListRelationFilter
 }
 
 export type CampaignUpdateOrderByWithRelationInput = {
@@ -199,10 +206,10 @@ export type CampaignUpdateOrderByWithRelationInput = {
   campaignId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  media?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   campaign?: Prisma.CampaignOrderByWithRelationInput
-  assets?: Prisma.AssetOrderByRelationAggregateInput
   _relevance?: Prisma.CampaignUpdateOrderByRelevanceInput
 }
 
@@ -214,10 +221,10 @@ export type CampaignUpdateWhereUniqueInput = Prisma.AtLeast<{
   campaignId?: Prisma.StringFilter<"CampaignUpdate"> | string
   title?: Prisma.StringFilter<"CampaignUpdate"> | string
   description?: Prisma.StringFilter<"CampaignUpdate"> | string
+  media?: Prisma.StringFilter<"CampaignUpdate"> | string
   createdAt?: Prisma.DateTimeFilter<"CampaignUpdate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignUpdate"> | Date | string
   campaign?: Prisma.XOR<Prisma.CampaignScalarRelationFilter, Prisma.CampaignWhereInput>
-  assets?: Prisma.AssetListRelationFilter
 }, "id">
 
 export type CampaignUpdateOrderByWithAggregationInput = {
@@ -225,6 +232,7 @@ export type CampaignUpdateOrderByWithAggregationInput = {
   campaignId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  media?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CampaignUpdateCountOrderByAggregateInput
@@ -240,6 +248,7 @@ export type CampaignUpdateScalarWhereWithAggregatesInput = {
   campaignId?: Prisma.StringWithAggregatesFilter<"CampaignUpdate"> | string
   title?: Prisma.StringWithAggregatesFilter<"CampaignUpdate"> | string
   description?: Prisma.StringWithAggregatesFilter<"CampaignUpdate"> | string
+  media?: Prisma.StringWithAggregatesFilter<"CampaignUpdate"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"CampaignUpdate"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"CampaignUpdate"> | Date | string
 }
@@ -248,10 +257,10 @@ export type CampaignUpdateCreateInput = {
   id?: string
   title: string
   description: string
+  media: string
   createdAt?: Date | string
   updatedAt?: Date | string
   campaign: Prisma.CampaignCreateNestedOneWithoutUpdatesInput
-  assets?: Prisma.AssetCreateNestedManyWithoutCampaignUpdateInput
 }
 
 export type CampaignUpdateUncheckedCreateInput = {
@@ -259,19 +268,19 @@ export type CampaignUpdateUncheckedCreateInput = {
   campaignId: string
   title: string
   description: string
+  media: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCampaignUpdateInput
 }
 
 export type CampaignUpdateUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  media?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   campaign?: Prisma.CampaignUpdateOneRequiredWithoutUpdatesNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutCampaignUpdateNestedInput
 }
 
 export type CampaignUpdateUncheckedUpdateInput = {
@@ -279,9 +288,9 @@ export type CampaignUpdateUncheckedUpdateInput = {
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  media?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCampaignUpdateNestedInput
 }
 
 export type CampaignUpdateCreateManyInput = {
@@ -289,6 +298,7 @@ export type CampaignUpdateCreateManyInput = {
   campaignId: string
   title: string
   description: string
+  media: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -297,6 +307,7 @@ export type CampaignUpdateUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  media?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -306,6 +317,7 @@ export type CampaignUpdateUncheckedUpdateManyInput = {
   campaignId?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  media?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -331,6 +343,7 @@ export type CampaignUpdateCountOrderByAggregateInput = {
   campaignId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  media?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -340,6 +353,7 @@ export type CampaignUpdateMaxOrderByAggregateInput = {
   campaignId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  media?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -349,13 +363,9 @@ export type CampaignUpdateMinOrderByAggregateInput = {
   campaignId?: Prisma.SortOrder
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  media?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-}
-
-export type CampaignUpdateNullableScalarRelationFilter = {
-  is?: Prisma.CampaignUpdateWhereInput | null
-  isNot?: Prisma.CampaignUpdateWhereInput | null
 }
 
 export type CampaignUpdateCreateNestedManyWithoutCampaignInput = {
@@ -400,38 +410,22 @@ export type CampaignUpdateUncheckedUpdateManyWithoutCampaignNestedInput = {
   deleteMany?: Prisma.CampaignUpdateScalarWhereInput | Prisma.CampaignUpdateScalarWhereInput[]
 }
 
-export type CampaignUpdateCreateNestedOneWithoutAssetsInput = {
-  create?: Prisma.XOR<Prisma.CampaignUpdateCreateWithoutAssetsInput, Prisma.CampaignUpdateUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.CampaignUpdateCreateOrConnectWithoutAssetsInput
-  connect?: Prisma.CampaignUpdateWhereUniqueInput
-}
-
-export type CampaignUpdateUpdateOneWithoutAssetsNestedInput = {
-  create?: Prisma.XOR<Prisma.CampaignUpdateCreateWithoutAssetsInput, Prisma.CampaignUpdateUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.CampaignUpdateCreateOrConnectWithoutAssetsInput
-  upsert?: Prisma.CampaignUpdateUpsertWithoutAssetsInput
-  disconnect?: Prisma.CampaignUpdateWhereInput | boolean
-  delete?: Prisma.CampaignUpdateWhereInput | boolean
-  connect?: Prisma.CampaignUpdateWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CampaignUpdateUpdateToOneWithWhereWithoutAssetsInput, Prisma.CampaignUpdateUpdateWithoutAssetsInput>, Prisma.CampaignUpdateUncheckedUpdateWithoutAssetsInput>
-}
-
 export type CampaignUpdateCreateWithoutCampaignInput = {
   id?: string
   title: string
   description: string
+  media: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  assets?: Prisma.AssetCreateNestedManyWithoutCampaignUpdateInput
 }
 
 export type CampaignUpdateUncheckedCreateWithoutCampaignInput = {
   id?: string
   title: string
   description: string
+  media: string
   createdAt?: Date | string
   updatedAt?: Date | string
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutCampaignUpdateInput
 }
 
 export type CampaignUpdateCreateOrConnectWithoutCampaignInput = {
@@ -468,66 +462,16 @@ export type CampaignUpdateScalarWhereInput = {
   campaignId?: Prisma.StringFilter<"CampaignUpdate"> | string
   title?: Prisma.StringFilter<"CampaignUpdate"> | string
   description?: Prisma.StringFilter<"CampaignUpdate"> | string
+  media?: Prisma.StringFilter<"CampaignUpdate"> | string
   createdAt?: Prisma.DateTimeFilter<"CampaignUpdate"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CampaignUpdate"> | Date | string
-}
-
-export type CampaignUpdateCreateWithoutAssetsInput = {
-  id?: string
-  title: string
-  description: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  campaign: Prisma.CampaignCreateNestedOneWithoutUpdatesInput
-}
-
-export type CampaignUpdateUncheckedCreateWithoutAssetsInput = {
-  id?: string
-  campaignId: string
-  title: string
-  description: string
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type CampaignUpdateCreateOrConnectWithoutAssetsInput = {
-  where: Prisma.CampaignUpdateWhereUniqueInput
-  create: Prisma.XOR<Prisma.CampaignUpdateCreateWithoutAssetsInput, Prisma.CampaignUpdateUncheckedCreateWithoutAssetsInput>
-}
-
-export type CampaignUpdateUpsertWithoutAssetsInput = {
-  update: Prisma.XOR<Prisma.CampaignUpdateUpdateWithoutAssetsInput, Prisma.CampaignUpdateUncheckedUpdateWithoutAssetsInput>
-  create: Prisma.XOR<Prisma.CampaignUpdateCreateWithoutAssetsInput, Prisma.CampaignUpdateUncheckedCreateWithoutAssetsInput>
-  where?: Prisma.CampaignUpdateWhereInput
-}
-
-export type CampaignUpdateUpdateToOneWithWhereWithoutAssetsInput = {
-  where?: Prisma.CampaignUpdateWhereInput
-  data: Prisma.XOR<Prisma.CampaignUpdateUpdateWithoutAssetsInput, Prisma.CampaignUpdateUncheckedUpdateWithoutAssetsInput>
-}
-
-export type CampaignUpdateUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  campaign?: Prisma.CampaignUpdateOneRequiredWithoutUpdatesNestedInput
-}
-
-export type CampaignUpdateUncheckedUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  campaignId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CampaignUpdateCreateManyCampaignInput = {
   id?: string
   title: string
   description: string
+  media: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -536,57 +480,29 @@ export type CampaignUpdateUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  media?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assets?: Prisma.AssetUpdateManyWithoutCampaignUpdateNestedInput
 }
 
 export type CampaignUpdateUncheckedUpdateWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  media?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutCampaignUpdateNestedInput
 }
 
 export type CampaignUpdateUncheckedUpdateManyWithoutCampaignInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  media?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-
-/**
- * Count Type CampaignUpdateCountOutputType
- */
-
-export type CampaignUpdateCountOutputType = {
-  assets: number
-}
-
-export type CampaignUpdateCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  assets?: boolean | CampaignUpdateCountOutputTypeCountAssetsArgs
-}
-
-/**
- * CampaignUpdateCountOutputType without action
- */
-export type CampaignUpdateCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the CampaignUpdateCountOutputType
-   */
-  select?: Prisma.CampaignUpdateCountOutputTypeSelect<ExtArgs> | null
-}
-
-/**
- * CampaignUpdateCountOutputType without action
- */
-export type CampaignUpdateCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AssetWhereInput
-}
 
 
 export type CampaignUpdateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -594,11 +510,10 @@ export type CampaignUpdateSelect<ExtArgs extends runtime.Types.Extensions.Intern
   campaignId?: boolean
   title?: boolean
   description?: boolean
+  media?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  assets?: boolean | Prisma.CampaignUpdate$assetsArgs<ExtArgs>
-  _count?: boolean | Prisma.CampaignUpdateCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["campaignUpdate"]>
 
 
@@ -608,28 +523,27 @@ export type CampaignUpdateSelectScalar = {
   campaignId?: boolean
   title?: boolean
   description?: boolean
+  media?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CampaignUpdateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "title" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["campaignUpdate"]>
+export type CampaignUpdateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "campaignId" | "title" | "description" | "media" | "createdAt" | "updatedAt", ExtArgs["result"]["campaignUpdate"]>
 export type CampaignUpdateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   campaign?: boolean | Prisma.CampaignDefaultArgs<ExtArgs>
-  assets?: boolean | Prisma.CampaignUpdate$assetsArgs<ExtArgs>
-  _count?: boolean | Prisma.CampaignUpdateCountOutputTypeDefaultArgs<ExtArgs>
 }
 
 export type $CampaignUpdatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CampaignUpdate"
   objects: {
     campaign: Prisma.$CampaignPayload<ExtArgs>
-    assets: Prisma.$AssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     campaignId: string
     title: string
     description: string
+    media: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["campaignUpdate"]>
@@ -973,7 +887,6 @@ readonly fields: CampaignUpdateFieldRefs;
 export interface Prisma__CampaignUpdateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   campaign<T extends Prisma.CampaignDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignDefaultArgs<ExtArgs>>): Prisma.Prisma__CampaignClient<runtime.Types.Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  assets<T extends Prisma.CampaignUpdate$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CampaignUpdate$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1007,6 +920,7 @@ export interface CampaignUpdateFieldRefs {
   readonly campaignId: Prisma.FieldRef<"CampaignUpdate", 'String'>
   readonly title: Prisma.FieldRef<"CampaignUpdate", 'String'>
   readonly description: Prisma.FieldRef<"CampaignUpdate", 'String'>
+  readonly media: Prisma.FieldRef<"CampaignUpdate", 'String'>
   readonly createdAt: Prisma.FieldRef<"CampaignUpdate", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"CampaignUpdate", 'DateTime'>
 }
@@ -1349,30 +1263,6 @@ export type CampaignUpdateDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many CampaignUpdates to delete.
    */
   limit?: number
-}
-
-/**
- * CampaignUpdate.assets
- */
-export type CampaignUpdate$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Asset
-   */
-  select?: Prisma.AssetSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Asset
-   */
-  omit?: Prisma.AssetOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AssetInclude<ExtArgs> | null
-  where?: Prisma.AssetWhereInput
-  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
-  cursor?: Prisma.AssetWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
 }
 
 /**

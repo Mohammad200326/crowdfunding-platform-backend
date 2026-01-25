@@ -33,6 +33,7 @@ export type UserMinAggregateOutputType = {
   role: $Enums.UserRole | null
   country: string | null
   phoneNumber: string | null
+  avatar: string | null
   notes: string | null
   isDeleted: boolean | null
   isVerified: boolean | null
@@ -50,6 +51,7 @@ export type UserMaxAggregateOutputType = {
   role: $Enums.UserRole | null
   country: string | null
   phoneNumber: string | null
+  avatar: string | null
   notes: string | null
   isDeleted: boolean | null
   isVerified: boolean | null
@@ -67,6 +69,7 @@ export type UserCountAggregateOutputType = {
   role: number
   country: number
   phoneNumber: number
+  avatar: number
   notes: number
   isDeleted: number
   isVerified: number
@@ -86,6 +89,7 @@ export type UserMinAggregateInputType = {
   role?: true
   country?: true
   phoneNumber?: true
+  avatar?: true
   notes?: true
   isDeleted?: true
   isVerified?: true
@@ -103,6 +107,7 @@ export type UserMaxAggregateInputType = {
   role?: true
   country?: true
   phoneNumber?: true
+  avatar?: true
   notes?: true
   isDeleted?: true
   isVerified?: true
@@ -120,6 +125,7 @@ export type UserCountAggregateInputType = {
   role?: true
   country?: true
   phoneNumber?: true
+  avatar?: true
   notes?: true
   isDeleted?: true
   isVerified?: true
@@ -210,6 +216,7 @@ export type UserGroupByOutputType = {
   role: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted: boolean
   isVerified: boolean
@@ -248,6 +255,7 @@ export type UserWhereInput = {
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   country?: Prisma.StringFilter<"User"> | string
   phoneNumber?: Prisma.StringFilter<"User"> | string
+  avatar?: Prisma.StringFilter<"User"> | string
   notes?: Prisma.StringFilter<"User"> | string
   isDeleted?: Prisma.BoolFilter<"User"> | boolean
   isVerified?: Prisma.BoolFilter<"User"> | boolean
@@ -261,8 +269,6 @@ export type UserWhereInput = {
   donorProfile?: Prisma.XOR<Prisma.DonorNullableScalarRelationFilter, Prisma.DonorWhereInput> | null
   preferences?: Prisma.UserPreferenceListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
-  assets?: Prisma.AssetListRelationFilter
-  ownedAssets?: Prisma.AssetListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -274,6 +280,7 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   country?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -287,8 +294,6 @@ export type UserOrderByWithRelationInput = {
   donorProfile?: Prisma.DonorOrderByWithRelationInput
   preferences?: Prisma.UserPreferenceOrderByRelationAggregateInput
   withdrawals?: Prisma.WithdrawalOrderByRelationAggregateInput
-  assets?: Prisma.AssetOrderByRelationAggregateInput
-  ownedAssets?: Prisma.AssetOrderByRelationAggregateInput
   _relevance?: Prisma.UserOrderByRelevanceInput
 }
 
@@ -304,6 +309,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.EnumUserRoleFilter<"User"> | $Enums.UserRole
   country?: Prisma.StringFilter<"User"> | string
   phoneNumber?: Prisma.StringFilter<"User"> | string
+  avatar?: Prisma.StringFilter<"User"> | string
   notes?: Prisma.StringFilter<"User"> | string
   isDeleted?: Prisma.BoolFilter<"User"> | boolean
   isVerified?: Prisma.BoolFilter<"User"> | boolean
@@ -317,8 +323,6 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   donorProfile?: Prisma.XOR<Prisma.DonorNullableScalarRelationFilter, Prisma.DonorWhereInput> | null
   preferences?: Prisma.UserPreferenceListRelationFilter
   withdrawals?: Prisma.WithdrawalListRelationFilter
-  assets?: Prisma.AssetListRelationFilter
-  ownedAssets?: Prisma.AssetListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -330,6 +334,7 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   country?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -353,6 +358,7 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
   country?: Prisma.StringWithAggregatesFilter<"User"> | string
   phoneNumber?: Prisma.StringWithAggregatesFilter<"User"> | string
+  avatar?: Prisma.StringWithAggregatesFilter<"User"> | string
   notes?: Prisma.StringWithAggregatesFilter<"User"> | string
   isDeleted?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -370,6 +376,7 @@ export type UserCreateInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -383,8 +390,6 @@ export type UserCreateInput = {
   donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -396,6 +401,7 @@ export type UserUncheckedCreateInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -409,8 +415,6 @@ export type UserUncheckedCreateInput = {
   donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUpdateInput = {
@@ -422,6 +426,7 @@ export type UserUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -435,8 +440,6 @@ export type UserUpdateInput = {
   donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -448,6 +451,7 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -461,8 +465,6 @@ export type UserUncheckedUpdateInput = {
   donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -474,6 +476,7 @@ export type UserCreateManyInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -491,6 +494,7 @@ export type UserUpdateManyMutationInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -508,6 +512,7 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -531,6 +536,7 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   country?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -548,6 +554,7 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   country?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -565,6 +572,7 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   country?: Prisma.SortOrder
   phoneNumber?: Prisma.SortOrder
+  avatar?: Prisma.SortOrder
   notes?: Prisma.SortOrder
   isDeleted?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
@@ -576,11 +584,6 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
-}
-
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -701,36 +704,6 @@ export type UserUpdateOneRequiredWithoutBankAccountsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutBankAccountsInput, Prisma.UserUpdateWithoutBankAccountsInput>, Prisma.UserUncheckedUpdateWithoutBankAccountsInput>
 }
 
-export type UserCreateNestedOneWithoutOwnedAssetsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedAssetsInput, Prisma.UserUncheckedCreateWithoutOwnedAssetsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedAssetsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserCreateNestedOneWithoutAssetsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssetsInput, Prisma.UserUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssetsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutOwnedAssetsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutOwnedAssetsInput, Prisma.UserUncheckedCreateWithoutOwnedAssetsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutOwnedAssetsInput
-  upsert?: Prisma.UserUpsertWithoutOwnedAssetsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutOwnedAssetsInput, Prisma.UserUpdateWithoutOwnedAssetsInput>, Prisma.UserUncheckedUpdateWithoutOwnedAssetsInput>
-}
-
-export type UserUpdateOneWithoutAssetsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssetsInput, Prisma.UserUncheckedCreateWithoutAssetsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssetsInput
-  upsert?: Prisma.UserUpsertWithoutAssetsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssetsInput, Prisma.UserUpdateWithoutAssetsInput>, Prisma.UserUncheckedUpdateWithoutAssetsInput>
-}
-
 export type UserCreateWithoutPreferencesInput = {
   id?: string
   firstName: string
@@ -740,6 +713,7 @@ export type UserCreateWithoutPreferencesInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -752,8 +726,6 @@ export type UserCreateWithoutPreferencesInput = {
   donations?: Prisma.DonationCreateNestedManyWithoutUserInput
   donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutPreferencesInput = {
@@ -765,6 +737,7 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -777,8 +750,6 @@ export type UserUncheckedCreateWithoutPreferencesInput = {
   donations?: Prisma.DonationUncheckedCreateNestedManyWithoutUserInput
   donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutPreferencesInput = {
@@ -806,6 +777,7 @@ export type UserUpdateWithoutPreferencesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -818,8 +790,6 @@ export type UserUpdateWithoutPreferencesInput = {
   donations?: Prisma.DonationUpdateManyWithoutUserNestedInput
   donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreferencesInput = {
@@ -831,6 +801,7 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -843,8 +814,6 @@ export type UserUncheckedUpdateWithoutPreferencesInput = {
   donations?: Prisma.DonationUncheckedUpdateManyWithoutUserNestedInput
   donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutCampaignsInput = {
@@ -856,6 +825,7 @@ export type UserCreateWithoutCampaignsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -868,8 +838,6 @@ export type UserCreateWithoutCampaignsInput = {
   donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutCampaignsInput = {
@@ -881,6 +849,7 @@ export type UserUncheckedCreateWithoutCampaignsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -893,8 +862,6 @@ export type UserUncheckedCreateWithoutCampaignsInput = {
   donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutCampaignsInput = {
@@ -922,6 +889,7 @@ export type UserUpdateWithoutCampaignsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -934,8 +902,6 @@ export type UserUpdateWithoutCampaignsInput = {
   donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCampaignsInput = {
@@ -947,6 +913,7 @@ export type UserUncheckedUpdateWithoutCampaignsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -959,8 +926,6 @@ export type UserUncheckedUpdateWithoutCampaignsInput = {
   donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutDonationsInput = {
@@ -972,6 +937,7 @@ export type UserCreateWithoutDonationsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -984,8 +950,6 @@ export type UserCreateWithoutDonationsInput = {
   donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutDonationsInput = {
@@ -997,6 +961,7 @@ export type UserUncheckedCreateWithoutDonationsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1009,8 +974,6 @@ export type UserUncheckedCreateWithoutDonationsInput = {
   donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutDonationsInput = {
@@ -1038,6 +1001,7 @@ export type UserUpdateWithoutDonationsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1050,8 +1014,6 @@ export type UserUpdateWithoutDonationsInput = {
   donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDonationsInput = {
@@ -1063,6 +1025,7 @@ export type UserUncheckedUpdateWithoutDonationsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1075,8 +1038,6 @@ export type UserUncheckedUpdateWithoutDonationsInput = {
   donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutWithdrawalsInput = {
@@ -1088,6 +1049,7 @@ export type UserCreateWithoutWithdrawalsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1100,8 +1062,6 @@ export type UserCreateWithoutWithdrawalsInput = {
   donations?: Prisma.DonationCreateNestedManyWithoutUserInput
   donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutWithdrawalsInput = {
@@ -1113,6 +1073,7 @@ export type UserUncheckedCreateWithoutWithdrawalsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1125,8 +1086,6 @@ export type UserUncheckedCreateWithoutWithdrawalsInput = {
   donations?: Prisma.DonationUncheckedCreateNestedManyWithoutUserInput
   donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutWithdrawalsInput = {
@@ -1154,6 +1113,7 @@ export type UserUpdateWithoutWithdrawalsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1166,8 +1126,6 @@ export type UserUpdateWithoutWithdrawalsInput = {
   donations?: Prisma.DonationUpdateManyWithoutUserNestedInput
   donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutWithdrawalsInput = {
@@ -1179,6 +1137,7 @@ export type UserUncheckedUpdateWithoutWithdrawalsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1191,8 +1150,6 @@ export type UserUncheckedUpdateWithoutWithdrawalsInput = {
   donations?: Prisma.DonationUncheckedUpdateManyWithoutUserNestedInput
   donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutDonorProfileInput = {
@@ -1204,6 +1161,7 @@ export type UserCreateWithoutDonorProfileInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1216,8 +1174,6 @@ export type UserCreateWithoutDonorProfileInput = {
   donations?: Prisma.DonationCreateNestedManyWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutDonorProfileInput = {
@@ -1229,6 +1185,7 @@ export type UserUncheckedCreateWithoutDonorProfileInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1241,8 +1198,6 @@ export type UserUncheckedCreateWithoutDonorProfileInput = {
   donations?: Prisma.DonationUncheckedCreateNestedManyWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutDonorProfileInput = {
@@ -1270,6 +1225,7 @@ export type UserUpdateWithoutDonorProfileInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1282,8 +1238,6 @@ export type UserUpdateWithoutDonorProfileInput = {
   donations?: Prisma.DonationUpdateManyWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDonorProfileInput = {
@@ -1295,6 +1249,7 @@ export type UserUncheckedUpdateWithoutDonorProfileInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1307,8 +1262,6 @@ export type UserUncheckedUpdateWithoutDonorProfileInput = {
   donations?: Prisma.DonationUncheckedUpdateManyWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutCreatorProfileInput = {
@@ -1320,6 +1273,7 @@ export type UserCreateWithoutCreatorProfileInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1332,8 +1286,6 @@ export type UserCreateWithoutCreatorProfileInput = {
   donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutCreatorProfileInput = {
@@ -1345,6 +1297,7 @@ export type UserUncheckedCreateWithoutCreatorProfileInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1357,8 +1310,6 @@ export type UserUncheckedCreateWithoutCreatorProfileInput = {
   donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutCreatorProfileInput = {
@@ -1386,6 +1337,7 @@ export type UserUpdateWithoutCreatorProfileInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1398,8 +1350,6 @@ export type UserUpdateWithoutCreatorProfileInput = {
   donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatorProfileInput = {
@@ -1411,6 +1361,7 @@ export type UserUncheckedUpdateWithoutCreatorProfileInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1423,8 +1374,6 @@ export type UserUncheckedUpdateWithoutCreatorProfileInput = {
   donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserCreateWithoutBankAccountsInput = {
@@ -1436,6 +1385,7 @@ export type UserCreateWithoutBankAccountsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1448,8 +1398,6 @@ export type UserCreateWithoutBankAccountsInput = {
   donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
 }
 
 export type UserUncheckedCreateWithoutBankAccountsInput = {
@@ -1461,6 +1409,7 @@ export type UserUncheckedCreateWithoutBankAccountsInput = {
   role?: $Enums.UserRole
   country: string
   phoneNumber: string
+  avatar: string
   notes: string
   isDeleted?: boolean
   isVerified?: boolean
@@ -1473,8 +1422,6 @@ export type UserUncheckedCreateWithoutBankAccountsInput = {
   donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
   preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
   withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
 }
 
 export type UserCreateOrConnectWithoutBankAccountsInput = {
@@ -1502,6 +1449,7 @@ export type UserUpdateWithoutBankAccountsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1514,8 +1462,6 @@ export type UserUpdateWithoutBankAccountsInput = {
   donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
 }
 
 export type UserUncheckedUpdateWithoutBankAccountsInput = {
@@ -1527,6 +1473,7 @@ export type UserUncheckedUpdateWithoutBankAccountsInput = {
   role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
   country?: Prisma.StringFieldUpdateOperationsInput | string
   phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  avatar?: Prisma.StringFieldUpdateOperationsInput | string
   notes?: Prisma.StringFieldUpdateOperationsInput | string
   isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1539,240 +1486,6 @@ export type UserUncheckedUpdateWithoutBankAccountsInput = {
   donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
   preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
   withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
-}
-
-export type UserCreateWithoutOwnedAssetsInput = {
-  id?: string
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  role?: $Enums.UserRole
-  country: string
-  phoneNumber: string
-  notes: string
-  isDeleted?: boolean
-  isVerified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verificationStatus?: $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountCreateNestedManyWithoutCreatorInput
-  creatorProfile?: Prisma.CampaignCreatorCreateNestedOneWithoutUserInput
-  campaigns?: Prisma.CampaignCreateNestedManyWithoutCreatorInput
-  donations?: Prisma.DonationCreateNestedManyWithoutUserInput
-  donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
-  preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutOwnedAssetsInput = {
-  id?: string
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  role?: $Enums.UserRole
-  country: string
-  phoneNumber: string
-  notes: string
-  isDeleted?: boolean
-  isVerified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verificationStatus?: $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountUncheckedCreateNestedManyWithoutCreatorInput
-  creatorProfile?: Prisma.CampaignCreatorUncheckedCreateNestedOneWithoutUserInput
-  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatorInput
-  donations?: Prisma.DonationUncheckedCreateNestedManyWithoutUserInput
-  donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
-  preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutOwnedAssetsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedAssetsInput, Prisma.UserUncheckedCreateWithoutOwnedAssetsInput>
-}
-
-export type UserCreateWithoutAssetsInput = {
-  id?: string
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  role?: $Enums.UserRole
-  country: string
-  phoneNumber: string
-  notes: string
-  isDeleted?: boolean
-  isVerified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verificationStatus?: $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountCreateNestedManyWithoutCreatorInput
-  creatorProfile?: Prisma.CampaignCreatorCreateNestedOneWithoutUserInput
-  campaigns?: Prisma.CampaignCreateNestedManyWithoutCreatorInput
-  donations?: Prisma.DonationCreateNestedManyWithoutUserInput
-  donorProfile?: Prisma.DonorCreateNestedOneWithoutUserInput
-  preferences?: Prisma.UserPreferenceCreateNestedManyWithoutUserInput
-  withdrawals?: Prisma.WithdrawalCreateNestedManyWithoutCreatorInput
-  ownedAssets?: Prisma.AssetCreateNestedManyWithoutOwnerInput
-}
-
-export type UserUncheckedCreateWithoutAssetsInput = {
-  id?: string
-  firstName: string
-  lastName: string
-  email: string
-  password: string
-  role?: $Enums.UserRole
-  country: string
-  phoneNumber: string
-  notes: string
-  isDeleted?: boolean
-  isVerified?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  verificationStatus?: $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountUncheckedCreateNestedManyWithoutCreatorInput
-  creatorProfile?: Prisma.CampaignCreatorUncheckedCreateNestedOneWithoutUserInput
-  campaigns?: Prisma.CampaignUncheckedCreateNestedManyWithoutCreatorInput
-  donations?: Prisma.DonationUncheckedCreateNestedManyWithoutUserInput
-  donorProfile?: Prisma.DonorUncheckedCreateNestedOneWithoutUserInput
-  preferences?: Prisma.UserPreferenceUncheckedCreateNestedManyWithoutUserInput
-  withdrawals?: Prisma.WithdrawalUncheckedCreateNestedManyWithoutCreatorInput
-  ownedAssets?: Prisma.AssetUncheckedCreateNestedManyWithoutOwnerInput
-}
-
-export type UserCreateOrConnectWithoutAssetsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssetsInput, Prisma.UserUncheckedCreateWithoutAssetsInput>
-}
-
-export type UserUpsertWithoutOwnedAssetsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutOwnedAssetsInput, Prisma.UserUncheckedUpdateWithoutOwnedAssetsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutOwnedAssetsInput, Prisma.UserUncheckedCreateWithoutOwnedAssetsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutOwnedAssetsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutOwnedAssetsInput, Prisma.UserUncheckedUpdateWithoutOwnedAssetsInput>
-}
-
-export type UserUpdateWithoutOwnedAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  notes?: Prisma.StringFieldUpdateOperationsInput | string
-  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountUpdateManyWithoutCreatorNestedInput
-  creatorProfile?: Prisma.CampaignCreatorUpdateOneWithoutUserNestedInput
-  campaigns?: Prisma.CampaignUpdateManyWithoutCreatorNestedInput
-  donations?: Prisma.DonationUpdateManyWithoutUserNestedInput
-  donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
-  preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutOwnedAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  notes?: Prisma.StringFieldUpdateOperationsInput | string
-  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountUncheckedUpdateManyWithoutCreatorNestedInput
-  creatorProfile?: Prisma.CampaignCreatorUncheckedUpdateOneWithoutUserNestedInput
-  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatorNestedInput
-  donations?: Prisma.DonationUncheckedUpdateManyWithoutUserNestedInput
-  donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
-  preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  assets?: Prisma.AssetUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserUpsertWithoutAssetsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAssetsInput, Prisma.UserUncheckedUpdateWithoutAssetsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssetsInput, Prisma.UserUncheckedCreateWithoutAssetsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutAssetsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAssetsInput, Prisma.UserUncheckedUpdateWithoutAssetsInput>
-}
-
-export type UserUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  notes?: Prisma.StringFieldUpdateOperationsInput | string
-  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountUpdateManyWithoutCreatorNestedInput
-  creatorProfile?: Prisma.CampaignCreatorUpdateOneWithoutUserNestedInput
-  campaigns?: Prisma.CampaignUpdateManyWithoutCreatorNestedInput
-  donations?: Prisma.DonationUpdateManyWithoutUserNestedInput
-  donorProfile?: Prisma.DonorUpdateOneWithoutUserNestedInput
-  preferences?: Prisma.UserPreferenceUpdateManyWithoutUserNestedInput
-  withdrawals?: Prisma.WithdrawalUpdateManyWithoutCreatorNestedInput
-  ownedAssets?: Prisma.AssetUpdateManyWithoutOwnerNestedInput
-}
-
-export type UserUncheckedUpdateWithoutAssetsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  firstName?: Prisma.StringFieldUpdateOperationsInput | string
-  lastName?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
-  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-  country?: Prisma.StringFieldUpdateOperationsInput | string
-  phoneNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  notes?: Prisma.StringFieldUpdateOperationsInput | string
-  isDeleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  verificationStatus?: Prisma.EnumVerificationStatusFieldUpdateOperationsInput | $Enums.VerificationStatus
-  bankAccounts?: Prisma.BankAccountUncheckedUpdateManyWithoutCreatorNestedInput
-  creatorProfile?: Prisma.CampaignCreatorUncheckedUpdateOneWithoutUserNestedInput
-  campaigns?: Prisma.CampaignUncheckedUpdateManyWithoutCreatorNestedInput
-  donations?: Prisma.DonationUncheckedUpdateManyWithoutUserNestedInput
-  donorProfile?: Prisma.DonorUncheckedUpdateOneWithoutUserNestedInput
-  preferences?: Prisma.UserPreferenceUncheckedUpdateManyWithoutUserNestedInput
-  withdrawals?: Prisma.WithdrawalUncheckedUpdateManyWithoutCreatorNestedInput
-  ownedAssets?: Prisma.AssetUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
 
@@ -1786,8 +1499,6 @@ export type UserCountOutputType = {
   donations: number
   preferences: number
   withdrawals: number
-  assets: number
-  ownedAssets: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1796,8 +1507,6 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   donations?: boolean | UserCountOutputTypeCountDonationsArgs
   preferences?: boolean | UserCountOutputTypeCountPreferencesArgs
   withdrawals?: boolean | UserCountOutputTypeCountWithdrawalsArgs
-  assets?: boolean | UserCountOutputTypeCountAssetsArgs
-  ownedAssets?: boolean | UserCountOutputTypeCountOwnedAssetsArgs
 }
 
 /**
@@ -1845,20 +1554,6 @@ export type UserCountOutputTypeCountWithdrawalsArgs<ExtArgs extends runtime.Type
   where?: Prisma.WithdrawalWhereInput
 }
 
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AssetWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountOwnedAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.AssetWhereInput
-}
-
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1869,6 +1564,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   country?: boolean
   phoneNumber?: boolean
+  avatar?: boolean
   notes?: boolean
   isDeleted?: boolean
   isVerified?: boolean
@@ -1882,8 +1578,6 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   donorProfile?: boolean | Prisma.User$donorProfileArgs<ExtArgs>
   preferences?: boolean | Prisma.User$preferencesArgs<ExtArgs>
   withdrawals?: boolean | Prisma.User$withdrawalsArgs<ExtArgs>
-  assets?: boolean | Prisma.User$assetsArgs<ExtArgs>
-  ownedAssets?: boolean | Prisma.User$ownedAssetsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1898,6 +1592,7 @@ export type UserSelectScalar = {
   role?: boolean
   country?: boolean
   phoneNumber?: boolean
+  avatar?: boolean
   notes?: boolean
   isDeleted?: boolean
   isVerified?: boolean
@@ -1906,7 +1601,7 @@ export type UserSelectScalar = {
   verificationStatus?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "password" | "role" | "country" | "phoneNumber" | "notes" | "isDeleted" | "isVerified" | "createdAt" | "updatedAt" | "verificationStatus", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "firstName" | "lastName" | "email" | "password" | "role" | "country" | "phoneNumber" | "avatar" | "notes" | "isDeleted" | "isVerified" | "createdAt" | "updatedAt" | "verificationStatus", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   bankAccounts?: boolean | Prisma.User$bankAccountsArgs<ExtArgs>
   creatorProfile?: boolean | Prisma.User$creatorProfileArgs<ExtArgs>
@@ -1915,8 +1610,6 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   donorProfile?: boolean | Prisma.User$donorProfileArgs<ExtArgs>
   preferences?: boolean | Prisma.User$preferencesArgs<ExtArgs>
   withdrawals?: boolean | Prisma.User$withdrawalsArgs<ExtArgs>
-  assets?: boolean | Prisma.User$assetsArgs<ExtArgs>
-  ownedAssets?: boolean | Prisma.User$ownedAssetsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 
@@ -1930,8 +1623,6 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     donorProfile: Prisma.$DonorPayload<ExtArgs> | null
     preferences: Prisma.$UserPreferencePayload<ExtArgs>[]
     withdrawals: Prisma.$WithdrawalPayload<ExtArgs>[]
-    assets: Prisma.$AssetPayload<ExtArgs>[]
-    ownedAssets: Prisma.$AssetPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1942,6 +1633,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: $Enums.UserRole
     country: string
     phoneNumber: string
+    avatar: string
     notes: string
     isDeleted: boolean
     isVerified: boolean
@@ -2295,8 +1987,6 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   donorProfile<T extends Prisma.User$donorProfileArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$donorProfileArgs<ExtArgs>>): Prisma.Prisma__DonorClient<runtime.Types.Result.GetResult<Prisma.$DonorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   preferences<T extends Prisma.User$preferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preferencesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPreferencePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   withdrawals<T extends Prisma.User$withdrawalsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$withdrawalsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WithdrawalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  assets<T extends Prisma.User$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  ownedAssets<T extends Prisma.User$ownedAssetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ownedAssetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2334,6 +2024,7 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'UserRole'>
   readonly country: Prisma.FieldRef<"User", 'String'>
   readonly phoneNumber: Prisma.FieldRef<"User", 'String'>
+  readonly avatar: Prisma.FieldRef<"User", 'String'>
   readonly notes: Prisma.FieldRef<"User", 'String'>
   readonly isDeleted: Prisma.FieldRef<"User", 'Boolean'>
   readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>
@@ -2838,54 +2529,6 @@ export type User$withdrawalsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.WithdrawalScalarFieldEnum | Prisma.WithdrawalScalarFieldEnum[]
-}
-
-/**
- * User.assets
- */
-export type User$assetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Asset
-   */
-  select?: Prisma.AssetSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Asset
-   */
-  omit?: Prisma.AssetOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AssetInclude<ExtArgs> | null
-  where?: Prisma.AssetWhereInput
-  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
-  cursor?: Prisma.AssetWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
-}
-
-/**
- * User.ownedAssets
- */
-export type User$ownedAssetsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Asset
-   */
-  select?: Prisma.AssetSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Asset
-   */
-  omit?: Prisma.AssetOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.AssetInclude<ExtArgs> | null
-  where?: Prisma.AssetWhereInput
-  orderBy?: Prisma.AssetOrderByWithRelationInput | Prisma.AssetOrderByWithRelationInput[]
-  cursor?: Prisma.AssetWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.AssetScalarFieldEnum | Prisma.AssetScalarFieldEnum[]
 }
 
 /**
