@@ -26,9 +26,6 @@ import type {
   registerDonorDTO,
 } from './dto/auth.dto';
 import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
-import { FileInterceptor } from '@nestjs/platform-express';
-import { FileCleanupInterceptor } from '../file/cleanup-file.interceptor';
-import { User } from 'src/utils/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -38,13 +35,11 @@ export class AuthController {
   ) {}
 
   @Post('register/donor')
-  @UseInterceptors(FileInterceptor('avatar'), FileCleanupInterceptor)
   async registerDonor(
     @Body(new ZodValidationPipe(donorValidationSchema))
     registerDonorDto: registerDonorDTO,
-    @UploadedFile() file: Express.Multer.File,
   ) {
-    return await this.authService.registerDonor(registerDonorDto, file);
+    return await this.authService.registerDonor(registerDonorDto);
   }
 
   @Post()
