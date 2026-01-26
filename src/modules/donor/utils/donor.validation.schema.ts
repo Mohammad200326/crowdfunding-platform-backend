@@ -10,21 +10,22 @@ export const donorValidationSchema = z.object({
   phoneNumber: z.string().min(7).max(15),
   country: z.string().min(2).max(100),
   notes: z.string().max(500),
-  // avatar: z.string().default(''),
-  donorProfile: z.object({
-    dateOfBirth: z
-      .string()
-      .refine((date) => !isNaN(Date.parse(date)), {
-        message: 'Invalid date format',
-      })
-      .transform((date) => new Date(date)),
-    areasOfInterest: z.string().min(1),
-    preferredCampaignTypes: z.string().min(1),
-    geographicScope: z.enum(['local', 'global']),
-    targetAudience: z.string().min(2).max(100),
-    preferredCampaignSize: z.coerce.number().positive(),
-    preferredCampaignVisibility: z.string().min(2).max(100),
-  }),
+  donorProfile: z
+    .object({
+      dateOfBirth: z
+        .string()
+        .refine((date) => !isNaN(Date.parse(date)), {
+          message: 'Invalid date format',
+        })
+        .transform((date) => new Date(date)),
+      areasOfInterest: z.string().min(1),
+      preferredCampaignTypes: z.string().min(1),
+      geographicScope: z.enum(['local', 'global']),
+      targetAudience: z.string().min(2).max(100),
+      preferredCampaignSize: z.coerce.number().positive(),
+      preferredCampaignVisibility: z.string().min(2).max(100),
+    })
+    .optional(),
 }) satisfies ZodType<registerDonorDTO>;
 
 export const updateDonorSchema =

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import * as argon from 'argon2';
 import { DatabaseService } from '../database/database.service';
 import type { registerDonorDTO, UserResponseDTO } from './dto/auth.dto';
@@ -8,6 +8,7 @@ import { UserService } from '../user/user.service';
 import { AssetKind } from '@prisma/client';
 import { OtpService } from './otp.service';
 import { EmailService } from './email.service';
+import { da } from 'zod/v4/locales';
 
 @Injectable()
 export class AuthService {
@@ -23,10 +24,15 @@ export class AuthService {
     return 'This action adds a new auth';
   }
 
-  async registerDonor(
-    registerDonorDto: registerDonorDTO,
-    file?: Express.Multer.File,
-  ) {
+  async registerDonor(registerDonorDto: registerDonorDTO) {
+    // Check if email already exists
+    const existingUser = await this.userService.findByEmail(
+      registerDonorDto.email,
+    );
+    if (existingUser) {
+      throw new ConflictException('Email already exists');
+    }
+
     const { password, donorProfile, ...userData } = registerDonorDto;
 
     // Hash password
@@ -36,35 +42,21 @@ export class AuthService {
     const user = await this.databaseService.user.create({
       data: {
         ...userData,
+        isVerified: true,
+        verificationStatus: 'confirmed',
         password: hashedPassword,
         role: UserRole.DONOR,
 
-        donorProfile: {
-          create: {
-            ...donorProfile,
-          },
-        },
-
-        ownedAssets: file
+        donorProfile: donorProfile
           ? {
               create: {
-                // 1. تصحيح الاسم من path إلى url
-                url: file.path,
-
-                // 2. إضافة الحقول الإجبارية الناقصة
-                fileId: file.filename || `${Date.now()}-${file.originalname}`,
-                fileType: file.mimetype,
-                fileSizeInKB: Math.round(file.size / 1024),
-
-                // 3. تحديد النوع
-                kind: AssetKind.USER_AVATAR,
+                ...donorProfile,
               },
             }
           : undefined,
       },
       include: {
         donorProfile: true,
-        ownedAssets: true,
       },
     });
 
