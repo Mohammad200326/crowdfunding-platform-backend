@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PasswordResetService } from './password-reset.service';
@@ -19,7 +21,9 @@ import type {
   ForgotPasswordDTO,
   ResetPasswordDTO,
   VerifyOtpDTO,
+  LoginDTO,
 } from './dto/auth.dto';
+import { LoginSchema } from './dto/auth.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +31,13 @@ export class AuthController {
     private authService: AuthService,
     private passwordResetService: PasswordResetService,
   ) {}
+
+  // LOGIN
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
+    return this.authService.login(dto);
+  }
 
   @Post()
   create(@Body() createAuthDto) {
