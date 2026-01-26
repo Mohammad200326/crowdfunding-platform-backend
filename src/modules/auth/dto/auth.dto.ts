@@ -18,7 +18,7 @@ export type registerUserDTO = Pick<
 >;
 
 export type registerDonorDTO = registerUserDTO & {
-  donorProfile: {
+  donorProfile?: {
     dateOfBirth: Date;
     areasOfInterest: string;
     preferredCampaignTypes: string;
