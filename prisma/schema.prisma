@@ -210,7 +210,6 @@ model Donor {
 
   user                        User            @relation(fields: [userId], references: [id])
   identity                    DonorIdentity?
-  identityAssets Asset[] @relation("DonorAssets")
 
   @@map("donors")
 }
@@ -229,6 +228,7 @@ model DonorIdentity {
   updatedAt        DateTime   @updatedAt @map("updated_at")
 
   donor            Donor      @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  assets           Asset[]   @relation("DonorIdentityAssets")
 
   @@map("donor_identities")
 }
@@ -299,8 +299,8 @@ model Asset {
   bankAccountId       String?             @map("bank_account_id") @db.Char(36)
   bankAccount         BankAccount?        @relation("BankAccountAssets", fields: [bankAccountId], references: [id])
 
-  donorId             String?             @map("donor_id") @db.Char(36)
-  donor               Donor?              @relation("DonorAssets", fields: [donorId], references: [id], onDelete: Cascade)
+  donorIdentityId     String?             @map("donor_identity_id") @db.Char(36)
+  donorIdentity       DonorIdentity?      @relation("DonorIdentityAssets", fields: [donorIdentityId], references: [id], onDelete: Cascade)
 
   createdAt     DateTime     @default(now()) @map("created_at")
   updatedAt     DateTime     @updatedAt @map("updated_at")
@@ -311,7 +311,8 @@ model Asset {
   @@index([campaignUpdateId])
   @@index([creatorId])
   @@index([bankAccountId])
-  @@index([donorId])
+  @@index([donorIdentityId])
+  @@index([donorIdentityId, kind])
 
   @@map("assets")
 }
