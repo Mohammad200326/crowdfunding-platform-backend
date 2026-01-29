@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
   UseInterceptors,
   UseFilters,
   UploadedFile,
@@ -23,8 +25,10 @@ import type {
   ResetPasswordDTO,
   UserResponseDTO,
   VerifyOtpDTO,
+  LoginDTO,
   registerDonorDTO,
 } from './dto/auth.dto';
+import { LoginSchema } from './dto/auth.dto';
 import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
 
 @Controller('auth')
@@ -34,6 +38,12 @@ export class AuthController {
     private passwordResetService: PasswordResetService,
   ) {}
 
+  // LOGIN
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
+    return this.authService.login(dto);
+  }
   @Post('register/donor')
   async registerDonor(
     @Body(new ZodValidationPipe(donorValidationSchema))

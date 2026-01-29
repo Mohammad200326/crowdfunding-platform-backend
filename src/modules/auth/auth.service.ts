@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import * as argon from 'argon2';
 import { DatabaseService } from '../database/database.service';
 import type { registerDonorDTO, UserResponseDTO } from './dto/auth.dto';
@@ -9,6 +9,7 @@ import { AssetKind } from '@prisma/client';
 import { OtpService } from './otp.service';
 import { EmailService } from './email.service';
 import { da } from 'zod/v4/locales';
+import { LoginDTO } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,13 @@ export class AuthService {
     private readonly otpService: OtpService,
     private readonly emailService: EmailService,
   ) {}
+
+  // LOGIN
+  async login(dto: LoginDTO) {
+    //Find User by email
+    const user = await this.databaseService.user.findUnique({
+      where: { email: dto.email },
+    });    
 
   create(createAuthDto) {
     return 'This action adds a new auth';
@@ -75,17 +83,26 @@ export class AuthService {
   findAll() {
     return `This action returns all auth`;
   }
+    // Validate (Generic error for safety)
+    if (!user || !(await this.verifyPassword(dto.password, user.password))) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    // Generate Token
+    const payload = { sub: user.id, email: user.email, role: user.role };
+    const token = await this.jwtService.signAsync(payload);
 
-  update(id: number, updateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    return {
+      access_token: token,
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        country: user.country,
+      },
+    };
   }
 
   hashPassword(password: string) {

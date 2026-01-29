@@ -5,6 +5,7 @@ import { PasswordResetService } from './password-reset.service';
 import { UserModule } from '../user/user.module';
 import { OtpService } from './otp.service';
 import { RedisModule } from 'src/lib/redis.module';
+import { DatabaseModule } from '../database/database.module';
 import { JwtModule } from '@nestjs/jwt';
 import { EnvVariables } from 'src/types/declartion-mergin';
 import { ConfigService } from '@nestjs/config';
@@ -15,6 +16,7 @@ import { EmailService } from './email.service';
   imports: [
     UserModule,
     RedisModule,
+    DatabaseModule,
     JwtModule.registerAsync({
       global: true,
       useFactory: (configService: ConfigService<EnvVariables>) => ({
