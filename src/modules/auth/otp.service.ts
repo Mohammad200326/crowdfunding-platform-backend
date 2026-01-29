@@ -18,7 +18,7 @@ export class OtpService {
 
     console.log('OTP:', otp); // dev فقط
 
-    return { expiresIn: this.ttl };
+    return { otp, expiresIn: this.ttl };
   }
 
   async verifyOtp(email: string, purpose: string, otp: string) {

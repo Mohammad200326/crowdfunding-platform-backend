@@ -20,7 +20,11 @@ export class PasswordResetService {
 
   async forgot(emailRaw: string) {
     const email = emailRaw.trim().toLowerCase();
+    console.log('verify email:', email);
+
     const user = await this.userService.findByEmail(email);
+    console.log('user found?', !!user);
+
     if (user) {
       await this.otpService.sendOtp(email, this.PURPOSE);
     }

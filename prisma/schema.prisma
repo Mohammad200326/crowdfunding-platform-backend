@@ -73,6 +73,10 @@ enum AssetKind {
   INSTITUTION_AUTHORIZATION_LETTER
 
   BANK_PROOF_DOCUMENT
+
+  DONOR_ID_FRONT
+  DONOR_ID_BACK
+  DONOR_ID_SELFIE_WITH_ID
 }
 
 model User {
@@ -203,9 +207,30 @@ model Donor {
   preferredCampaignVisibility String          @map("preferred_campaign_visibility") @db.Text
   createdAt                   DateTime        @default(now()) @map("created_at")
   updatedAt                   DateTime        @updatedAt @map("updated_at")
+
   user                        User            @relation(fields: [userId], references: [id])
+  identity                    DonorIdentity?
 
   @@map("donors")
+}
+
+model DonorIdentity {
+  id              String     @id @default(uuid()) @db.Char(36)
+  donorId          String     @unique @map("donor_id") @db.Char(36)
+
+  fullNameOnId     String     @map("full_name_on_id") @db.VarChar(150)
+  idNumber         String?    @unique @map("id_number") @db.VarChar(64)
+
+  reviewedAt       DateTime?  @map("reviewed_at")
+  notes  String?    @map("rejection_reason") @db.Text
+
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+
+  donor            Donor      @relation(fields: [donorId], references: [id], onDelete: Cascade)
+  assets           Asset[]   @relation("DonorIdentityAssets")
+
+  @@map("donor_identities")
 }
 
 model CampaignCreator {
@@ -274,6 +299,9 @@ model Asset {
   bankAccountId       String?             @map("bank_account_id") @db.Char(36)
   bankAccount         BankAccount?        @relation("BankAccountAssets", fields: [bankAccountId], references: [id])
 
+  donorIdentityId     String?             @map("donor_identity_id") @db.Char(36)
+  donorIdentity       DonorIdentity?      @relation("DonorIdentityAssets", fields: [donorIdentityId], references: [id], onDelete: Cascade)
+
   createdAt     DateTime     @default(now()) @map("created_at")
   updatedAt     DateTime     @updatedAt @map("updated_at")
   
@@ -283,6 +311,8 @@ model Asset {
   @@index([campaignUpdateId])
   @@index([creatorId])
   @@index([bankAccountId])
+  @@index([donorIdentityId])
+  @@index([donorIdentityId, kind])
 
   @@map("assets")
 }

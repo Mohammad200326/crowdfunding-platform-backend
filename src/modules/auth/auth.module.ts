@@ -7,19 +7,26 @@ import { OtpService } from './otp.service';
 import { RedisModule } from 'src/lib/redis.module';
 import { DatabaseModule } from '../database/database.module';
 import { JwtModule } from '@nestjs/jwt';
+import { EnvVariables } from 'src/types/declartion-mergin';
+import { ConfigService } from '@nestjs/config';
+import { FileModule } from '../file/file.module';
+import { EmailService } from './email.service';
 
 @Module({
   imports: [
     UserModule,
     RedisModule,
     DatabaseModule,
-    JwtModule.register({
+    JwtModule.registerAsync({
       global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
+      useFactory: (configService: ConfigService<EnvVariables>) => ({
+        secret: configService.getOrThrow('JWT_SECRET'),
+      }),
+      inject: [ConfigService],
     }),
+    FileModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, PasswordResetService, OtpService],
+  providers: [AuthService, PasswordResetService, OtpService, EmailService],
 })
 export class AuthModule {}

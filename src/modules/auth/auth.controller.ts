@@ -8,6 +8,9 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  UseInterceptors,
+  UseFilters,
+  UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PasswordResetService } from './password-reset.service';
@@ -20,10 +23,13 @@ import {
 import type {
   ForgotPasswordDTO,
   ResetPasswordDTO,
+  UserResponseDTO,
   VerifyOtpDTO,
   LoginDTO,
+  registerDonorDTO,
 } from './dto/auth.dto';
 import { LoginSchema } from './dto/auth.dto';
+import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
 
 @Controller('auth')
 export class AuthController {
@@ -37,6 +43,13 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
     return this.authService.login(dto);
+  }
+  @Post('register/donor')
+  async registerDonor(
+    @Body(new ZodValidationPipe(donorValidationSchema))
+    registerDonorDto: registerDonorDTO,
+  ) {
+    return await this.authService.registerDonor(registerDonorDto);
   }
 
   @Post()
@@ -69,7 +82,7 @@ export class AuthController {
     @Body(new ZodValidationPipe(ForgotPasswordSchema))
     forgotPasswordDTO: ForgotPasswordDTO,
   ) {
-    return this.passwordResetService.forgot(forgotPasswordDTO.email);
+    return this.authService.forgotPassword(forgotPasswordDTO.email);
   }
 
   @Post('password/verify-otp')
