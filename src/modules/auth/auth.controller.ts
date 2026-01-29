@@ -16,7 +16,15 @@ import type {
 } from './dto/auth.dto';
 import { LoginSchema } from './dto/auth.dto';
 import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
+import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ExpiresInResponseDto,
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  VerifyForgotOtpDto,
+} from './dto/auth.swagger.dto';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -24,12 +32,6 @@ export class AuthController {
     private passwordResetService: PasswordResetService,
   ) {}
 
-  // LOGIN
-  @Post('login')
-  @HttpCode(HttpStatus.OK)
-  async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
-    return this.authService.login(dto);
-  }
   @Post('register/donor')
   async registerDonor(
     @Body(new ZodValidationPipe(donorValidationSchema))
@@ -38,7 +40,17 @@ export class AuthController {
     return await this.authService.registerDonor(registerDonorDto);
   }
 
+  // LOGIN
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
+    return this.authService.login(dto);
+  }
+
   @Post('password/forgot')
+  @ApiOperation({ summary: 'Send OTP for forgot password' })
+  @ApiBody({ type: ForgotPasswordDto })
+  @ApiOkResponse({ type: ExpiresInResponseDto })
   async forgot(
     @Body(new ZodValidationPipe(ForgotPasswordSchema))
     forgotPasswordDTO: ForgotPasswordDTO,
@@ -47,6 +59,17 @@ export class AuthController {
   }
 
   @Post('password/verify-otp')
+  @ApiOperation({ summary: 'Verify OTP and return reset token' })
+  @ApiBody({ type: VerifyForgotOtpDto })
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        resetToken: { type: 'string', format: 'uuid' },
+      },
+      required: ['resetToken'],
+    },
+  })
   async verifyOTP(
     @Body(new ZodValidationPipe(VerifyOtpSchema))
     verifyOTPSchema: VerifyOtpDTO,
@@ -58,6 +81,15 @@ export class AuthController {
   }
 
   @Post('password/reset')
+  @ApiOperation({ summary: 'Reset password using reset token' })
+  @ApiBody({ type: ResetPasswordDto })
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: { ok: { type: 'boolean', example: true } },
+      required: ['ok'],
+    },
+  })
   async reset(
     @Body(new ZodValidationPipe(ResetPasswordSchema))
     resetPasswordDTO: ResetPasswordDTO,
