@@ -1,6 +1,6 @@
 import crypto from 'crypto';
 
-export function generateOtp(length = 6) {
+export function generateOtp(length = 5) {
   const n = crypto.randomInt(0, 10 ** length);
   return n.toString().padStart(length, '0');
 }

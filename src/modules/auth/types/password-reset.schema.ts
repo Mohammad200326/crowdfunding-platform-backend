@@ -11,7 +11,7 @@ export const VerifyOtpSchema = z.object({
   otp: z
     .string()
     .trim()
-    .regex(/^\d{6}$/, 'OTP must be 6 digits'),
+    .regex(/^\d{5}$/, 'OTP must be 5 digits'),
 });
 
 export type VerifyForgotOtpInput = z.infer<typeof VerifyOtpSchema>;
