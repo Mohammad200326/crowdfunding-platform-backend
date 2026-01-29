@@ -1,17 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  HttpCode,
-  HttpStatus,
-  UseInterceptors,
-  UseFilters,
-  UploadedFile,
-} from '@nestjs/common';
+import { Controller, Post, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PasswordResetService } from './password-reset.service';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
@@ -23,7 +10,6 @@ import {
 import type {
   ForgotPasswordDTO,
   ResetPasswordDTO,
-  UserResponseDTO,
   VerifyOtpDTO,
   LoginDTO,
   registerDonorDTO,
@@ -50,31 +36,6 @@ export class AuthController {
     registerDonorDto: registerDonorDTO,
   ) {
     return await this.authService.registerDonor(registerDonorDto);
-  }
-
-  @Post()
-  create(@Body() createAuthDto) {
-    return this.authService.create(createAuthDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
   }
 
   @Post('password/forgot')

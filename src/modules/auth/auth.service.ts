@@ -1,14 +1,16 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as argon from 'argon2';
 import { DatabaseService } from '../database/database.service';
-import type { registerDonorDTO, UserResponseDTO } from './dto/auth.dto';
+import type { registerDonorDTO } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@prisma/client';
 import { UserService } from '../user/user.service';
-import { AssetKind } from '@prisma/client';
 import { OtpService } from './otp.service';
 import { EmailService } from './email.service';
-import { da } from 'zod/v4/locales';
 import { LoginDTO } from './dto/auth.dto';
 
 @Injectable()
@@ -23,13 +25,31 @@ export class AuthService {
 
   // LOGIN
   async login(dto: LoginDTO) {
-    //Find User by email
+    // Find User by email
     const user = await this.databaseService.user.findUnique({
       where: { email: dto.email },
-    });    
+    });
 
-  create(createAuthDto) {
-    return 'This action adds a new auth';
+    // Validate (Generic error for safety)
+    if (!user || !(await this.verifyPassword(dto.password, user.password))) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Generate Token
+    const payload = { sub: user.id, email: user.email, role: user.role };
+    const token = await this.jwtService.signAsync(payload);
+
+    return {
+      access_token: token,
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        country: user.country,
+      },
+    };
   }
 
   async registerDonor(registerDonorDto: registerDonorDTO) {
@@ -77,31 +97,6 @@ export class AuthService {
     return {
       user: userWithoutPassword,
       token,
-    };
-  }
-
-  findAll() {
-    return `This action returns all auth`;
-  }
-    // Validate (Generic error for safety)
-    if (!user || !(await this.verifyPassword(dto.password, user.password))) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    // Generate Token
-    const payload = { sub: user.id, email: user.email, role: user.role };
-    const token = await this.jwtService.signAsync(payload);
-
-    return {
-      access_token: token,
-      user: {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        country: user.country,
-      },
     };
   }
 
