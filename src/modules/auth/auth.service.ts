@@ -91,11 +91,8 @@ export class AuthService {
     // Generate JWT token
     const token = this.generateJwtToken(user.id, UserRole.DONOR);
 
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-
     return {
-      user: userWithoutPassword,
+      user: this.userService.mapUserWithoutPassword(user),
       token,
     };
   }

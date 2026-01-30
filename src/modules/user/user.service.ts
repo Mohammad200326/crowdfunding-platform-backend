@@ -3,7 +3,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from '../database/database.service';
 import { FileService } from '../file/file.service';
-import { AssetKind } from '@prisma/client';
+import { AssetKind, User } from '@prisma/client';
+import { removeFields } from 'src/utils/object.util';
+import { UserResponseDTO } from '../auth/dto/auth.dto';
+// import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -149,5 +152,14 @@ export class UserService {
     return this.prismaService.user.findUnique({
       where: { email },
     });
+  }
+
+  mapUserWithoutPassword(user: User): UserResponseDTO['userData'] {
+    const userWithoutPassword = removeFields(user, ['password']);
+
+    return {
+      ...userWithoutPassword,
+      id: userWithoutPassword.id,
+    };
   }
 }
