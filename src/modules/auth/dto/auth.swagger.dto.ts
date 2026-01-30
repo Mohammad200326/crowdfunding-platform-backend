@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CreatorType, UserRole } from '@prisma/client';
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -173,4 +174,174 @@ export class ResetPasswordDto {
 export class ExpiresInResponseDto {
   @ApiProperty({ example: 900, description: 'Seconds until OTP expires' })
   expiresIn!: number;
+}
+
+export class CreatorProfileDto {
+  @ApiProperty({
+    enum: CreatorType,
+    example: CreatorType.INSTITUTION,
+  })
+  type!: CreatorType;
+
+  @ApiProperty({ example: 'Palestine' })
+  institutionCountry!: string;
+
+  @ApiProperty({ example: 'Non-Profit Organization' })
+  institutionType!: string;
+
+  @ApiProperty({
+    example: '2015-03-20',
+    description: 'ISO date string',
+  })
+  institutionDateOfEstablishment!: string;
+
+  @ApiProperty({ example: 'Registered NGO' })
+  institutionLegalStatus!: string;
+
+  @ApiProperty({ example: 'TAX-PL-987654' })
+  institutionTaxIdentificationNumber!: string;
+
+  @ApiProperty({ example: 'REG-2015-1122' })
+  institutionRegistrationNumber!: string;
+
+  @ApiProperty({ example: 'Mohammad Saleh' })
+  institutionRepresentativeName!: string;
+
+  @ApiProperty({ example: 'Executive Director' })
+  institutionRepresentativePosition!: string;
+
+  @ApiProperty({ example: 'REP-445566' })
+  institutionRepresentativeRegistrationNumber!: string;
+
+  @ApiProperty({ example: 'https://example-ngo.org' })
+  institutionWebsite!: string;
+
+  @ApiProperty({
+    example: 'https://linkedin.com/in/mohammad-saleh',
+  })
+  institutionRepresentativeSocialMedia!: string;
+}
+
+export class RegisterCampaignCreatorDto {
+  @ApiProperty({ example: 'Ahmad' })
+  firstName!: string;
+
+  @ApiProperty({ example: 'Al-Hassan' })
+  lastName!: string;
+
+  @ApiProperty({ example: 'ahmad.institution@example.com' })
+  email!: string;
+
+  @ApiProperty({ example: 'StrongPassword123', minLength: 6 })
+  password!: string;
+
+  @ApiProperty({ example: '+970598123456' })
+  phoneNumber!: string;
+
+  @ApiProperty({ example: 'Palestine' })
+  country!: string;
+
+  @ApiProperty({
+    example:
+      'Non-profit organization focused on education and community development',
+    required: false,
+  })
+  notes?: string;
+
+  @ApiProperty({ type: CreatorProfileDto })
+  creatorProfile!: CreatorProfileDto;
+}
+
+export class CampaignCreatorProfileResponseDto {
+  @ApiProperty({
+    example: '550e8400-e29b-41d4-a716-446655440000',
+  })
+  id!: string;
+
+  @ApiProperty({
+    enum: CreatorType,
+    example: CreatorType.INSTITUTION,
+  })
+  type!: CreatorType;
+
+  @ApiProperty({ example: 'Palestine' })
+  institutionCountry!: string;
+
+  @ApiProperty({ example: 'Non-Profit Organization' })
+  institutionType!: string;
+
+  @ApiProperty({
+    example: '2015-03-20T00:00:00.000Z',
+    description: 'ISO Date string',
+  })
+  institutionDateOfEstablishment!: string;
+
+  @ApiProperty({ example: 'Registered NGO' })
+  institutionLegalStatus!: string;
+
+  @ApiProperty({ example: 'TAX-PL-987654' })
+  institutionTaxIdentificationNumber!: string;
+
+  @ApiProperty({ example: 'REG-2015-1122' })
+  institutionRegistrationNumber!: string;
+
+  @ApiProperty({ example: 'Mohammad Saleh' })
+  institutionRepresentativeName!: string;
+
+  @ApiProperty({ example: 'Executive Director' })
+  institutionRepresentativePosition!: string;
+
+  @ApiProperty({ example: 'REP-445566' })
+  institutionRepresentativeRegistrationNumber!: string;
+
+  @ApiProperty({ example: 'https://example-ngo.org' })
+  institutionWebsite!: string;
+
+  @ApiProperty({
+    example: 'https://linkedin.com/in/mohammad-saleh',
+  })
+  institutionRepresentativeSocialMedia!: string;
+
+  @ApiProperty({
+    example: '2026-01-30T22:10:26.761Z',
+  })
+  createdAt!: string;
+
+  @ApiProperty({
+    example: '2026-01-30T22:10:26.761Z',
+  })
+  updatedAt!: string;
+}
+
+export class LoginUserDto {
+  @ApiProperty({ example: 'be1c995a-0c07-4222-a846-6f449905c70b' })
+  id!: string;
+
+  @ApiProperty({ example: 'Ahmad' })
+  firstName!: string;
+
+  @ApiProperty({ example: 'Al-Hassan' })
+  lastName!: string;
+
+  @ApiProperty({ example: 'ahmad.institution@example.com' })
+  email!: string;
+
+  @ApiProperty({
+    enum: UserRole,
+    example: UserRole.CAMPAIGN_CREATOR,
+  })
+  role!: UserRole;
+
+  @ApiProperty({ example: 'Palestine' })
+  country!: string;
+}
+
+export class LoginResponseDto {
+  @ApiProperty({ type: LoginUserDto })
+  user!: LoginUserDto;
+
+  @ApiProperty({
+    example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+  })
+  token!: string;
 }

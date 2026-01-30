@@ -4,7 +4,7 @@ import {
   ResetPasswordSchema,
   VerifyOtpSchema,
 } from '../types/password-reset.schema';
-import { User } from '@prisma/client';
+import { User, CreatorType } from '@prisma/client';
 
 export type registerUserDTO = Pick<
   User,
@@ -26,6 +26,23 @@ export type registerDonorDTO = registerUserDTO & {
     targetAudience: string;
     preferredCampaignSize: number;
     preferredCampaignVisibility: string;
+  };
+};
+
+export type registerCampaignCreatorDTO = registerUserDTO & {
+  creatorProfile?: {
+    type: CreatorType;
+    institutionCountry: string;
+    institutionType: string;
+    institutionDateOfEstablishment: Date;
+    institutionLegalStatus: string;
+    institutionTaxIdentificationNumber: string;
+    institutionRegistrationNumber: string;
+    institutionRepresentativeName: string;
+    institutionRepresentativePosition: string;
+    institutionRepresentativeRegistrationNumber: string;
+    institutionWebsite: string;
+    institutionRepresentativeSocialMedia: string;
   };
 };
 

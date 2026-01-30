@@ -13,18 +13,29 @@ import type {
   VerifyOtpDTO,
   LoginDTO,
   registerDonorDTO,
+  registerCampaignCreatorDTO,
 } from './dto/auth.dto';
 import { LoginSchema } from './dto/auth.dto';
 import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
+  CampaignCreatorProfileResponseDto,
   ExpiresInResponseDto,
   ForgotPasswordDto,
+  LoginResponseDto,
+  RegisterCampaignCreatorDto,
   ResetPasswordDto,
   VerifyForgotOtpDto,
   RegisterDonorDto,
   RegisterDonorResponseDto,
 } from './dto/auth.swagger.dto';
+import { campaignCreatorValidationSchema } from '../campaign-creator/utils/donor.validation.schema';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -45,9 +56,43 @@ export class AuthController {
     return await this.authService.registerDonor(registerDonorDto);
   }
 
+  @Post('register/campaign-creator')
+  @ApiOperation({ summary: 'Register a new campaign creator (institution)' })
+  @ApiBody({ type: RegisterCampaignCreatorDto })
+  @ApiCreatedResponse({
+    description: 'Campaign creator registered successfully',
+    type: CampaignCreatorProfileResponseDto,
+  })
+  async registerCampaignCreator(
+    @Body(new ZodValidationPipe(campaignCreatorValidationSchema))
+    registerCampaignCreatorDto: registerCampaignCreatorDTO,
+  ) {
+    return await this.authService.registerCampaignCreator(
+      registerCampaignCreatorDto,
+    );
+  }
+
   // LOGIN
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Login with email and password' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        email: {
+          type: 'string',
+          example: 'example@gmail.com',
+        },
+        password: {
+          type: 'string',
+          example: 'StrongPassword123',
+        },
+      },
+      required: ['email', 'password'],
+    },
+  })
+  @ApiOkResponse({ type: LoginResponseDto })
   async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
     return this.authService.login(dto);
   }

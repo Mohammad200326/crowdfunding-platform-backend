@@ -5,7 +5,10 @@ import {
 } from '@nestjs/common';
 import * as argon from 'argon2';
 import { DatabaseService } from '../database/database.service';
-import type { registerDonorDTO } from './dto/auth.dto';
+import type {
+  registerCampaignCreatorDTO,
+  registerDonorDTO,
+} from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UserRole } from '@prisma/client';
 import { UserService } from '../user/user.service';
@@ -40,7 +43,6 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload);
 
     return {
-      access_token: token,
       user: {
         id: user.id,
         firstName: user.firstName,
@@ -49,6 +51,7 @@ export class AuthService {
         role: user.role,
         country: user.country,
       },
+      token,
     };
   }
 
@@ -93,6 +96,54 @@ export class AuthService {
 
     return {
       user: this.userService.mapUserWithoutPassword(user),
+      token,
+    };
+  }
+
+  async registerCampaignCreator(
+    registerCampaignCreatorDto: registerCampaignCreatorDTO,
+  ) {
+    const existingUser = await this.userService.findByEmail(
+      registerCampaignCreatorDto.email,
+    );
+    if (existingUser) {
+      throw new ConflictException('Email already exists');
+    }
+
+    const { password, creatorProfile, ...userData } =
+      registerCampaignCreatorDto;
+
+    const hashedPassword = await this.hashPassword(password);
+
+    const user = await this.databaseService.user.create({
+      data: {
+        ...userData,
+        isVerified: true,
+        verificationStatus: 'confirmed',
+        password: hashedPassword,
+        role: UserRole.CAMPAIGN_CREATOR,
+
+        creatorProfile: creatorProfile
+          ? {
+              create: {
+                ...creatorProfile,
+              },
+            }
+          : undefined,
+      },
+      include: {
+        creatorProfile: true,
+      },
+    });
+
+    // Generate JWT token
+    const token = this.generateJwtToken(user.id, UserRole.CAMPAIGN_CREATOR);
+
+    // Remove password from response
+    const { password: _, ...userWithoutPassword } = user;
+
+    return {
+      user: userWithoutPassword,
       token,
     };
   }
