@@ -136,8 +136,13 @@ export class AuthController {
   @ApiOkResponse({
     schema: {
       type: 'object',
-      properties: { ok: { type: 'boolean', example: true } },
-      required: ['ok'],
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Password reset successfully',
+        },
+      },
+      required: ['message'],
     },
   })
   async reset(
