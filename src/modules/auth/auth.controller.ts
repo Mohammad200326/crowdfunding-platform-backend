@@ -22,6 +22,8 @@ import {
   ForgotPasswordDto,
   ResetPasswordDto,
   VerifyForgotOtpDto,
+  RegisterDonorDto,
+  RegisterDonorResponseDto,
 } from './dto/auth.swagger.dto';
 
 @ApiTags('Auth')
@@ -33,6 +35,9 @@ export class AuthController {
   ) {}
 
   @Post('register/donor')
+  @ApiOperation({ summary: 'Register new donor' })
+  @ApiBody({ type: RegisterDonorDto })
+  @ApiOkResponse({ type: RegisterDonorResponseDto })
   async registerDonor(
     @Body(new ZodValidationPipe(donorValidationSchema))
     registerDonorDto: registerDonorDTO,
