@@ -87,17 +87,6 @@ export class CampaignCreatorService {
     };
   }
 
-  async createProfile(userId: string, profile: registerCampaignCreatorDTO['creatorProfile']) {
-    if (!profile) return null;
-
-    return this.db.campaignCreator.create({
-      data: {
-        userId,
-        ...profile,
-      },
-    });
-  }
-
   async findAll() {
     return this.databaseService.campaignCreator.findMany({
       include: {
