@@ -10,6 +10,7 @@ export type CreateCampaignDto = Omit<
   | 'verificationStatus'
   | 'isActive'
   | 'isDeleted'
+  | 'creatorId'
 >;
 
 export type UpdateCampaignDto = Partial<
@@ -23,5 +24,10 @@ export type UpdateCampaignDto = Partial<
 >;
 
 export type CampaignResponseDTO = Prisma.CampaignGetPayload<{
-  include: { assets: true; creator: true; updates: true; donations: true };
+  include: {
+    assets: true;
+    creator: { omit: { password: true } };
+    updates: true;
+    donations: true;
+  };
 }>;

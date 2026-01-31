@@ -36,6 +36,7 @@ import {
   RegisterDonorResponseDto,
 } from './dto/auth.swagger.dto';
 import { campaignCreatorValidationSchema } from '../campaign-creator/utils/donor.validation.schema';
+import { IsPublic } from 'src/utils/decorators/public.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -46,6 +47,7 @@ export class AuthController {
   ) {}
 
   @Post('register/donor')
+  @IsPublic(true)
   @ApiOperation({ summary: 'Register new donor' })
   @ApiBody({ type: RegisterDonorDto })
   @ApiOkResponse({ type: RegisterDonorResponseDto })
@@ -57,6 +59,7 @@ export class AuthController {
   }
 
   @Post('register/campaign-creator')
+  @IsPublic(true)
   @ApiOperation({ summary: 'Register a new campaign creator (institution)' })
   @ApiBody({ type: RegisterCampaignCreatorDto })
   @ApiCreatedResponse({
@@ -74,6 +77,7 @@ export class AuthController {
 
   // LOGIN
   @Post('login')
+  @IsPublic(true)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login with email and password' })
   @ApiBody({
@@ -98,6 +102,7 @@ export class AuthController {
   }
 
   @Post('password/forgot')
+  @IsPublic(true)
   @ApiOperation({ summary: 'Send OTP for forgot password' })
   @ApiBody({ type: ForgotPasswordDto })
   @ApiOkResponse({ type: ExpiresInResponseDto })

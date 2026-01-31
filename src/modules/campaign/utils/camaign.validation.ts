@@ -4,7 +4,7 @@ import { paginationSchema } from 'src/modules/auth/util/api.util';
 import { CampaignQuery } from '../types/camaign.types';
 
 export const campaignValidationSchema = z.object({
-  creatorId: z.string().uuid(),
+  // creatorId: z.string().uuid(),
   title: z.string().min(2).max(100),
   description: z.string().min(2).max(1000),
   category: z.enum([
@@ -16,9 +16,9 @@ export const campaignValidationSchema = z.object({
     'SHELTER',
     'ANIMALS',
   ]),
-  goal: z.number().min(1),
-  startDate: z.date(),
-  endDate: z.date().min(new Date()),
+  goal: z.coerce.number().min(1),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date().min(new Date()),
   motivationMessage: z.string().min(2).max(1000),
   notes: z.string().max(1000),
   likes: z.coerce.number().min(0),
