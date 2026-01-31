@@ -35,7 +35,6 @@ export class CampaignCreatorService {
       data: {
         userId: dto.userId,
         type: dto.type,
-        institutionName: dto.institutionName,
         institutionCountry: dto.institutionCountry,
         institutionType: isIndividual
           ? 'Individual'
@@ -86,6 +85,17 @@ export class CampaignCreatorService {
         createdAt: creator.createdAt,
       },
     };
+  }
+
+  async createProfile(userId: string, profile: registerCampaignCreatorDTO['creatorProfile']) {
+    if (!profile) return null;
+
+    return this.db.campaignCreator.create({
+      data: {
+        userId,
+        ...profile,
+      },
+    });
   }
 
   async findAll() {
