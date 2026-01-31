@@ -34,6 +34,7 @@ import {
   VerifyForgotOtpDto,
   RegisterDonorDto,
   RegisterDonorResponseDto,
+  LoginRequestDto,
 } from './dto/auth.swagger.dto';
 import { campaignCreatorValidationSchema } from '../campaign-creator/utils/donor.validation.schema';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
@@ -80,22 +81,7 @@ export class AuthController {
   @IsPublic(true)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login with email and password' })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        email: {
-          type: 'string',
-          example: 'example@gmail.com',
-        },
-        password: {
-          type: 'string',
-          example: 'StrongPassword123',
-        },
-      },
-      required: ['email', 'password'],
-    },
-  })
+  @ApiBody({ type: LoginRequestDto })
   @ApiOkResponse({ type: LoginResponseDto })
   async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
     return this.authService.login(dto);

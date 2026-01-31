@@ -313,6 +313,14 @@ export class CampaignCreatorProfileResponseDto {
   updatedAt!: string;
 }
 
+export class LoginRequestDto {
+  @ApiProperty({ example: 'example@gmail.com' })
+  email!: string;
+
+  @ApiProperty({ example: 'StrongPassword123' })
+  password!: string;
+}
+
 export class LoginUserDto {
   @ApiProperty({ example: 'be1c995a-0c07-4222-a846-6f449905c70b' })
   id!: string;
