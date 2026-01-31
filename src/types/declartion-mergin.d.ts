@@ -1,3 +1,5 @@
+import { UserResponseDTO } from 'src/modules/auth/dto/auth.dto';
+
 export type EnvVariables = {
   PORT: string;
   NODE_ENV: 'development' | 'production';
@@ -17,9 +19,9 @@ declare global {
         url?: string;
       }
     }
-    // interface Request {
-    //   user?: UserResponseDTO['user'];
-    // }
+    interface Request {
+      user?: UserResponseDTO['user'];
+    }
   }
   namespace NodeJS {
     // eslint-disable-next-line @typescript-eslint/no-empty-object-type

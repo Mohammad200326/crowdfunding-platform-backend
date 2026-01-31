@@ -9,6 +9,10 @@ import { FileModule } from './modules/file/file.module';
 import { DonorModule } from './modules/donor/donor.module';
 import { CampaignCreatorModule } from './modules/campaign-creator/campaign-creator.module';
 import { UserModule } from './modules/user/user.module';
+import { CampaignModule } from './modules/campaign/campaign.module';
+import { RolesGuard } from './modules/auth/guards/roles.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './modules/auth/guards/auth.guard';
 
 // const envFilePath = path.join(
 //   __dirname,
@@ -27,8 +31,19 @@ import { UserModule } from './modules/user/user.module';
     DonorModule,
     CampaignCreatorModule,
     UserModule,
+    CampaignModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
