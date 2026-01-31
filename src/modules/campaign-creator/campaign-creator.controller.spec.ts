@@ -11,7 +11,9 @@ describe('CampaignCreatorController', () => {
       providers: [CampaignCreatorService],
     }).compile();
 
-    controller = module.get<CampaignCreatorController>(CampaignCreatorController);
+    controller = module.get<CampaignCreatorController>(
+      CampaignCreatorController,
+    );
   });
 
   it('should be defined', () => {
