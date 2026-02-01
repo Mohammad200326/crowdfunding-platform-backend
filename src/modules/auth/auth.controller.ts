@@ -35,6 +35,7 @@ import {
   LoginRequestDto,
   RegisterCampaignCreatorResponseDto,
 } from './dto/auth.swagger.dto';
+import { campaignCreatorValidationSchema } from '../campaign-creator/utils/camaign-creator.validation.schema';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
 import type { RegisterCampaignCreatorDTO } from './dto/register-campaign-creator.schema';
 import { RegisterCampaignCreatorSchema } from './dto/register-campaign-creator.schema';

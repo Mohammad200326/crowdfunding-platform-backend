@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PasswordResetService } from './password-reset.service';
 import { UserModule } from '../user/user.module';
+import { DonorModule } from '../donor/donor.module';
 import { OtpService } from './otp.service';
 import { RedisModule } from 'src/lib/redis.module';
 import { DatabaseModule } from '../database/database.module';
@@ -15,6 +16,7 @@ import { EmailService } from './email.service';
 @Module({
   imports: [
     UserModule,
+    DonorModule,
     RedisModule,
     DatabaseModule,
     JwtModule.registerAsync({

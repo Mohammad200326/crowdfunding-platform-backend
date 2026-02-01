@@ -3,9 +3,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from '../database/database.service';
 import { FileService } from '../file/file.service';
-import { AssetKind, User } from '@prisma/client';
+import { AssetKind, User, UserRole } from '@prisma/client';
 import { removeFields } from 'src/utils/object.util';
-import { UserResponseDTO } from '../auth/dto/auth.dto';
+import { registerUserDTO, UserResponseDTO } from '../auth/dto/auth.dto';
+import * as argon from 'argon2';
 // import { User } from './entities/user.entity';
 
 @Injectable()
@@ -15,6 +16,31 @@ export class UserService {
     private fileService: FileService,
   ) {}
 
+  async createUserForRegistration(
+    userData: Omit<registerUserDTO, 'password'> & { password: string },
+    role: UserRole,
+    tx?: any,
+  ) {
+    const prisma = tx || this.prismaService;
+    const hashedPassword = await argon.hash(userData.password);
+
+    return prisma.user.create({
+      data: {
+        ...userData,
+        password: hashedPassword,
+        role,
+        isVerified: true,
+        verificationStatus: 'confirmed',
+      },
+    });
+  }
+
+  createUser(registerUserDTO: registerUserDTO) {
+    return this.prismaService.user.create({
+      data: registerUserDTO,
+    });
+  }
+
   async create(createUserDto: CreateUserDto, avatar?: Express.Multer.File) {
     const user = await this.prismaService.user.create({
       data: {
@@ -22,6 +48,7 @@ export class UserService {
         lastName: createUserDto.lastName,
         email: createUserDto.email,
         password: createUserDto.password,
+        dateOfBirth: createUserDto.dateOfBirth,
         role: createUserDto.role,
         country: createUserDto.country,
         phoneNumber: createUserDto.phoneNumber,

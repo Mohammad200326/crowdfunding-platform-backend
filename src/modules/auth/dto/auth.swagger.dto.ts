@@ -4,12 +4,6 @@ import { CreatorType, UserRole } from '@prisma/client';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class DonorProfileDto {
-  @ApiProperty({
-    example: '1990-05-15',
-    description: 'Date of birth in YYYY-MM-DD format',
-  })
-  dateOfBirth!: string;
-
   @ApiProperty({ example: 'Education and Health' })
   areasOfInterest!: string;
 
@@ -42,20 +36,28 @@ export class RegisterDonorDto {
   @ApiProperty({ example: '123456789', minLength: 8 })
   password!: string;
 
-  @ApiProperty({ example: '+970599123456' })
-  phoneNumber!: string;
+  @ApiProperty({
+    example: '1990-05-15',
+    description: 'Date of birth in YYYY-MM-DD format',
+  })
+  dateOfBirth!: string;
 
-  @ApiProperty({ example: 'Palestine' })
-  country!: string;
+  @ApiProperty({ example: '+970599123456', required: false })
+  phoneNumber?: string;
+
+  @ApiProperty({ example: 'Palestine', required: false })
+  country?: string;
 
   @ApiPropertyOptional({
     example: 'New donor interested in supporting charitable projects',
+    required: false,
   })
   notes?: string;
 
-  @ApiProperty({ type: DonorProfileDto })
-  donorProfile!: DonorProfileDto;
+  @ApiProperty({ type: DonorProfileDto, required: false })
+  donorProfile?: DonorProfileDto;
 }
+
 export class DonorProfileResponseDto {
   @ApiProperty({ example: '537a8d3e-4cf3-4a57-9d9e-b379f682aa1e' })
   id!: string;

@@ -10,6 +10,7 @@ import type { registerDonorDTO } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { CreatorType, UserRole } from '@prisma/client';
 import { UserService } from '../user/user.service';
+import { DonorService } from '../donor/donor.service';
 import { OtpService } from './otp.service';
 import { EmailService } from './email.service';
 import { LoginDTO } from './dto/auth.dto';
@@ -19,6 +20,7 @@ import { RegisterCampaignCreatorDTO } from './dto/register-campaign-creator.sche
 export class AuthService {
   constructor(
     private userService: UserService,
+    private donorService: DonorService,
     private databaseService: DatabaseService,
     private jwtService: JwtService,
     private readonly otpService: OtpService,
@@ -65,36 +67,48 @@ export class AuthService {
 
     const { password, donorProfile, ...userData } = registerDonorDto;
 
-    // Hash password
-    const hashedPassword = await this.hashPassword(password);
+    // Use transaction to create user and donor profile
+    const result = await this.databaseService.$transaction(async (tx) => {
+      // Create user using user.service
+      const user = await this.userService.createUserForRegistration(
+        { ...userData, password },
+        UserRole.DONOR,
+        tx,
+      );
 
-    // Create user with donor profile
-    const user = await this.databaseService.user.create({
-      data: {
-        ...userData,
-        isVerified: true,
-        verificationStatus: 'confirmed',
-        password: hashedPassword,
-        role: UserRole.DONOR,
+      // Create donor profile using donor.service
+      const profile = await this.donorService.createDonorProfile(
+        user.id,
+        donorProfile,
+        tx,
+      );
 
-        donorProfile: donorProfile
-          ? {
-              create: {
-                ...donorProfile,
-              },
-            }
-          : undefined,
-      },
-      include: {
-        donorProfile: true,
-      },
+      return {
+        ...user,
+        donorProfile: profile,
+      };
     });
 
     // Generate JWT token
-    const token = this.generateJwtToken(user.id, UserRole.DONOR);
+    const token = this.generateJwtToken(result.id, UserRole.DONOR);
+
+    // Map user and include donorProfile based on whether custom data was provided
+    const userWithoutPassword = this.userService.mapUserWithoutPassword(result);
+
+    // If custom data was provided, show all profile data, otherwise show only id and userId
+    let donorProfileResponse = null;
+    if (result.donorProfile) {
+      const { hasCustomData, ...profileData } = result.donorProfile as any;
+      donorProfileResponse = hasCustomData
+        ? profileData
+        : { id: profileData.id, userId: profileData.userId };
+    }
 
     return {
-      user: this.userService.mapUserWithoutPassword(user),
+      user: {
+        ...userWithoutPassword,
+        donorProfile: donorProfileResponse,
+      },
       token,
     };
   }
