@@ -22,6 +22,7 @@ const BaseUserSchema = z.object({
   phoneNumber: z.string().min(1),
   country: z.string().min(1),
   notes: z.string().optional(),
+  dateOfBirth: z.coerce.date().optional(),
 });
 
 // ✅ discriminated union على string literal
@@ -32,7 +33,7 @@ export const RegisterCampaignCreatorSchema = z.discriminatedUnion('type', [
   }),
   BaseUserSchema.extend({
     type: z.literal('INSTITUTION'),
-    creatorProfile: InstitutionDetailsSchema,
+    creatorProfile: InstitutionDetailsSchema.optional().nullable(),
   }),
 ]);
 

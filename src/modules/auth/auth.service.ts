@@ -123,69 +123,54 @@ export class AuthService {
     if (existing) throw new ConflictException('Email already exists');
 
     const hashedPassword = await this.hashPassword(dto.password);
-    const notes = dto.notes ?? '';
+    const notes = dto.notes ?? null;
 
-    // INDIVIDUAL
-    if (dto.type === 'INDIVIDUAL') {
-      const user = await this.databaseService.user.create({
+    const { creatorProfile, type } = dto;
+
+    const result = await this.databaseService.$transaction(async (tx) => {
+      // 1) create user (always unverified at signup per new plan)
+      const user = await tx.user.create({
         data: {
           firstName: dto.firstName,
           lastName: dto.lastName,
           email,
           password: hashedPassword,
           phoneNumber: dto.phoneNumber,
+          dateOfBirth: dto.dateOfBirth,
           country: dto.country,
-          notes,
+          notes: notes,
           role: UserRole.CAMPAIGN_CREATOR,
-          isVerified: true,
-          verificationStatus: 'confirmed',
+          isVerified: false,
+          verificationStatus: 'pending',
         },
       });
 
-      const token = this.generateJwtToken(user.id, user.role);
-      const { password, ...userData } = user;
-      return { token, userData };
-    }
+      // 2) create profile only if provided now
+      const profile = creatorProfile
+        ? await tx.campaignCreator.create({
+            data: {
+              userId: user.id,
+              type, // INDIVIDUAL or INSTITUTION (outer type)
+              ...creatorProfile, // institution fields (if you allow them)
+            },
+          })
+        : null;
 
-    // safety guard
-    if (dto.type !== 'INSTITUTION') {
-      throw new BadRequestException('Invalid creator type');
-    }
-
-    if (!dto.creatorProfile) {
-      throw new BadRequestException(
-        'creatorProfile is required when type is INSTITUTION',
-      );
-    }
-
-    const user = await this.databaseService.user.create({
-      data: {
-        firstName: dto.firstName,
-        lastName: dto.lastName,
-        email,
-        password: hashedPassword,
-        phoneNumber: dto.phoneNumber,
-        country: dto.country,
-        notes,
-        role: UserRole.CAMPAIGN_CREATOR,
-        isVerified: true,
-        verificationStatus: 'confirmed',
-
-        creatorProfile: {
-          create: {
-            type: CreatorType.INSTITUTION,
-            ...dto.creatorProfile,
-          },
-        },
-      },
-      include: {
-        creatorProfile: true,
-      },
+      return { user, profile };
     });
 
-    const token = this.generateJwtToken(user.id, user.role);
-    const { password, ...userData } = user;
-    return { token, userData };
+    const token = this.generateJwtToken(result.user.id, result.user.role);
+
+    const { password, ...userData } = result.user;
+
+    return {
+      token,
+      userData: {
+        ...userData,
+        type,
+        creatorProfile: result.profile,
+      },
+    };
   }
 
   hashPassword(password: string) {

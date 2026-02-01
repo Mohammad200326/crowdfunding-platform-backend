@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreatorType, UserRole } from '@prisma/client';
+import { CreatorType, UserRole, VerificationStatus } from '@prisma/client';
+import { Type } from 'class-transformer';
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -220,12 +221,13 @@ export class LoginResponseDto {
 }
 
 export class CampaignCreatorProfileDto {
-  @ApiProperty({ example: 'Palestine' })
-  institutionCountry: string;
-
   @ApiProperty({ example: 'NGO' })
   institutionType: string;
 
+  @ApiProperty({ example: 'Palestine' })
+  institutionCountry: string;
+
+  // NOTE: request comes as string, Zod will coerce to Date
   @ApiProperty({ example: '2015-01-01', format: 'date' })
   institutionDateOfEstablishment: string;
 
@@ -238,10 +240,10 @@ export class CampaignCreatorProfileDto {
   @ApiProperty({ example: 'REG-987654' })
   institutionRegistrationNumber: string;
 
-  @ApiProperty({ example: 'Ahmed Mahmoud' })
+  @ApiProperty({ example: 'Lina Hassan' })
   institutionRepresentativeName: string;
 
-  @ApiProperty({ example: 'CEO' })
+  @ApiProperty({ example: 'Director' })
   institutionRepresentativePosition: string;
 
   @ApiProperty({ example: 'REP-001' })
@@ -255,10 +257,10 @@ export class CampaignCreatorProfileDto {
 }
 
 export class RegisterCampaignCreatorDto {
-  @ApiProperty({ example: 'Ahmed' })
+  @ApiProperty({ example: 'Ahmad' })
   firstName: string;
 
-  @ApiProperty({ example: 'Mahmoud' })
+  @ApiProperty({ example: 'Saleh' })
   lastName: string;
 
   @ApiProperty({ example: 'creator@example.com' })
@@ -267,62 +269,35 @@ export class RegisterCampaignCreatorDto {
   @ApiProperty({ example: '123456789', minLength: 8 })
   password: string;
 
-  @ApiProperty({ example: '+970599123456' })
+  @ApiProperty({ example: '+970599111223' })
   phoneNumber: string;
 
   @ApiProperty({ example: 'Palestine' })
   country: string;
 
-  @ApiPropertyOptional({ example: 'Campaign creator account' })
-  notes?: string;
+  @ApiPropertyOptional({ example: 'Campaign creator account', nullable: true })
+  notes?: string | null;
+
+  // NOTE: request is string (Swagger); Zod coerces it to Date
+  @ApiPropertyOptional({ example: '1998-06-12', format: 'date' })
+  dateOfBirth?: string;
 
   @ApiProperty({ enum: CreatorType, example: CreatorType.INSTITUTION })
   type: CreatorType;
 
-  @ApiPropertyOptional({ type: CampaignCreatorProfileDto, nullable: true })
-  creatorProfile?: CampaignCreatorProfileDto;
+  @ApiPropertyOptional({
+    type: () => CampaignCreatorProfileDto,
+    nullable: true,
+    description:
+      'Optional. If provided, a CampaignCreator profile will be created in the same transaction.',
+  })
+  @Type(() => CampaignCreatorProfileDto)
+  creatorProfile?: CampaignCreatorProfileDto | null;
 }
 
-export class AuthUserResponseDto {
-  @ApiProperty({ example: 'uuid' })
-  id: string;
-
-  @ApiProperty({ example: 'Ahmed' })
-  firstName: string;
-
-  @ApiProperty({ example: 'Mahmoud' })
-  lastName: string;
-
-  @ApiProperty({ example: 'creator@example.com' })
-  email: string;
-
-  @ApiProperty({ example: 'CAMPAIGN_CREATOR' })
-  role: string;
-
-  @ApiProperty({ example: 'Palestine' })
-  country: string;
-
-  @ApiProperty({ example: '+970599123456' })
-  phoneNumber: string;
-
-  @ApiProperty({ example: false })
-  isDeleted: boolean;
-
-  @ApiProperty({ example: false })
-  isVerified: boolean;
-
-  @ApiProperty({ example: 'pending' })
-  verificationStatus: string;
-
-  @ApiProperty({ example: '2026-01-31T21:07:02.316Z' })
-  createdAt: string;
-
-  @ApiProperty({ example: '2026-01-31T21:07:02.316Z' })
-  updatedAt: string;
-
-  @ApiProperty({ example: 'Campaign creator account' })
-  notes?: string | null;
-}
+/**
+ * ===== Response DTOs
+ */
 
 export class CampaignCreatorProfileResponseDto {
   @ApiProperty({ example: '22d19b2a-2c3a-494d-98ce-98b5328a7c26' })
@@ -340,6 +315,7 @@ export class CampaignCreatorProfileResponseDto {
   @ApiProperty({ example: 'Palestine' })
   institutionCountry: string;
 
+  // DB usually returns ISO date-time string
   @ApiProperty({ example: '2015-01-01T00:00:00.000Z', format: 'date-time' })
   institutionDateOfEstablishment: string;
 
@@ -352,10 +328,10 @@ export class CampaignCreatorProfileResponseDto {
   @ApiProperty({ example: 'REG-987654' })
   institutionRegistrationNumber: string;
 
-  @ApiProperty({ example: 'Ahmed Mahmoud' })
+  @ApiProperty({ example: 'Lina Hassan' })
   institutionRepresentativeName: string;
 
-  @ApiProperty({ example: 'CEO' })
+  @ApiProperty({ example: 'Director' })
   institutionRepresentativePosition: string;
 
   @ApiProperty({ example: 'REP-001' })
@@ -367,10 +343,10 @@ export class CampaignCreatorProfileResponseDto {
   @ApiProperty({ example: '@example_org' })
   institutionRepresentativeSocialMedia: string;
 
-  @ApiProperty({ example: '2026-02-01T00:15:54.824Z', format: 'date-time' })
+  @ApiProperty({ example: '2026-02-01T12:00:00.000Z', format: 'date-time' })
   createdAt: string;
 
-  @ApiProperty({ example: '2026-02-01T00:15:54.824Z', format: 'date-time' })
+  @ApiProperty({ example: '2026-02-01T12:00:00.000Z', format: 'date-time' })
   updatedAt: string;
 }
 
@@ -378,44 +354,62 @@ export class CampaignCreatorUserDataResponseDto {
   @ApiProperty({ example: '1a0a3cd3-3341-43ff-aa4a-32552c8d2346' })
   id: string;
 
-  @ApiProperty({ example: 'Ahmed' })
+  @ApiProperty({ example: 'Ahmad' })
   firstName: string;
 
-  @ApiProperty({ example: 'Mahmoud' })
+  @ApiProperty({ example: 'Saleh' })
   lastName: string;
 
-  @ApiProperty({ example: 'creator1@example.com' })
+  @ApiProperty({ example: 'creator@example.com' })
   email: string;
 
-  @ApiProperty({ example: 'CAMPAIGN_CREATOR' })
-  role: string;
+  @ApiProperty({ enum: UserRole, example: UserRole.CAMPAIGN_CREATOR })
+  role: UserRole;
 
-  @ApiProperty({ example: 'Palestine' })
-  country: string;
+  @ApiPropertyOptional({ example: 'Palestine', nullable: true })
+  country?: string | null;
 
-  @ApiProperty({ example: '+970599123456' })
-  phoneNumber: string;
+  @ApiPropertyOptional({ example: '+970599111223', nullable: true })
+  phoneNumber?: string | null;
 
-  @ApiProperty({ example: 'Campaign creator account' })
-  notes: string | null;
+  @ApiPropertyOptional({ example: 'Campaign creator account', nullable: true })
+  notes?: string | null;
+
+  @ApiPropertyOptional({
+    example: '1998-06-12',
+    format: 'date',
+    nullable: true,
+  })
+  dateOfBirth?: string | null;
 
   @ApiProperty({ example: false })
   isDeleted: boolean;
 
-  @ApiProperty({ example: true })
+  @ApiProperty({ example: false })
   isVerified: boolean;
 
-  @ApiProperty({ example: 'confirmed' })
-  verificationStatus: string;
+  // إذا عندك enum في Prisma اسمه VerificationStatus استخدمه، وإلا خليها string
+  @ApiProperty({
+    enum: VerificationStatus,
+    example: VerificationStatus.pending,
+  })
+  verificationStatus: VerificationStatus;
 
-  @ApiProperty({ example: '2026-02-01T00:15:54.824Z', format: 'date-time' })
+  @ApiProperty({ example: '2026-02-01T12:00:00.000Z', format: 'date-time' })
   createdAt: string;
 
-  @ApiProperty({ example: '2026-02-01T00:15:54.824Z', format: 'date-time' })
+  @ApiProperty({ example: '2026-02-01T12:00:00.000Z', format: 'date-time' })
   updatedAt: string;
 
-  @ApiProperty({ type: CampaignCreatorProfileResponseDto, nullable: true })
-  creatorProfile: CampaignCreatorProfileResponseDto | null;
+  // أنت بترجّع type يدويًا في الـ response
+  @ApiProperty({ enum: CreatorType, example: CreatorType.INSTITUTION })
+  type: CreatorType;
+
+  @ApiPropertyOptional({
+    type: () => CampaignCreatorProfileResponseDto,
+    nullable: true,
+  })
+  creatorProfile?: CampaignCreatorProfileResponseDto | null;
 }
 
 export class RegisterCampaignCreatorResponseDto {
@@ -424,6 +418,6 @@ export class RegisterCampaignCreatorResponseDto {
   })
   token: string;
 
-  @ApiProperty({ type: CampaignCreatorUserDataResponseDto })
+  @ApiProperty({ type: () => CampaignCreatorUserDataResponseDto })
   userData: CampaignCreatorUserDataResponseDto;
 }
