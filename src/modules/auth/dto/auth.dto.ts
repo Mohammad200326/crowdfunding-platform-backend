@@ -30,8 +30,8 @@ export type registerDonorDTO = registerUserDTO & {
 };
 
 export type registerCampaignCreatorDTO = registerUserDTO & {
+  type: CreatorType;
   creatorProfile?: {
-    type: CreatorType;
     institutionCountry: string;
     institutionType: string;
     institutionDateOfEstablishment: Date;
