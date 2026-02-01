@@ -30,6 +30,7 @@ import {
 } from '@nestjs/swagger';
 import {
   CreateDonorIdentityFormDto,
+  GetDonorIdentityByDonorResponseDto,
   UpdateDonorIdentityFormDto,
 } from './dto/donor-identity.swagger.dto';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
@@ -83,14 +84,10 @@ export class DonorIdentityController {
     return this.donorIdentityService.create(dto, files);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.donorIdentityService.findAll();
-  // }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.donorIdentityService.findByUserId(id);
+  @Get(':donorId')
+  @ApiOkResponse({ type: GetDonorIdentityByDonorResponseDto })
+  getByDonorId(@Param('donorId') donorId: string) {
+    return this.donorIdentityService.getByDonorId(donorId);
   }
 
   @Patch(':donorId')

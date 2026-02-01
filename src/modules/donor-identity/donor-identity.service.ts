@@ -96,12 +96,36 @@ export class DonorIdentityService {
     };
   }
 
-  findByUserId(donorId: string) {
-    return this.databaseService.donorIdentity.findUniqueOrThrow({
-      where: {
-        id: donorId,
+  async getByDonorId(donorId: string) {
+    const donorIdentity = await this.databaseService.donorIdentity.findUnique({
+      where: { donorId },
+      include: {
+        assets: {
+          where: {
+            kind: {
+              in: [
+                AssetKind.DONOR_ID_FRONT,
+                AssetKind.DONOR_ID_BACK,
+                AssetKind.DONOR_ID_SELFIE_WITH_ID,
+              ],
+            },
+          },
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true,
+            kind: true,
+            url: true,
+            fileType: true,
+            fileSizeInKB: true,
+            createdAt: true,
+          },
+        },
       },
     });
+
+    if (!donorIdentity) throw new NotFoundException('Donor identity not found');
+
+    return { donorIdentity };
   }
 
   async updateByDonorId(
@@ -110,11 +134,11 @@ export class DonorIdentityService {
     files?: DonorIdentityUpdateFiles,
   ): Promise<UpdateDonorIdentityResponse> {
     const existing = await this.databaseService.donorIdentity.findUnique({
-      where: { donorId }, // ✅ لأن donorId unique في DonorIdentity
+      where: { donorId },
       select: {
         id: true,
         donorId: true,
-        donor: { select: { userId: true } }, // ✅ ownerId
+        donor: { select: { userId: true } },
       },
     });
 
@@ -132,7 +156,6 @@ export class DonorIdentityService {
     if (selfie) kindsToReplace.push(AssetKind.DONOR_ID_SELFIE_WITH_ID);
 
     const result = await this.databaseService.$transaction(async (tx) => {
-      // 1) update text fields (only provided)
       const updatedIdentity = await tx.donorIdentity.update({
         where: { id: existing.id },
         data: {
@@ -150,7 +173,6 @@ export class DonorIdentityService {
         },
       });
 
-      // 2) replace assets only for provided files
       if (kindsToReplace.length) {
         await tx.asset.deleteMany({
           where: {
