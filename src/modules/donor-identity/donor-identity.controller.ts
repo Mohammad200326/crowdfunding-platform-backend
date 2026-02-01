@@ -10,13 +10,28 @@ import {
   UploadedFiles,
 } from '@nestjs/common';
 import { DonorIdentityService } from './donor-identity.service';
-import { UpdateDonorIdentityDto } from './dto/update-donor-identity.dto';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
-import { CreateDonorIdentitySchema } from './dto/donor-identity.dto';
-import type { CreateDonorIdentityDTO } from './dto/donor-identity.dto';
-import { ApiBody, ApiConsumes, ApiCreatedResponse } from '@nestjs/swagger';
-import { CreateDonorIdentityFormDto } from './dto/donor-identity.swagger.dto';
+import {
+  CreateDonorIdentitySchema,
+  UpdateDonorIdentitySchema,
+} from './dto/donor-identity.dto';
+import type {
+  CreateDonorIdentityDTO,
+  DonorIdentityUpdateFiles,
+  UpdateDonorIdentityDTO,
+  UpdateDonorIdentityResponse,
+} from './dto/donor-identity.dto';
+import {
+  ApiBody,
+  ApiConsumes,
+  ApiCreatedResponse,
+  ApiOkResponse,
+} from '@nestjs/swagger';
+import {
+  CreateDonorIdentityFormDto,
+  UpdateDonorIdentityFormDto,
+} from './dto/donor-identity.swagger.dto';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
 
 @Controller('donor-identity')
@@ -55,7 +70,8 @@ export class DonorIdentityController {
       { name: 'selfieWithId', maxCount: 1 },
     ]),
   )
-  create(@Body(new ZodValidationPipe(CreateDonorIdentitySchema))
+  create(
+    @Body(new ZodValidationPipe(CreateDonorIdentitySchema))
     dto: CreateDonorIdentityDTO,
     @UploadedFiles()
     files: {
@@ -77,9 +93,35 @@ export class DonorIdentityController {
     return this.donorIdentityService.findByUserId(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDonorIdentityDto: UpdateDonorIdentityDto) {
-    return this.donorIdentityService.update(+id, updateDonorIdentityDto);
+  @Patch(':donorId')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({ type: UpdateDonorIdentityFormDto })
+  @ApiOkResponse({
+    schema: {
+      type: 'object',
+      properties: {
+        message: {
+          type: 'string',
+          example: 'Donor identity updated successfully',
+        },
+      },
+      required: ['message'],
+    },
+  })
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'idFront', maxCount: 1 },
+      { name: 'idBack', maxCount: 1 },
+      { name: 'selfieWithId', maxCount: 1 },
+    ]),
+  )
+  update(
+    @Param('donorId') donorId: string,
+    @Body(new ZodValidationPipe(UpdateDonorIdentitySchema))
+    dto: UpdateDonorIdentityDTO,
+    @UploadedFiles() files: DonorIdentityUpdateFiles,
+  ): Promise<UpdateDonorIdentityResponse> {
+    return this.donorIdentityService.updateByDonorId(donorId, dto, files);
   }
 
   @Delete(':id')

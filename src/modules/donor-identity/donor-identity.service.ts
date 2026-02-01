@@ -3,11 +3,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { UpdateDonorIdentityDto } from './dto/update-donor-identity.dto';
 import { DatabaseService } from '../database/database.service';
 import {
   CreateDonorIdentityDTO,
   CreateDonorIdentityResponse,
+  DonorIdentityUpdateFiles,
+  UpdateDonorIdentityDTO,
+  UpdateDonorIdentityResponse,
 } from './dto/donor-identity.dto';
 import { AssetKind, Prisma } from '@prisma/client';
 import { FileService } from '../file/file.service';
@@ -102,8 +104,109 @@ export class DonorIdentityService {
     });
   }
 
-  update(id: number, updateDonorIdentityDto: UpdateDonorIdentityDto) {
-    return `This action updates a #${id} donorIdentity`;
+  async updateByDonorId(
+    donorId: string,
+    dto: UpdateDonorIdentityDTO,
+    files?: DonorIdentityUpdateFiles,
+  ): Promise<UpdateDonorIdentityResponse> {
+    const existing = await this.databaseService.donorIdentity.findUnique({
+      where: { donorId }, // ✅ لأن donorId unique في DonorIdentity
+      select: {
+        id: true,
+        donorId: true,
+        donor: { select: { userId: true } }, // ✅ ownerId
+      },
+    });
+
+    if (!existing) {
+      throw new NotFoundException('Donor identity not found for this donor');
+    }
+
+    const front = files?.idFront?.[0];
+    const back = files?.idBack?.[0];
+    const selfie = files?.selfieWithId?.[0];
+
+    const kindsToReplace: AssetKind[] = [];
+    if (front) kindsToReplace.push(AssetKind.DONOR_ID_FRONT);
+    if (back) kindsToReplace.push(AssetKind.DONOR_ID_BACK);
+    if (selfie) kindsToReplace.push(AssetKind.DONOR_ID_SELFIE_WITH_ID);
+
+    const result = await this.databaseService.$transaction(async (tx) => {
+      // 1) update text fields (only provided)
+      const updatedIdentity = await tx.donorIdentity.update({
+        where: { id: existing.id },
+        data: {
+          ...(dto.fullNameOnId !== undefined
+            ? { fullNameOnId: dto.fullNameOnId }
+            : {}),
+          ...(dto.idNumber !== undefined ? { idNumber: dto.idNumber } : {}),
+        },
+        select: {
+          id: true,
+          donorId: true,
+          fullNameOnId: true,
+          idNumber: true,
+          updatedAt: true,
+        },
+      });
+
+      // 2) replace assets only for provided files
+      if (kindsToReplace.length) {
+        await tx.asset.deleteMany({
+          where: {
+            donorIdentityId: existing.id,
+            kind: { in: kindsToReplace },
+          },
+        });
+
+        const ownerId = existing.donor.userId;
+        const assetsToCreate: Prisma.AssetUncheckedCreateInput[] = [];
+
+        if (front) {
+          assetsToCreate.push(
+            this.fileService.createFileAssetData(
+              front,
+              ownerId,
+              AssetKind.DONOR_ID_FRONT,
+              existing.id,
+            ),
+          );
+        }
+
+        if (back) {
+          assetsToCreate.push(
+            this.fileService.createFileAssetData(
+              back,
+              ownerId,
+              AssetKind.DONOR_ID_BACK,
+              existing.id,
+            ),
+          );
+        }
+
+        if (selfie) {
+          assetsToCreate.push(
+            this.fileService.createFileAssetData(
+              selfie,
+              ownerId,
+              AssetKind.DONOR_ID_SELFIE_WITH_ID,
+              existing.id,
+            ),
+          );
+        }
+
+        if (assetsToCreate.length) {
+          await tx.asset.createMany({ data: assetsToCreate });
+        }
+      }
+
+      return updatedIdentity;
+    });
+
+    return {
+      message: 'Donor identity updated successfully',
+      donorIdentity: result,
+    };
   }
 
   remove(donorId: string) {

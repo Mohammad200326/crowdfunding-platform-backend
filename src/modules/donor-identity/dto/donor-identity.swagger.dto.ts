@@ -24,3 +24,20 @@ export class CreateDonorIdentityFormDto extends CreateDonorIdentityDto {
   @ApiProperty({ type: 'string', format: 'binary' })
   selfieWithId!: any;
 }
+
+export class UpdateDonorIdentityFormDto {
+  @ApiPropertyOptional({ example: 'Ahmed Mahmoud Hassan' })
+  fullNameOnId?: string;
+
+  @ApiPropertyOptional({ example: 'A123456789', nullable: true })
+  idNumber?: string | null;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  idFront?: any;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  idBack?: any;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  selfieWithId?: any;
+}
