@@ -43,6 +43,7 @@ export class FileService {
     file: Express.Multer.File,
     userId: string,
     kind: AssetKind,
+    donorIdentityId?: string,
   ): Prisma.AssetUncheckedCreateInput {
     return {
       fileId: file.fileId!,
@@ -51,6 +52,7 @@ export class FileService {
       ownerId: userId,
       fileType: file.mimetype,
       kind,
+      donorIdentityId: donorIdentityId ?? null,
     };
   }
 
