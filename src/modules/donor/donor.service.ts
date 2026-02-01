@@ -14,6 +14,21 @@ export class DonorService {
     return 'This action adds a new donor';
   }
 
+  async createDonorProfile(userId: string, donorProfileData: any, tx?: any) {
+    const prisma = tx || this.prismaService;
+
+    if (!donorProfileData) {
+      return null;
+    }
+
+    return prisma.donor.create({
+      data: {
+        ...donorProfileData,
+        userId,
+      },
+    });
+  }
+
   findAll(
     query: PaginationQueryType,
   ): Promise<PaginatedResult<Omit<User, 'password'>>> {

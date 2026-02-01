@@ -8,18 +8,18 @@ import { User, CreatorType } from '@prisma/client';
 
 export type registerUserDTO = Pick<
   User,
-  | 'firstName'
-  | 'lastName'
-  | 'email'
-  | 'password'
-  | 'phoneNumber'
-  | 'country'
-  | 'notes'
->;
+  'firstName' | 'lastName' | 'email' | 'password' | 'dateOfBirth'
+  // | 'phoneNumber'
+  // | 'country'
+  // | 'notes'
+> & {
+  phoneNumber?: string;
+  country?: string;
+  notes?: string;
+};
 
 export type registerDonorDTO = registerUserDTO & {
   donorProfile?: {
-    dateOfBirth: Date;
     areasOfInterest: string;
     preferredCampaignTypes: string;
     geographicScope: 'local' | 'global';

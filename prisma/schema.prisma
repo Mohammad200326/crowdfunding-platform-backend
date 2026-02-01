@@ -85,10 +85,11 @@ model User {
   lastName           String             @db.Text
   email              String             @unique
   password           String             @db.Text
+  dateOfBirth        DateTime           @map("date_of_birth") @db.Date
   role               UserRole           @default(DONOR)
-  country            String             @db.Text
-  phoneNumber        String             @map("phone_number") @db.Text
-  notes              String             @db.Text
+  country            String?             @db.Text
+  phoneNumber        String?             @map("phone_number") @db.Text
+  notes              String?             @db.Text
   isDeleted          Boolean            @default(false) @map("is_deleted")
   isVerified         Boolean            @default(false) @map("is_verified")
   createdAt          DateTime           @default(now()) @map("created_at")
@@ -198,7 +199,6 @@ model Withdrawal {
 model Donor {
   id                          String          @id @default(uuid()) @db.Char(36)
   userId                      String          @unique @map("user_id") @db.Char(36)
-  dateOfBirth                 DateTime        @map("date_of_birth") @db.Date
   areasOfInterest             String          @map("areas_of_interest") @db.Text
   preferredCampaignTypes      String          @map("preferred_campaign_types") @db.Text
   geographicScope             GeographicScope @map("geographic_scope")

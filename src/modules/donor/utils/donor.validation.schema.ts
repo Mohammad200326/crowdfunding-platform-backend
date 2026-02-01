@@ -7,17 +7,17 @@ export const donorValidationSchema = z.object({
   lastName: z.string().min(2).max(100),
   email: z.string().email().toLowerCase(),
   password: z.string().min(6).max(100),
-  phoneNumber: z.string().min(7).max(15),
-  country: z.string().min(2).max(100),
-  notes: z.string().max(500),
+  dateOfBirth: z
+    .string()
+    .refine((date) => !isNaN(Date.parse(date)), {
+      message: 'Invalid date format',
+    })
+    .transform((date) => new Date(date)),
+  phoneNumber: z.string().min(7).max(15).optional(),
+  country: z.string().min(2).max(100).optional(),
+  notes: z.string().max(500).optional(),
   donorProfile: z
     .object({
-      dateOfBirth: z
-        .string()
-        .refine((date) => !isNaN(Date.parse(date)), {
-          message: 'Invalid date format',
-        })
-        .transform((date) => new Date(date)),
       areasOfInterest: z.string().min(1),
       preferredCampaignTypes: z.string().min(1),
       geographicScope: z.enum(['local', 'global']),

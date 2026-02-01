@@ -35,7 +35,7 @@ import {
   RegisterDonorDto,
   RegisterDonorResponseDto,
 } from './dto/auth.swagger.dto';
-import { campaignCreatorValidationSchema } from '../campaign-creator/utils/donor.validation.schema';
+import { campaignCreatorValidationSchema } from '../campaign-creator/utils/camaign-creator.validation.schema';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
 
 @ApiTags('Auth')
