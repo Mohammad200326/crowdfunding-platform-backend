@@ -93,8 +93,23 @@ export class AuthService {
     // Generate JWT token
     const token = this.generateJwtToken(result.id, UserRole.DONOR);
 
+    // Map user and include donorProfile based on whether custom data was provided
+    const userWithoutPassword = this.userService.mapUserWithoutPassword(result);
+
+    // If custom data was provided, show all profile data, otherwise show only id and userId
+    let donorProfileResponse = null;
+    if (result.donorProfile) {
+      const { hasCustomData, ...profileData } = result.donorProfile as any;
+      donorProfileResponse = hasCustomData
+        ? profileData
+        : { id: profileData.id, userId: profileData.userId };
+    }
+
     return {
-      user: this.userService.mapUserWithoutPassword(result),
+      user: {
+        ...userWithoutPassword,
+        donorProfile: donorProfileResponse,
+      },
       token,
     };
   }

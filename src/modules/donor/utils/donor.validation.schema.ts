@@ -18,12 +18,12 @@ export const donorValidationSchema = z.object({
   notes: z.string().max(500).optional(),
   donorProfile: z
     .object({
-      areasOfInterest: z.string().min(1),
-      preferredCampaignTypes: z.string().min(1),
-      geographicScope: z.enum(['local', 'global']),
-      targetAudience: z.string().min(2).max(100),
-      preferredCampaignSize: z.coerce.number().positive(),
-      preferredCampaignVisibility: z.string().min(2).max(100),
+      areasOfInterest: z.string().min(1).optional(),
+      preferredCampaignTypes: z.string().min(1).optional(),
+      geographicScope: z.enum(['local', 'global']).optional(),
+      targetAudience: z.string().min(2).max(100).optional(),
+      preferredCampaignSize: z.coerce.number().positive().optional(),
+      preferredCampaignVisibility: z.string().min(2).max(100).optional(),
     })
     .optional(),
 }) satisfies ZodType<registerDonorDTO>;

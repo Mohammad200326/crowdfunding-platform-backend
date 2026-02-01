@@ -20,12 +20,12 @@ export type registerUserDTO = Pick<
 
 export type registerDonorDTO = registerUserDTO & {
   donorProfile?: {
-    areasOfInterest: string;
-    preferredCampaignTypes: string;
-    geographicScope: 'local' | 'global';
-    targetAudience: string;
-    preferredCampaignSize: number;
-    preferredCampaignVisibility: string;
+    areasOfInterest?: string;
+    preferredCampaignTypes?: string;
+    geographicScope?: 'local' | 'global';
+    targetAudience?: string;
+    preferredCampaignSize?: number;
+    preferredCampaignVisibility?: string;
   };
 };
 

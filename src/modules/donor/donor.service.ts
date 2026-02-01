@@ -17,16 +17,33 @@ export class DonorService {
   async createDonorProfile(userId: string, donorProfileData: any, tx?: any) {
     const prisma = tx || this.prismaService;
 
-    if (!donorProfileData) {
-      return null;
-    }
+    // Check if donor profile data was provided
+    const hasCustomData =
+      donorProfileData && Object.keys(donorProfileData).length > 0;
 
-    return prisma.donor.create({
+    // Create donor profile with default values if not provided
+    const defaultProfile = {
+      areasOfInterest: '',
+      preferredCampaignTypes: '',
+      geographicScope: 'local',
+      targetAudience: '',
+      preferredCampaignSize: 0,
+      preferredCampaignVisibility: '',
+    };
+
+    const profile = await prisma.donor.create({
       data: {
+        ...defaultProfile,
         ...donorProfileData,
         userId,
       },
     });
+
+    // Return profile with flag indicating if custom data was provided
+    return {
+      ...profile,
+      hasCustomData,
+    };
   }
 
   findAll(
