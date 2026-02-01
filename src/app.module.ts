@@ -10,6 +10,7 @@ import { DonorModule } from './modules/donor/donor.module';
 import { CampaignCreatorModule } from './modules/campaign-creator/campaign-creator.module';
 import { UserModule } from './modules/user/user.module';
 import { CampaignModule } from './modules/campaign/campaign.module';
+import { CampaignUpdateModule } from './modules/campaign-update/campaign-update.module';
 import { RolesGuard } from './modules/auth/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/guards/auth.guard';
@@ -33,6 +34,7 @@ import { DonorIdentityModule } from './modules/donor-identity/donor-identity.mod
     CampaignCreatorModule,
     UserModule,
     CampaignModule,
+    CampaignUpdateModule,
     DonorIdentityModule,
   ],
   controllers: [AppController],

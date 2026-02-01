@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from '../database/database.service';
 import { FileService } from '../file/file.service';
-import { AssetKind, User, UserRole } from '@prisma/client';
+import { AssetKind, User, UserRole, PrismaClient } from '@prisma/client';
 import { removeFields } from 'src/utils/object.util';
 import { registerUserDTO, UserResponseDTO } from '../auth/dto/auth.dto';
 import * as argon from 'argon2';
@@ -19,8 +19,11 @@ export class UserService {
   async createUserForRegistration(
     userData: Omit<registerUserDTO, 'password'> & { password: string },
     role: UserRole,
-    tx?: any,
-  ) {
+    tx?: Omit<
+      PrismaClient,
+      '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'
+    >,
+  ): Promise<User> {
     const prisma = tx || this.prismaService;
     const hashedPassword = await argon.hash(userData.password);
 
@@ -164,14 +167,18 @@ export class UserService {
     return user;
   }
 
-  async remove(id: string) {
+  async remove(id: string): Promise<User | null> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+    });
+
+    if (!user || user.isDeleted) {
+      return null;
+    }
+
     return this.prismaService.user.update({
-      where: {
-        id,
-      },
-      data: {
-        isDeleted: true,
-      },
+      where: { id },
+      data: { isDeleted: true },
     });
   }
 
