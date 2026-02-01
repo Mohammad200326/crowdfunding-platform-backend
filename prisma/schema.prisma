@@ -85,7 +85,7 @@ model User {
   lastName           String             @db.Text
   email              String             @unique
   password           String             @db.Text
-  dateOfBirth        DateTime           @map("date_of_birth") @db.Date
+  dateOfBirth        DateTime?           @map("date_of_birth") @db.Date
   role               UserRole           @default(DONOR)
   country            String?             @db.Text
   phoneNumber        String?             @map("phone_number") @db.Text

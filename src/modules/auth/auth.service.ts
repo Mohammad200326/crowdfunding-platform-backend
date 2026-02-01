@@ -1,21 +1,20 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as argon from 'argon2';
 import { DatabaseService } from '../database/database.service';
-import type {
-  registerCampaignCreatorDTO,
-  registerDonorDTO,
-} from './dto/auth.dto';
+import type { registerDonorDTO } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
-import { UserRole } from '@prisma/client';
+import { CreatorType, UserRole } from '@prisma/client';
 import { UserService } from '../user/user.service';
 import { DonorService } from '../donor/donor.service';
 import { OtpService } from './otp.service';
 import { EmailService } from './email.service';
 import { LoginDTO } from './dto/auth.dto';
+import { RegisterCampaignCreatorDTO } from './dto/register-campaign-creator.schema';
 
 @Injectable()
 export class AuthService {
@@ -114,52 +113,79 @@ export class AuthService {
     };
   }
 
-  async registerCampaignCreator(
-    registerCampaignCreatorDto: registerCampaignCreatorDTO,
-  ) {
-    const existingUser = await this.userService.findByEmail(
-      registerCampaignCreatorDto.email,
-    );
-    if (existingUser) {
-      throw new ConflictException('Email already exists');
+  async registerCampaignCreator(dto: RegisterCampaignCreatorDTO) {
+    const email = dto.email.trim().toLowerCase();
+
+    const existing = await this.databaseService.user.findUnique({
+      where: { email },
+      select: { id: true },
+    });
+    if (existing) throw new ConflictException('Email already exists');
+
+    const hashedPassword = await this.hashPassword(dto.password);
+    const notes = dto.notes ?? '';
+
+    // INDIVIDUAL
+    if (dto.type === 'INDIVIDUAL') {
+      const user = await this.databaseService.user.create({
+        data: {
+          firstName: dto.firstName,
+          lastName: dto.lastName,
+          email,
+          password: hashedPassword,
+          phoneNumber: dto.phoneNumber,
+          country: dto.country,
+          notes,
+          role: UserRole.CAMPAIGN_CREATOR,
+          isVerified: true,
+          verificationStatus: 'confirmed',
+        },
+      });
+
+      const token = this.generateJwtToken(user.id, user.role);
+      const { password, ...userData } = user;
+      return { token, userData };
     }
 
-    const { password, creatorProfile, ...userData } =
-      registerCampaignCreatorDto;
+    // safety guard
+    if (dto.type !== 'INSTITUTION') {
+      throw new BadRequestException('Invalid creator type');
+    }
 
-    const hashedPassword = await this.hashPassword(password);
+    if (!dto.creatorProfile) {
+      throw new BadRequestException(
+        'creatorProfile is required when type is INSTITUTION',
+      );
+    }
 
     const user = await this.databaseService.user.create({
       data: {
-        ...userData,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
+        email,
+        password: hashedPassword,
+        phoneNumber: dto.phoneNumber,
+        country: dto.country,
+        notes,
+        role: UserRole.CAMPAIGN_CREATOR,
         isVerified: true,
         verificationStatus: 'confirmed',
-        password: hashedPassword,
-        role: UserRole.CAMPAIGN_CREATOR,
 
-        creatorProfile: creatorProfile
-          ? {
-              create: {
-                ...creatorProfile,
-              },
-            }
-          : undefined,
+        creatorProfile: {
+          create: {
+            type: CreatorType.INSTITUTION,
+            ...dto.creatorProfile,
+          },
+        },
       },
       include: {
         creatorProfile: true,
       },
     });
 
-    // Generate JWT token
-    const token = this.generateJwtToken(user.id, UserRole.CAMPAIGN_CREATOR);
-
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = user;
-
-    return {
-      user: userWithoutPassword,
-      token,
-    };
+    const token = this.generateJwtToken(user.id, user.role);
+    const { password, ...userData } = user;
+    return { token, userData };
   }
 
   hashPassword(password: string) {

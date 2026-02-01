@@ -13,7 +13,6 @@ import type {
   VerifyOtpDTO,
   LoginDTO,
   registerDonorDTO,
-  registerCampaignCreatorDTO,
 } from './dto/auth.dto';
 import { LoginSchema } from './dto/auth.dto';
 import { donorValidationSchema } from '../donor/utils/donor.validation.schema';
@@ -25,7 +24,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
-  CampaignCreatorProfileResponseDto,
   ExpiresInResponseDto,
   ForgotPasswordDto,
   LoginResponseDto,
@@ -34,9 +32,13 @@ import {
   VerifyForgotOtpDto,
   RegisterDonorDto,
   RegisterDonorResponseDto,
+  LoginRequestDto,
+  RegisterCampaignCreatorResponseDto,
 } from './dto/auth.swagger.dto';
 import { campaignCreatorValidationSchema } from '../campaign-creator/utils/camaign-creator.validation.schema';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
+import type { RegisterCampaignCreatorDTO } from './dto/register-campaign-creator.schema';
+import { RegisterCampaignCreatorSchema } from './dto/register-campaign-creator.schema';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -60,19 +62,17 @@ export class AuthController {
 
   @Post('register/campaign-creator')
   @IsPublic(true)
-  @ApiOperation({ summary: 'Register a new campaign creator (institution)' })
+  @ApiOperation({ summary: 'Register a new campaign creator' })
   @ApiBody({ type: RegisterCampaignCreatorDto })
   @ApiCreatedResponse({
     description: 'Campaign creator registered successfully',
-    type: CampaignCreatorProfileResponseDto,
+    type: RegisterCampaignCreatorResponseDto,
   })
-  async registerCampaignCreator(
-    @Body(new ZodValidationPipe(campaignCreatorValidationSchema))
-    registerCampaignCreatorDto: registerCampaignCreatorDTO,
+  async newRegisterCampaignCreator(
+    @Body(new ZodValidationPipe(RegisterCampaignCreatorSchema))
+    dto: RegisterCampaignCreatorDTO,
   ) {
-    return await this.authService.registerCampaignCreator(
-      registerCampaignCreatorDto,
-    );
+    return await this.authService.registerCampaignCreator(dto);
   }
 
   // LOGIN
@@ -80,22 +80,7 @@ export class AuthController {
   @IsPublic(true)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Login with email and password' })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        email: {
-          type: 'string',
-          example: 'example@gmail.com',
-        },
-        password: {
-          type: 'string',
-          example: 'StrongPassword123',
-        },
-      },
-      required: ['email', 'password'],
-    },
-  })
+  @ApiBody({ type: LoginRequestDto })
   @ApiOkResponse({ type: LoginResponseDto })
   async login(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
     return this.authService.login(dto);

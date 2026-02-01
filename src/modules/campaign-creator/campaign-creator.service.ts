@@ -35,7 +35,6 @@ export class CampaignCreatorService {
       data: {
         userId: dto.userId,
         type: dto.type,
-
         institutionCountry: dto.institutionCountry,
         institutionType: isIndividual
           ? 'Individual'

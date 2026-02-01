@@ -3,6 +3,8 @@ import { CreatorType } from '@prisma/client';
 import { registerCampaignCreatorDTO } from 'src/modules/auth/dto/auth.dto';
 
 export const campaignCreatorValidationSchema = z.object({
+  // ✅ لازم يطابق enum
+  type: z.nativeEnum(CreatorType),
   firstName: z.string().min(2).max(100),
   lastName: z.string().min(2).max(100),
   email: z.string().email().toLowerCase(),
@@ -21,9 +23,6 @@ export const campaignCreatorValidationSchema = z.object({
 
   creatorProfile: z
     .object({
-      // ✅ لازم يطابق enum
-      type: z.nativeEnum(CreatorType),
-
       institutionCountry: z.string().min(2).max(100),
       institutionType: z.string().min(2).max(200),
 
