@@ -13,6 +13,7 @@ import {
 } from './dto/donor-identity.dto';
 import { AssetKind, Prisma } from '@prisma/client';
 import { FileService } from '../file/file.service';
+import { UserResponseDTO } from '../auth/dto/auth.dto';
 
 @Injectable()
 export class DonorIdentityService {
@@ -23,6 +24,7 @@ export class DonorIdentityService {
 
   async create(
     dto: CreateDonorIdentityDTO,
+    user: UserResponseDTO['userData'],
     files: {
       idFront: Express.Multer.File[];
       idBack: Express.Multer.File[];
@@ -30,13 +32,13 @@ export class DonorIdentityService {
     },
   ): Promise<CreateDonorIdentityResponse> {
     const donor = await this.databaseService.donor.findUnique({
-      where: { id: dto.donorId },
-      select: { id: true, userId: true },
+      where: { userId: user.id },
+      select: { id: true },
     });
     if (!donor) throw new NotFoundException('Donor not found');
 
     const exists = await this.databaseService.donorIdentity.findUnique({
-      where: { donorId: dto.donorId },
+      where: { donorId: donor.id },
       select: { id: true },
     });
     if (exists) throw new ConflictException('Donor identity already exists');
@@ -52,7 +54,7 @@ export class DonorIdentityService {
     const result = await this.databaseService.$transaction(async (tx) => {
       const donorIdentity = await tx.donorIdentity.create({
         data: {
-          donorId: dto.donorId,
+          donorId: donor.id,
           fullNameOnId: dto.fullNameOnId,
           idNumber: dto.idNumber ?? null,
         },
@@ -64,7 +66,7 @@ export class DonorIdentityService {
       assets.push(
         this.fileService.createFileAssetData(
           front,
-          donor.userId,
+          user.id,
           AssetKind.DONOR_ID_FRONT,
           donorIdentity.id,
         ),
@@ -72,7 +74,7 @@ export class DonorIdentityService {
       assets.push(
         this.fileService.createFileAssetData(
           back,
-          donor.userId,
+          user.id,
           AssetKind.DONOR_ID_BACK,
           donorIdentity.id,
         ),
@@ -80,7 +82,7 @@ export class DonorIdentityService {
       assets.push(
         this.fileService.createFileAssetData(
           selfie,
-          donor.userId,
+          user.id,
           AssetKind.DONOR_ID_SELFIE_WITH_ID,
           donorIdentity.id,
         ),

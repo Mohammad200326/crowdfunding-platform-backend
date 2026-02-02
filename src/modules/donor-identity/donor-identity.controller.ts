@@ -36,6 +36,8 @@ import {
   UpdateDonorIdentityFormDto,
 } from './dto/donor-identity.swagger.dto';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
+import { User } from 'src/utils/decorators/user.decorator';
+import { UserResponseDTO } from '../auth/dto/auth.dto';
 
 @ApiTags('Donor Identity')
 @ApiBearerAuth('access-token')
@@ -78,6 +80,7 @@ export class DonorIdentityController {
   create(
     @Body(new ZodValidationPipe(CreateDonorIdentitySchema))
     dto: CreateDonorIdentityDTO,
+    @User() user: UserResponseDTO['userData'],
     @UploadedFiles()
     files: {
       idFront: Express.Multer.File[];
@@ -85,7 +88,7 @@ export class DonorIdentityController {
       selfieWithId: Express.Multer.File[];
     },
   ) {
-    return this.donorIdentityService.create(dto, files);
+    return this.donorIdentityService.create(dto, user, files);
   }
 
   @Get(':donorId')

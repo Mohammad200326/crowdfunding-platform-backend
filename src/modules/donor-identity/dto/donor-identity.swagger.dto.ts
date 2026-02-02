@@ -2,12 +2,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AssetKind } from '@prisma/client';
 
 export class CreateDonorIdentityDto {
-  @ApiProperty({
-    format: 'uuid',
-    example: '8d2d3e0c-9c74-4c8c-9e44-2d5c7b2e2a11',
-  })
-  donorId!: string;
-
   @ApiProperty({ example: 'Ahmed Mahmoud' })
   fullNameOnId!: string;
 
