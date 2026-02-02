@@ -41,12 +41,12 @@ import type { CreateCampaignDto } from './dto/campaign.dto'; // Ensure this impo
 import { CampaignCategory } from '@prisma/client';
 
 @ApiTags('Campaigns')
+@ApiBearerAuth('access-token')
 @Controller('campaign')
 export class CampaignController {
   constructor(private readonly campaignService: CampaignService) {}
 
   @Post()
-  @ApiBearerAuth('access-token') // Only Create needs auth usually
   @ApiOperation({ summary: 'Create new campaign by campaign creator' })
   @ApiConsumes('multipart/form-data')
   @ApiBody(createCampaignApiBody)
@@ -112,7 +112,6 @@ export class CampaignController {
 
   // SOFT DELETE
   @Delete(':id')
-  @ApiBearerAuth('access-token') // Delete usually requires Auth
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Soft delete a campaign (Mark as deleted)' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
