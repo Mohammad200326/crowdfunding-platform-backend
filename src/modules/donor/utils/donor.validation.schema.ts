@@ -1,6 +1,7 @@
 import { registerDonorDTO } from 'src/modules/auth/dto/auth.dto';
 import z, { ZodType } from 'zod';
-import { updateDonorDTO } from '../dto/donor.dto';
+import { UpdateDonorDTO } from '../dto/donor.dto';
+import { UpdateDonorIdentitySchema } from 'src/modules/donor-identity/dto/donor-identity.dto';
 
 export const donorValidationSchema = z.object({
   firstName: z.string().min(2).max(100),
@@ -28,5 +29,7 @@ export const donorValidationSchema = z.object({
     .optional(),
 }) satisfies ZodType<registerDonorDTO>;
 
-export const updateDonorSchema =
-  donorValidationSchema.partial() satisfies ZodType<updateDonorDTO>;
+export const updateDonorSchema = donorValidationSchema
+  .extend(UpdateDonorIdentitySchema.shape)
+  .omit({ password: true })
+  .partial() satisfies ZodType<UpdateDonorDTO>;

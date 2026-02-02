@@ -7,5 +7,6 @@ import { FileModule } from '../file/file.module';
   imports: [FileModule],
   controllers: [DonorIdentityController],
   providers: [DonorIdentityService],
+  exports: [DonorIdentityService],
 })
 export class DonorIdentityModule {}

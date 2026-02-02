@@ -22,6 +22,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import {
   CreateCampaignCreatorRequestDto,
@@ -30,6 +31,7 @@ import {
 } from './dto/create-campaign-creator.swagger.dto';
 
 @ApiTags('Campaign Creator')
+@ApiBearerAuth('access-token')
 @Controller('campaign-creator')
 export class CampaignCreatorController {
   constructor(private readonly service: CampaignCreatorService) {}

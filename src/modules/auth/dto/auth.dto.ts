@@ -9,9 +9,6 @@ import { User, CreatorType } from '@prisma/client';
 export type registerUserDTO = Pick<
   User,
   'firstName' | 'lastName' | 'email' | 'password' | 'dateOfBirth'
-  // | 'phoneNumber'
-  // | 'country'
-  // | 'notes'
 > & {
   phoneNumber?: string;
   country?: string;

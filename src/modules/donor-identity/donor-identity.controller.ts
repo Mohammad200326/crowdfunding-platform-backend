@@ -27,6 +27,8 @@ import {
   ApiConsumes,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiTags,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import {
   CreateDonorIdentityFormDto,
@@ -35,6 +37,8 @@ import {
 } from './dto/donor-identity.swagger.dto';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
 
+@ApiTags('Donor Identity')
+@ApiBearerAuth('access-token')
 @Controller('donor-identity')
 @IsPublic(true)
 export class DonorIdentityController {
