@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const CreateDonorIdentitySchema = z.object({
-  donorId: z.string().uuid(),
   fullNameOnId: z.string().min(2).max(150),
   idNumber: z.string().max(64),
 });
