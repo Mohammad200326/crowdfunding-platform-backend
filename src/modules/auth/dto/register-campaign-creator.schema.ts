@@ -1,6 +1,7 @@
-import { date, z } from 'zod';
+import { z } from 'zod';
 
 const InstitutionDetailsSchema = z.object({
+  institutionName: z.string().min(1),
   institutionType: z.string().min(1),
   institutionCountry: z.string().min(1),
   institutionDateOfEstablishment: z.coerce.date(),
@@ -19,8 +20,8 @@ const BaseUserSchema = z.object({
   lastName: z.string().min(1),
   email: z.string().trim().toLowerCase().email(),
   password: z.string().min(8),
-  phoneNumber: z.string().min(1),
-  country: z.string().min(1),
+  phoneNumber: z.string().optional(),
+  country: z.string().optional(),
   notes: z.string().optional(),
   dateOfBirth: z.coerce.date().optional(),
 });

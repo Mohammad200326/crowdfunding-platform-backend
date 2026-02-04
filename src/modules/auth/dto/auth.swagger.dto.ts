@@ -221,6 +221,9 @@ export class LoginResponseDto {
 }
 
 export class CampaignCreatorProfileDto {
+  @ApiProperty({ example: 'Institution' })
+  institutionName: string;
+
   @ApiProperty({ example: 'NGO' })
   institutionType: string;
 
@@ -308,6 +311,9 @@ export class CampaignCreatorProfileResponseDto {
 
   @ApiProperty({ example: '1a0a3cd3-3341-43ff-aa4a-32552c8d2346' })
   userId: string;
+
+  @ApiProperty({ example: 'Institution' })
+  institutionName: string;
 
   @ApiProperty({ example: 'NGO' })
   institutionType: string;

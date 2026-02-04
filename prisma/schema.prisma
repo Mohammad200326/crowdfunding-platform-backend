@@ -237,6 +237,7 @@ model CampaignCreator {
   id                                          String      @id @default(uuid()) @db.Char(36)
   type                                        CreatorType
   userId                                      String      @unique @map("user_id") @db.Char(36)
+  institutionName                             String      @map("institution_name") @db.Text
   institutionType                             String      @map("institution_type") @db.Text
   institutionCountry                          String      @map("institution_country") @db.Text
   institutionDateOfEstablishment              DateTime    @map("institution_date_of_establishment") @db.Date
@@ -258,18 +259,18 @@ model CampaignCreator {
 
 model BankAccount {
   id            String       @id @default(uuid()) @db.Char(36)
-  creatorId     String       @map("creator_id") @db.Char(36)
+  userId     String          @map("user_id") @db.Char(36)
   bankName      String       @map("bank_name") @db.Text
   iban          String       @db.Text
   isVerified    Boolean      @default(false) @map("is_verified")
   notes         String       @db.Text
   createdAt     DateTime     @default(now()) @map("created_at")
   updatedAt     DateTime     @updatedAt @map("updated_at")
-  creator       User         @relation("UserBankAccounts", fields: [creatorId], references: [id])
+  creator       User         @relation("UserBankAccounts", fields: [userId], references: [id])
   withdrawals   Withdrawal[]
   assets        Asset[]      @relation("BankAccountAssets")
 
-  @@index([creatorId])
+  @@index([userId])
   @@map("bank_accounts")
 }
 

@@ -8,8 +8,8 @@ export const CreateCampaignCreatorSchema = z.object({
     .refine((val) => Object.values(CreatorType).includes(val), {
       message: 'Type must be INDIVIDUAL or INSTITUTION',
     }),
+  institutionName: z.string(),
   institutionCountry: z.string().min(1, 'Country is required'),
-
   // optional fields
   institutionType: z.string().optional(),
   institutionDateOfEstablishment: z.string().optional(), // expecting ISO date string

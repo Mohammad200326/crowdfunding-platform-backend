@@ -23,6 +23,7 @@ export const campaignCreatorValidationSchema = z.object({
 
   creatorProfile: z
     .object({
+      institutionName: z.string().min(2).max(100),
       institutionCountry: z.string().min(2).max(100),
       institutionType: z.string().min(2).max(200),
 
