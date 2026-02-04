@@ -40,6 +40,7 @@ import {
 import {
   CampaignResponseDto,
   createCampaignApiBody,
+  updateCampaignApiBody,
 } from './dto/campaign.swagger.dto';
 import type {
   CampaignResponseDTO,
@@ -119,6 +120,19 @@ export class CampaignController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Update campaign' })
+  @ApiConsumes('multipart/form-data')
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  @ApiBody(updateCampaignApiBody)
+  @ApiOkResponse({
+    description: 'Campaign updated successfully',
+    type: CampaignResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Campaign not found' })
+  @ApiResponse({
+    status: 403,
+    description: 'You are not authorized to update this campaign',
+  })
   @UseInterceptors(FileInterceptor('file'), FileCleanupInterceptor)
   update(
     @Param('id') id: string,
