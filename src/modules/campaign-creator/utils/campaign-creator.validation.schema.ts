@@ -4,6 +4,7 @@ import { RegisterCampaignCreatorDTO } from 'src/modules/auth/dto/register-campai
 
 // ✅ Schema لبيانات المؤسسة (بدون type)
 const InstitutionProfileSchema = z.object({
+  institutionName: z.string().min(1),
   institutionCountry: z.string().min(1),
   institutionType: z.string().min(1),
   institutionDateOfEstablishment: z.coerce.date(),
@@ -17,7 +18,6 @@ const InstitutionProfileSchema = z.object({
   institutionRepresentativeSocialMedia: z.string().min(1),
 });
 
-// ✅ الأفضل: discriminatedUnion (يطابق حالتك تماماً)
 export const registerCampaignCreatorValidationSchema = z.discriminatedUnion(
   'type',
   [

@@ -35,6 +35,7 @@ export class CampaignCreatorService {
       data: {
         userId: dto.userId,
         type: dto.type,
+        institutionName: dto.institutionName,
         institutionCountry: dto.institutionCountry,
         institutionType: isIndividual
           ? 'Individual'
@@ -80,6 +81,7 @@ export class CampaignCreatorService {
         id: creator.id,
         userId: creator.userId,
         type: creator.type,
+        institutionName: creator.institutionName,
         institutionCountry: creator.institutionCountry,
         institutionType: creator.institutionType,
         createdAt: creator.createdAt,
