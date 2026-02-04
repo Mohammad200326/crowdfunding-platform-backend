@@ -14,12 +14,16 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { CampaignService } from './campaign.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileCleanupInterceptor } from '../file/cleanup-file.interceptor';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
-import { campaignValidationSchema } from './utils/camaign.validation';
+import {
+  campaignValidationSchema,
+  updateCampaignValidationSchema,
+} from './utils/camaign.validation';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 import { User } from 'src/utils/decorators/user.decorator';
 import { Roles } from 'src/utils/decorators/roles.decorator';
@@ -36,8 +40,13 @@ import {
 import {
   CampaignResponseDto,
   createCampaignApiBody,
+  updateCampaignApiBody,
 } from './dto/campaign.swagger.dto';
-import type { CreateCampaignDto } from './dto/campaign.dto'; // Ensure this import exists
+import type {
+  CampaignResponseDTO,
+  CreateCampaignDto,
+  UpdateCampaignDto,
+} from './dto/campaign.dto'; // Ensure this import exists
 import { CampaignCategory } from '@prisma/client';
 
 @ApiTags('Campaigns')
@@ -108,6 +117,31 @@ export class CampaignController {
   })
   findByCreator(@Param('creatorId', ParseUUIDPipe) creatorId: string) {
     return this.campaignService.findByCreator(creatorId);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ summary: 'Update campaign' })
+  @ApiConsumes('multipart/form-data')
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  @ApiBody(updateCampaignApiBody)
+  @ApiOkResponse({
+    description: 'Campaign updated successfully',
+    type: CampaignResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Campaign not found' })
+  @ApiResponse({
+    status: 403,
+    description: 'You are not authorized to update this campaign',
+  })
+  @UseInterceptors(FileInterceptor('file'), FileCleanupInterceptor)
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateCampaignValidationSchema))
+    updatePayload: UpdateCampaignDto,
+    @User() user: UserResponseDTO['userData'],
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.campaignService.update(id, updatePayload, user, file);
   }
 
   // SOFT DELETE
