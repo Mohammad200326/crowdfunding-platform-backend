@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto';
 import { Prisma, CampaignCategory } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
@@ -145,10 +149,78 @@ export class CampaignService {
   }
 
   // UPDATE
-  async update(id: string, updateCampaignDto: UpdateCampaignDto) {
+  async update(
+    id: string,
+    updateCampaignDto: UpdateCampaignDto,
+    user: Express.Request['user'],
+    file?: Express.Multer.File,
+  ) {
+    // Check if campaign exists
+    const campaign = await this.prismaService.campaign.findUnique({
+      where: { id },
+    });
+
+    if (!campaign) {
+      throw new NotFoundException(`Campaign with ID ${id} not found`);
+    }
+
+    if (campaign.isDeleted) {
+      throw new NotFoundException(`Campaign is deleted and cannot be updated`);
+    }
+
+    // Check if user is the owner of the campaign
+    if (campaign.creatorId !== user!.id) {
+      throw new ForbiddenException(
+        `You are not authorized to update this campaign`,
+      );
+    }
+
+    // Build update payload
+    const dataPayload: Prisma.CampaignUncheckedUpdateInput = {
+      ...updateCampaignDto,
+    };
+
+    // Handle File Upload if exists (update thumbnail)
+    if (file) {
+      // Get old campaign thumbnails
+      const oldThumbnails = await this.prismaService.asset.findMany({
+        where: {
+          campaignId: id,
+          kind: 'CAMPAIGN_THUMBNAIL',
+        },
+      });
+
+      // Delete old thumbnails from ImageKit and database
+      if (oldThumbnails.length > 0) {
+        // Delete from ImageKit
+        await Promise.all(
+          oldThumbnails.map((asset) =>
+            this.filesService.deleteFileFromImageKit(asset.fileId),
+          ),
+        );
+
+        // Delete from database
+        await this.prismaService.asset.deleteMany({
+          where: {
+            campaignId: id,
+            kind: 'CAMPAIGN_THUMBNAIL',
+          },
+        });
+      }
+
+      // Add new thumbnail
+      dataPayload.assets = {
+        create: this.filesService.createFileAssetData(
+          file,
+          user!.id,
+          'CAMPAIGN_THUMBNAIL',
+        ),
+      };
+    }
+
     return this.prismaService.campaign.update({
       where: { id },
-      data: updateCampaignDto,
+      data: dataPayload,
       include: this.campaignIncludes,
     });
   }

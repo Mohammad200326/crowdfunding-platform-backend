@@ -14,12 +14,16 @@ import {
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
+  Patch,
 } from '@nestjs/common';
 import { CampaignService } from './campaign.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileCleanupInterceptor } from '../file/cleanup-file.interceptor';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
-import { campaignValidationSchema } from './utils/camaign.validation';
+import {
+  campaignValidationSchema,
+  updateCampaignValidationSchema,
+} from './utils/camaign.validation';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 import { User } from 'src/utils/decorators/user.decorator';
 import { Roles } from 'src/utils/decorators/roles.decorator';
@@ -37,7 +41,11 @@ import {
   CampaignResponseDto,
   createCampaignApiBody,
 } from './dto/campaign.swagger.dto';
-import type { CreateCampaignDto } from './dto/campaign.dto'; // Ensure this import exists
+import type {
+  CampaignResponseDTO,
+  CreateCampaignDto,
+  UpdateCampaignDto,
+} from './dto/campaign.dto'; // Ensure this import exists
 import { CampaignCategory } from '@prisma/client';
 
 @ApiTags('Campaigns')
@@ -108,6 +116,18 @@ export class CampaignController {
   })
   findByCreator(@Param('creatorId', ParseUUIDPipe) creatorId: string) {
     return this.campaignService.findByCreator(creatorId);
+  }
+
+  @Patch(':id')
+  @UseInterceptors(FileInterceptor('file'), FileCleanupInterceptor)
+  update(
+    @Param('id') id: string,
+    @Body(new ZodValidationPipe(updateCampaignValidationSchema))
+    updatePayload: UpdateCampaignDto,
+    @User() user: UserResponseDTO['userData'],
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    return this.campaignService.update(id, updatePayload, user, file);
   }
 
   // SOFT DELETE

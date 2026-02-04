@@ -19,7 +19,6 @@ export type UpdateCampaignDto = Partial<
     isVerified: Campaign['isVerified'];
     verificationStatus: Campaign['verificationStatus'];
     isActive: Campaign['isActive'];
-    isDeleted: Campaign['isDeleted'];
   }
 >;
 
