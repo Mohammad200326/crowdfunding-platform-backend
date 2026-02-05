@@ -1,10 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as express from 'express';
 
 async function bootstrap() {
   console.log('CURRENT DB URL:', process.env.DATABASE_URL);
   const app = await NestFactory.create(AppModule);
+
+  app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }));
+
+  app.use(express.json());
 
   app.setGlobalPrefix('api/v1');
 
