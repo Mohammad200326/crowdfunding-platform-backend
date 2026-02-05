@@ -60,7 +60,8 @@ export class DonationService {
       },
     });
 
-    const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:5173';
+    // const frontendUrl = process.env.FRONTEND_URL ?? 'http://localhost:5173';
+    const appUrl = process.env.APP_URL ?? 'http://localhost:3000';
 
     const session = await this.stripeService.stripe.checkout.sessions.create({
       mode: 'payment',
@@ -84,8 +85,10 @@ export class DonationService {
         userId,
         stars: String(dto.stars),
       },
-      success_url: `${frontendUrl}/donation/success?donationId=${donation.id}`,
-      cancel_url: `${frontendUrl}/donation/cancel?donationId=${donation.id}`,
+      // success_url: `${frontendUrl}/donation/success?donationId=${donation.id}`,
+      // cancel_url: `${frontendUrl}/donation/cancel?donationId=${donation.id}`,
+      success_url: `${appUrl}/api/docs`,
+      cancel_url: `${appUrl}/api/docs`,
     });
 
     await this.databaseService.donation.update({

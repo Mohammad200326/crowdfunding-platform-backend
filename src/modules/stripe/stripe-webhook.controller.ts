@@ -17,6 +17,7 @@ export class StripeWebhookController {
     @Req() req: StripeRawBodyRequest,
     @Headers('stripe-signature') signature: string,
   ) {
+    console.log('Stripe webhook hit ✅');
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
     if (!webhookSecret) throw new Error('STRIPE_WEBHOOK_SECRET is missing');
 
@@ -25,6 +26,7 @@ export class StripeWebhookController {
       signature,
       webhookSecret,
     );
+    console.log('Stripe event type:', event.type, 'id:', event.id);
 
     const already = await this.databaseService.stripeEvent.findUnique({
       where: { id: event.id },
