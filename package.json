@@ -13,6 +13,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "migrate:deploy": "prisma migrate deploy",
+    "deploy": "npm run build && git add . && git commit -m \"build\" && git push",
 "start:prod": "prisma migrate deploy && node dist/src/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
