@@ -11,6 +11,7 @@ import { CampaignCreatorModule } from './modules/campaign-creator/campaign-creat
 import { UserModule } from './modules/user/user.module';
 import { CampaignModule } from './modules/campaign/campaign.module';
 import { CampaignUpdateModule } from './modules/campaign-update/campaign-update.module';
+import { BankAccountModule } from './modules/bank-account/bank-account.module';
 import { RolesGuard } from './modules/auth/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/guards/auth.guard';
@@ -36,6 +37,7 @@ import { DonationModule } from './modules/donation/donation.module';
     UserModule,
     CampaignModule,
     CampaignUpdateModule,
+    BankAccountModule,
     DonorIdentityModule,
     DonationModule,
   ],
