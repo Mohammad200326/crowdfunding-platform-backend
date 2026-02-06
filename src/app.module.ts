@@ -16,6 +16,7 @@ import { RolesGuard } from './modules/auth/guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './modules/auth/guards/auth.guard';
 import { DonorIdentityModule } from './modules/donor-identity/donor-identity.module';
+// import { WithdrawalModule } from './modules/withdrawal/withdrawal.module';
 import { DonationModule } from './modules/donation/donation.module';
 
 // const envFilePath = path.join(
@@ -40,6 +41,7 @@ import { DonationModule } from './modules/donation/donation.module';
     BankAccountModule,
     DonorIdentityModule,
     DonationModule,
+    // WithdrawalModule,
   ],
   controllers: [AppController],
   providers: [

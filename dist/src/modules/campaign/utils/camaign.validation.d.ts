@@ -41,14 +41,14 @@ export declare const updateCampaignValidationSchema: z.ZodObject<{
         confirmed: "confirmed";
         rejected: "rejected";
     }>>>;
-    isVerified: z.ZodOptional<z.ZodOptional<z.ZodBoolean>>;
+    isVerified: z.ZodOptional<z.ZodOptional<z.ZodCoercedBoolean<unknown>>>;
     verificationStatus: z.ZodOptional<z.ZodOptional<z.ZodEnum<{
         pending: "pending";
         confirmed: "confirmed";
         rejected: "rejected";
     }>>>;
-    isActive: z.ZodOptional<z.ZodOptional<z.ZodBoolean>>;
-    isDeleted: z.ZodOptional<z.ZodOptional<z.ZodBoolean>>;
+    isActive: z.ZodOptional<z.ZodOptional<z.ZodCoercedBoolean<unknown>>>;
+    isDeleted: z.ZodOptional<z.ZodOptional<z.ZodCoercedBoolean<unknown>>>;
 }, z.core.$strip>;
 export declare const campaignPaginationSchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
