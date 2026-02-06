@@ -1,3 +1,3 @@
-import { Withdrawal } from '@prisma/client';
+// import { Withdrawal } from '@prisma/client';
 
-export type WithdrawalDto = Pick<Withdrawal, 'amount' | 'notes'>;
+// export type WithdrawalDto = Pick<Withdrawal, 'amount' | 'notes'>;

@@ -28,10 +28,10 @@ export const updateCampaignValidationSchema = campaignValidationSchema
   .partial()
   .extend({
     status: z.enum(['pending', 'confirmed', 'rejected']).optional(),
-    isVerified: z.boolean().optional(),
+    isVerified: z.coerce.boolean().optional(),
     verificationStatus: z.enum(['pending', 'confirmed', 'rejected']).optional(),
-    isActive: z.boolean().optional(),
-    isDeleted: z.boolean().optional(),
+    isActive: z.coerce.boolean().optional(),
+    isDeleted: z.coerce.boolean().optional(),
   })
   .partial() satisfies ZodType<Partial<UpdateCampaignDto>>;
 

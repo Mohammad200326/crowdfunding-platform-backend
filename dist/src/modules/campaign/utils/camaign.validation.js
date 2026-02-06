@@ -26,10 +26,10 @@ exports.updateCampaignValidationSchema = exports.campaignValidationSchema
     .partial()
     .extend({
     status: zod_1.z.enum(['pending', 'confirmed', 'rejected']).optional(),
-    isVerified: zod_1.z.boolean().optional(),
+    isVerified: zod_1.z.coerce.boolean().optional(),
     verificationStatus: zod_1.z.enum(['pending', 'confirmed', 'rejected']).optional(),
-    isActive: zod_1.z.boolean().optional(),
-    isDeleted: zod_1.z.boolean().optional(),
+    isActive: zod_1.z.coerce.boolean().optional(),
+    isDeleted: zod_1.z.coerce.boolean().optional(),
 })
     .partial();
 exports.campaignPaginationSchema = api_util_1.paginationSchema.extend({
