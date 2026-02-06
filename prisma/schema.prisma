@@ -43,6 +43,7 @@ enum PaymentStatus {
 enum WithdrawalStatus {
   pending
   approved
+  paid
   rejected
 }
 
@@ -151,19 +152,34 @@ model Donation {
   id            String        @id @default(uuid()) @db.Char(36)
   userId        String        @map("user_id") @db.Char(36)
   campaignId    String        @map("campign_id") @db.Char(36)
-  stars         Int
-  amount        Int
-  paymentToken  String        @map("payment_token") @db.Text
+
+  stars            Int
+  starValueInMinor Int         @default(500) @db.UnsignedInt @map("star_value_in_minor")
+  amountInMinor    Int         @db.UnsignedInt @map("amount_in_minor")
+  currency         String      @default("usd") @db.VarChar(3) @map("currency")
+
+  stripeCheckoutSessionId String? @unique @db.VarChar(255) @map("stripe_checkout_session_id")
+  stripePaymentIntentId   String? @unique @db.VarChar(255) @map("stripe_payment_intent_id")
+
   paymentStatus PaymentStatus @default(pending) @map("payment_status")
+  paidAt        DateTime?     @map("paid_at")
+  failureReason String?       @db.Text @map("failure_reason")
+
   createdAt     DateTime      @default(now()) @map("created_at")
   updatedAt     DateTime      @updatedAt @map("updated_at")
+
   campaign      Campaign      @relation(fields: [campaignId], references: [id])
   user          User          @relation(fields: [userId], references: [id])
+  stripeEvents StripeEvent[] @relation("DonationStripeEvents")
 
   @@index([campaignId], map: "donations_campign_id_fkey")
   @@index([userId], map: "donations_user_id_fkey")
+  @@index([paymentStatus])
+  @@index([campaignId, paymentStatus])
+
   @@map("donations")
 }
+
 
 model CampaignUpdate {
   id          String   @id @default(uuid()) @db.Char(36)
@@ -183,18 +199,29 @@ model Withdrawal {
   id            String           @id @default(uuid()) @db.Char(36)
   creatorId     String           @map("creator_id") @db.Char(36)
   bankAccountId String           @map("bank_account_id") @db.Char(36)
-  amount        Int
+
+  amountInMinor Int              @db.UnsignedInt @map("amount_in_minor")
+  currency      String           @default("usd") @db.VarChar(3) @map("currency")
+
   status        WithdrawalStatus @default(pending)
   notes         String           @db.Text
+
+  approvedAt    DateTime?        @map("approved_at")
+  paidAt        DateTime?        @map("paid_at")
+
   createdAt     DateTime         @default(now()) @map("created_at")
   updatedAt     DateTime         @updatedAt @map("updated_at")
+
   bankAccount   BankAccount      @relation(fields: [bankAccountId], references: [id])
   creator       User             @relation(fields: [creatorId], references: [id])
 
   @@index([creatorId])
   @@index([bankAccountId])
+  @@index([status])
+
   @@map("withdrawals")
 }
+
 
 model Donor {
   id                          String          @id @default(uuid()) @db.Char(36)
@@ -250,7 +277,7 @@ model CampaignCreator {
   institutionWebsite                          String      @map("institution_website") @db.Text
   institutionRepresentativeSocialMedia        String      @map("institution_representative_social_media") @db.Text
   createdAt                                   DateTime    @default(now()) @map("created_at")
-  updatedAt                                   DateTime    @default(now()) @map("updated_at")
+updatedAt DateTime @updatedAt @map("updated_at")
   user                                        User        @relation(fields: [userId], references: [id])
   assets Asset[] @relation("CreatorAssets")
 
@@ -318,3 +345,16 @@ model Asset {
   @@map("assets")
 }
 
+model StripeEvent {
+  id         String   @id @db.VarChar(255)
+type String @db.VarChar(128) @map("type")
+  donationId String?  @map("donation_id") @db.Char(36)
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  donation Donation? @relation("DonationStripeEvents", fields: [donationId], references: [id], onDelete: SetNull)
+
+  @@index([donationId])
+  @@index([createdAt])
+
+  @@map("stripe_events")
+}
