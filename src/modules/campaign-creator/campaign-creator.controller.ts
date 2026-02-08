@@ -12,23 +12,16 @@ import {
 } from '@nestjs/common';
 import { CampaignCreatorService } from './campaign-creator.service';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
-import { CreateCampaignCreatorSchema } from './dto/create-campaign-creator.dto';
-import type { CreateCampaignCreatorDto } from './dto/create-campaign-creator.dto';
-import type { UpdateCampaignCreatorDto } from './dto/update-campaign-creator.dto';
-
+import * as createCampaignCreatorDto from './dto/create-campaign-creator.dto';
+import * as updateCampaignCreatorDto from './dto/update-campaign-creator.dto';
 import {
   ApiTags,
   ApiOperation,
-  ApiBody,
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
-  ApiBearerAuth,
 } from '@nestjs/swagger';
-import {
-  CreateCampaignCreatorRequestDto,
-  CreateCreatorResponseWrapper,
-  CampaignCreatorResponseDto,
-} from './dto/create-campaign-creator.swagger.dto';
+import { CampaignCreatorResponseDto } from './dto/create-campaign-creator.swagger.dto';
 
 @ApiTags('Campaign Creator')
 @ApiBearerAuth('access-token')
@@ -38,52 +31,48 @@ export class CampaignCreatorController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({
-    summary: 'Create a new campaign creator profile for existing user',
-  })
-  @ApiBody({ type: CreateCampaignCreatorRequestDto })
+  @ApiOperation({ summary: 'Create a new campaign creator profile' })
   @ApiCreatedResponse({
-    description: 'Campaign creator profile created successfully',
-    type: CreateCreatorResponseWrapper,
+    description: 'Profile created',
+    type: CampaignCreatorResponseDto,
   })
-  @UsePipes(new ZodValidationPipe(CreateCampaignCreatorSchema))
-  create(@Body() dto: CreateCampaignCreatorDto) {
+  @UsePipes(
+    new ZodValidationPipe(createCampaignCreatorDto.CreateCampaignCreatorSchema),
+  )
+  create(@Body() dto: createCampaignCreatorDto.CreateCampaignCreatorDto) {
     return this.service.create(dto);
   }
 
-  // ... rest of the file
   @Get()
   @ApiOperation({ summary: 'Get all campaign creators' })
-  @ApiOkResponse({
-    description: 'List of all campaign creators',
-    type: [CampaignCreatorResponseDto],
-  })
+  @ApiOkResponse({ type: [CampaignCreatorResponseDto] })
   findAll() {
     return this.service.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Get campaign creator by ID' })
-  @ApiOkResponse({
-    description: 'Campaign creator details',
-    type: CampaignCreatorResponseDto,
-  })
+  @ApiOperation({ summary: 'Get a specific campaign creator by ID' })
+  @ApiOkResponse({ type: CampaignCreatorResponseDto })
   findOne(@Param('id') id: string) {
     return this.service.findOne(id);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Update campaign creator (Not implemented)' })
+  @ApiOperation({ summary: 'Update campaign creator details' })
+  @UsePipes(
+    new ZodValidationPipe(updateCampaignCreatorDto.UpdateCampaignCreatorSchema),
+  )
   update(
     @Param('id') id: string,
-    @Body() updateCampaignCreatorDto: UpdateCampaignCreatorDto,
+    @Body() dto: updateCampaignCreatorDto.UpdateCampaignCreatorDto,
   ) {
-    return this.service.update(+id, updateCampaignCreatorDto);
+    return this.service.update(id, dto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Delete campaign creator (Not implemented)' })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete campaign creator profile' })
   remove(@Param('id') id: string) {
-    return this.service.remove(+id);
+    return this.service.remove(id);
   }
 }
