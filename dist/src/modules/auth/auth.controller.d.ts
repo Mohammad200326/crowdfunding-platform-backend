@@ -48,6 +48,7 @@ export declare class AuthController {
                 institutionRepresentativeRegistrationNumber: string;
                 institutionWebsite: string;
                 institutionRepresentativeSocialMedia: string;
+                stripeAccountId: string | null;
             } | null;
             email: string;
             id: string;

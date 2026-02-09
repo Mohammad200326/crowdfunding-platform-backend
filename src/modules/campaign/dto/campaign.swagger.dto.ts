@@ -23,8 +23,7 @@ export const createCampaignApiBody: ApiBodyOptions = {
       startDate: { type: 'string', format: 'date-time' },
       endDate: { type: 'string', format: 'date-time' },
       motivationMessage: { type: 'string', minLength: 2, maxLength: 1000 },
-      notes: { type: 'string', maxLength: 1000 },
-      likes: { type: 'number', minimum: 0 },
+      notes: { type: 'string', maxLength: 1000, nullable: true },
       file: {
         type: 'string',
         format: 'binary',
@@ -39,8 +38,6 @@ export const createCampaignApiBody: ApiBodyOptions = {
       'startDate',
       'endDate',
       'motivationMessage',
-      'notes',
-      'likes',
     ],
   },
 };

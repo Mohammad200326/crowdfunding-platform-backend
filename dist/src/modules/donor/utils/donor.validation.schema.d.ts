@@ -20,7 +20,7 @@ export declare const donorValidationSchema: z.ZodObject<{
         preferredCampaignVisibility: z.ZodOptional<z.ZodString>;
     }, z.core.$strip>>;
 }, z.core.$strip>;
-export declare const updateDonorSchema: z.ZodObject<{
+export declare const updateDonorSchema: z.ZodPipe<z.ZodTransform<any, unknown>, z.ZodObject<{
     email: z.ZodOptional<z.ZodString>;
     firstName: z.ZodOptional<z.ZodString>;
     lastName: z.ZodOptional<z.ZodString>;
@@ -41,4 +41,4 @@ export declare const updateDonorSchema: z.ZodObject<{
     }, z.core.$strip>>>;
     fullNameOnId: z.ZodOptional<z.ZodOptional<z.ZodString>>;
     idNumber: z.ZodOptional<z.ZodNullable<z.ZodOptional<z.ZodString>>>;
-}, z.core.$strip>;
+}, z.core.$strip>>;

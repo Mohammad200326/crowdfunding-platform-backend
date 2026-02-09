@@ -32,7 +32,7 @@ export declare class CampaignController {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -77,7 +77,7 @@ export declare class CampaignController {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -122,7 +122,7 @@ export declare class CampaignController {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -167,7 +167,7 @@ export declare class CampaignController {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -212,7 +212,7 @@ export declare class CampaignController {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;

@@ -25,6 +25,47 @@ let StripeService = class StripeService {
             apiVersion: '2026-01-28.clover',
         });
     }
+    async createConnectAccount(email, metadata) {
+        return this.stripe.accounts.create({
+            type: 'express',
+            email,
+            metadata,
+            capabilities: {
+                transfers: { requested: true },
+            },
+        });
+    }
+    async createAccountLink(accountId, refreshUrl, returnUrl) {
+        return this.stripe.accountLinks.create({
+            account: accountId,
+            refresh_url: refreshUrl,
+            return_url: returnUrl,
+            type: 'account_onboarding',
+        });
+    }
+    async getConnectAccount(accountId) {
+        return this.stripe.accounts.retrieve(accountId);
+    }
+    async isAccountReadyForTransfers(accountId) {
+        const account = await this.stripe.accounts.retrieve(accountId);
+        return (account.charges_enabled === true &&
+            account.payouts_enabled === true &&
+            account.details_submitted === true);
+    }
+    async createTransfer(amountInMinor, currency, destinationAccountId, metadata) {
+        return this.stripe.transfers.create({
+            amount: amountInMinor,
+            currency,
+            destination: destinationAccountId,
+            metadata,
+        });
+    }
+    async getTransfer(transferId) {
+        return this.stripe.transfers.retrieve(transferId);
+    }
+    async getPlatformBalance() {
+        return this.stripe.balance.retrieve();
+    }
 };
 exports.StripeService = StripeService;
 exports.StripeService = StripeService = __decorate([
