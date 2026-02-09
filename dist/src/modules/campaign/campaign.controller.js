@@ -24,6 +24,7 @@ const roles_decorator_1 = require("../../utils/decorators/roles.decorator");
 const swagger_1 = require("@nestjs/swagger");
 const campaign_swagger_dto_1 = require("./dto/campaign.swagger.dto");
 const client_1 = require("@prisma/client");
+const public_decorator_1 = require("../../utils/decorators/public.decorator");
 let CampaignController = class CampaignController {
     campaignService;
     constructor(campaignService) {
@@ -65,6 +66,7 @@ __decorate([
 ], CampaignController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, public_decorator_1.IsPublic)(true),
     (0, swagger_1.ApiOperation)({ summary: 'Get all active campaigns (Feed)' }),
     (0, swagger_1.ApiOkResponse)({
         description: 'List of all active and non-deleted campaigns',
@@ -78,6 +80,7 @@ __decorate([
 ], CampaignController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)('category/:category'),
+    (0, public_decorator_1.IsPublic)(true),
     (0, swagger_1.ApiOperation)({ summary: 'Filter campaigns by category' }),
     (0, swagger_1.ApiParam)({
         name: 'category',

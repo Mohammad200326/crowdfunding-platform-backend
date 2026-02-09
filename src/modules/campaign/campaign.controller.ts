@@ -48,6 +48,7 @@ import type {
   UpdateCampaignDto,
 } from './dto/campaign.dto'; // Ensure this import exists
 import { CampaignCategory } from '@prisma/client';
+import { IsPublic } from 'src/utils/decorators/public.decorator';
 
 @ApiTags('Campaigns')
 @ApiBearerAuth('access-token')
@@ -71,6 +72,7 @@ export class CampaignController {
   }
 
   @Get()
+  @IsPublic(true)
   @ApiOperation({ summary: 'Get all active campaigns (Feed)' })
   @ApiOkResponse({
     description: 'List of all active and non-deleted campaigns',
@@ -85,6 +87,7 @@ export class CampaignController {
 
   // GET BY CATEGORY
   @Get('category/:category')
+  @IsPublic(true)
   @ApiOperation({ summary: 'Filter campaigns by category' })
   @ApiParam({
     name: 'category',
