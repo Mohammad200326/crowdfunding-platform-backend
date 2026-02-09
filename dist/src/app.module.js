@@ -24,6 +24,7 @@ const roles_guard_1 = require("./modules/auth/guards/roles.guard");
 const core_1 = require("@nestjs/core");
 const auth_guard_1 = require("./modules/auth/guards/auth.guard");
 const donor_identity_module_1 = require("./modules/donor-identity/donor-identity.module");
+const withdrawal_module_1 = require("./modules/withdrawal/withdrawal.module");
 const donation_module_1 = require("./modules/donation/donation.module");
 let AppModule = class AppModule {
 };
@@ -46,6 +47,7 @@ exports.AppModule = AppModule = __decorate([
             bank_account_module_1.BankAccountModule,
             donor_identity_module_1.DonorIdentityModule,
             donation_module_1.DonationModule,
+            withdrawal_module_1.WithdrawalModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [

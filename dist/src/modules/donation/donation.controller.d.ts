@@ -14,10 +14,10 @@ export declare class DonationController {
         amountInMinor: number;
         currency: string;
         paidAt: Date | null;
+        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         stars: number;
         stripeCheckoutSessionId: string | null;
         stripePaymentIntentId: string | null;
-        paymentStatus: import("@prisma/client").$Enums.PaymentStatus;
         failureReason: string | null;
     }>;
 }

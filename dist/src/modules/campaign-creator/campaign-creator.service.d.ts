@@ -43,6 +43,7 @@ export declare class CampaignCreatorService {
         institutionRepresentativeRegistrationNumber: string;
         institutionWebsite: string;
         institutionRepresentativeSocialMedia: string;
+        stripeAccountId: string | null;
     })[]>;
     findOne(id: string): Promise<{
         user: {
@@ -88,6 +89,7 @@ export declare class CampaignCreatorService {
         institutionRepresentativeRegistrationNumber: string;
         institutionWebsite: string;
         institutionRepresentativeSocialMedia: string;
+        stripeAccountId: string | null;
     }>;
     update(id: number, updateCampaignCreatorDto: UpdateCampaignCreatorDto): string;
     remove(id: number): string;

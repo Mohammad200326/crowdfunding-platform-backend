@@ -15,8 +15,7 @@ export declare const campaignValidationSchema: z.ZodObject<{
     startDate: z.ZodCoercedDate<unknown>;
     endDate: z.ZodCoercedDate<unknown>;
     motivationMessage: z.ZodString;
-    notes: z.ZodString;
-    likes: z.ZodCoercedNumber<unknown>;
+    notes: z.ZodOptional<z.ZodString>;
 }, z.core.$strip>;
 export declare const updateCampaignValidationSchema: z.ZodObject<{
     title: z.ZodOptional<z.ZodOptional<z.ZodString>>;
@@ -34,8 +33,7 @@ export declare const updateCampaignValidationSchema: z.ZodObject<{
     startDate: z.ZodOptional<z.ZodOptional<z.ZodCoercedDate<unknown>>>;
     endDate: z.ZodOptional<z.ZodOptional<z.ZodCoercedDate<unknown>>>;
     motivationMessage: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    notes: z.ZodOptional<z.ZodOptional<z.ZodString>>;
-    likes: z.ZodOptional<z.ZodOptional<z.ZodCoercedNumber<unknown>>>;
+    notes: z.ZodOptional<z.ZodOptional<z.ZodOptional<z.ZodString>>>;
     status: z.ZodOptional<z.ZodOptional<z.ZodEnum<{
         pending: "pending";
         confirmed: "confirmed";

@@ -13,7 +13,12 @@ export const donorValidationSchema = z.object({
     .refine((date) => !isNaN(Date.parse(date)), {
       message: 'Invalid date format',
     })
-    .transform((date) => new Date(date)),
+    .transform((dateStr) => {
+      const date = new Date(dateStr);
+      return new Date(
+        Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()),
+      );
+    }),
   phoneNumber: z.string().min(7).max(15).optional(),
   country: z.string().min(2).max(100).optional(),
   notes: z.string().max(500).optional(),
@@ -29,7 +34,42 @@ export const donorValidationSchema = z.object({
     .optional(),
 }) satisfies ZodType<registerDonorDTO>;
 
-export const updateDonorSchema = donorValidationSchema
-  .extend(UpdateDonorIdentitySchema.shape)
-  .omit({ password: true })
-  .partial() satisfies ZodType<UpdateDonorDTO>;
+const cleanEmptyStrings = (data: unknown) => {
+  if (typeof data !== 'object' || data === null) return data;
+
+  const cleaned: any = { ...data };
+
+  Object.keys(cleaned).forEach((key) => {
+    if (cleaned[key] === '') {
+      delete cleaned[key];
+    }
+
+    if (
+      key === 'donorProfile' &&
+      typeof cleaned[key] === 'object' &&
+      cleaned[key] !== null
+    ) {
+      const profile = { ...cleaned[key] };
+      Object.keys(profile).forEach((pKey) => {
+        if (profile[pKey] === '') {
+          delete profile[pKey];
+        }
+      });
+      if (Object.keys(profile).length === 0) {
+        delete cleaned[key];
+      } else {
+        cleaned[key] = profile;
+      }
+    }
+  });
+
+  return cleaned;
+};
+
+export const updateDonorSchema = z.preprocess(
+  cleanEmptyStrings,
+  donorValidationSchema
+    .extend(UpdateDonorIdentitySchema.shape)
+    .omit({ password: true })
+    .partial(),
+) satisfies ZodType<UpdateDonorDTO>;

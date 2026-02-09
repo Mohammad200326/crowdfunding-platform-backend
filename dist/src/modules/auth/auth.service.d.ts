@@ -68,6 +68,7 @@ export declare class AuthService {
                 institutionRepresentativeRegistrationNumber: string;
                 institutionWebsite: string;
                 institutionRepresentativeSocialMedia: string;
+                stripeAccountId: string | null;
             } | null;
             email: string;
             id: string;

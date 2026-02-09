@@ -20,8 +20,7 @@ export const campaignValidationSchema = z.object({
   startDate: z.coerce.date(),
   endDate: z.coerce.date().min(new Date()),
   motivationMessage: z.string().min(2).max(1000),
-  notes: z.string().max(1000),
-  likes: z.coerce.number().min(0),
+  notes: z.string().max(1000).optional(),
 }) satisfies ZodType<CreateCampaignDto>;
 
 export const updateCampaignValidationSchema = campaignValidationSchema

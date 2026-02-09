@@ -16,7 +16,10 @@ exports.donorValidationSchema = zod_1.default.object({
         .refine((date) => !isNaN(Date.parse(date)), {
         message: 'Invalid date format',
     })
-        .transform((date) => new Date(date)),
+        .transform((dateStr) => {
+        const date = new Date(dateStr);
+        return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    }),
     phoneNumber: zod_1.default.string().min(7).max(15).optional(),
     country: zod_1.default.string().min(2).max(100).optional(),
     notes: zod_1.default.string().max(500).optional(),
@@ -31,8 +34,35 @@ exports.donorValidationSchema = zod_1.default.object({
     })
         .optional(),
 });
-exports.updateDonorSchema = exports.donorValidationSchema
+const cleanEmptyStrings = (data) => {
+    if (typeof data !== 'object' || data === null)
+        return data;
+    const cleaned = { ...data };
+    Object.keys(cleaned).forEach((key) => {
+        if (cleaned[key] === '') {
+            delete cleaned[key];
+        }
+        if (key === 'donorProfile' &&
+            typeof cleaned[key] === 'object' &&
+            cleaned[key] !== null) {
+            const profile = { ...cleaned[key] };
+            Object.keys(profile).forEach((pKey) => {
+                if (profile[pKey] === '') {
+                    delete profile[pKey];
+                }
+            });
+            if (Object.keys(profile).length === 0) {
+                delete cleaned[key];
+            }
+            else {
+                cleaned[key] = profile;
+            }
+        }
+    });
+    return cleaned;
+};
+exports.updateDonorSchema = zod_1.default.preprocess(cleanEmptyStrings, exports.donorValidationSchema
     .extend(donor_identity_dto_1.UpdateDonorIdentitySchema.shape)
     .omit({ password: true })
-    .partial();
+    .partial());
 //# sourceMappingURL=donor.validation.schema.js.map

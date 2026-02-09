@@ -35,7 +35,7 @@ export declare class CampaignService {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -80,7 +80,7 @@ export declare class CampaignService {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -125,7 +125,7 @@ export declare class CampaignService {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -170,7 +170,7 @@ export declare class CampaignService {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -215,7 +215,7 @@ export declare class CampaignService {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;
@@ -264,7 +264,7 @@ export declare class CampaignService {
         };
     } & {
         id: string;
-        notes: string;
+        notes: string | null;
         isDeleted: boolean;
         isVerified: boolean;
         createdAt: Date;

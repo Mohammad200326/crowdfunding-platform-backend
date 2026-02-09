@@ -136,7 +136,7 @@ model Campaign {
   isVerified         Boolean            @default(false) @map("is_verified")
   verificationStatus VerificationStatus @default(pending) @map("verification_status")
   isActive           Boolean            @default(true) @map("is_active")
-  notes              String             @db.Text
+  notes              String?             @db.Text
   isDeleted          Boolean            @default(false) @map("is_deleted")
   likes              Int                @default(0)
   updates            CampaignUpdate[]
@@ -200,11 +200,18 @@ model Withdrawal {
   creatorId     String           @map("creator_id") @db.Char(36)
   bankAccountId String           @map("bank_account_id") @db.Char(36)
 
-  amountInMinor Int              @db.UnsignedInt @map("amount_in_minor")
-  currency      String           @default("usd") @db.VarChar(3) @map("currency")
+  starsNumber      Int           @db.UnsignedInt @map("stars_number")
+  platformFeeStars Int           @db.UnsignedInt @map("platform_fee_stars") @default(0)
+  netStars         Int           @db.UnsignedInt @map("net_stars") @default(0)
+  platformFeeRate  Float         @default(0.20) @map("platform_fee_rate")
+  
+  amountInMinor    Int?          @db.UnsignedInt @map("transfer_amount_in_minor")
+  currency         String        @default("usd") @db.VarChar(3) @map("currency")
+
+  stripeTransferId String?       @unique @map("stripe_transfer_id") @db.VarChar(255)
 
   status        WithdrawalStatus @default(pending)
-  notes         String           @db.Text
+  notes         String?           @db.Text
 
   approvedAt    DateTime?        @map("approved_at")
   paidAt        DateTime?        @map("paid_at")
@@ -280,7 +287,7 @@ model CampaignCreator {
 updatedAt DateTime @updatedAt @map("updated_at")
   user                                        User        @relation(fields: [userId], references: [id])
   assets Asset[] @relation("CreatorAssets")
-
+  stripeAccountId                             String?     @unique @map("stripe_account_id")
   @@map("campign_creators")
 }
 
