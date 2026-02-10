@@ -42,12 +42,12 @@ export declare class CampaignController {
         creatorId: string;
         title: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
-        isActive: boolean;
         likes: number;
     }>;
     findAll(page: number, limit: number): Promise<({
@@ -87,12 +87,12 @@ export declare class CampaignController {
         creatorId: string;
         title: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
-        isActive: boolean;
         likes: number;
     })[]>;
     findByCategory(category: CampaignCategory, page: number, limit: number): Promise<({
@@ -132,12 +132,12 @@ export declare class CampaignController {
         creatorId: string;
         title: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
-        isActive: boolean;
         likes: number;
     })[]>;
     findByCreator(creatorId: string): Promise<({
@@ -177,12 +177,12 @@ export declare class CampaignController {
         creatorId: string;
         title: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
-        isActive: boolean;
         likes: number;
     })[]>;
     update(id: string, updatePayload: UpdateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<{
@@ -222,12 +222,12 @@ export declare class CampaignController {
         creatorId: string;
         title: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
-        isActive: boolean;
         likes: number;
     }>;
     remove(id: string): Promise<{
