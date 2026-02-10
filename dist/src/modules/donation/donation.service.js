@@ -52,7 +52,7 @@ let DonationService = class DonationService {
                 starValueInMinor,
                 amountInMinor,
                 currency,
-                paymentStatus: 'pending',
+                paymentStatus: 'completed',
             },
             select: {
                 id: true,

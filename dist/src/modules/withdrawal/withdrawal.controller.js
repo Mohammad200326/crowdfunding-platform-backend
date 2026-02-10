@@ -19,7 +19,6 @@ const withdrawal_service_1 = require("./withdrawal.service");
 const user_decorator_1 = require("../../utils/decorators/user.decorator");
 const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
 const withdrawal_validation_1 = require("./utils/withdrawal.validation");
-const auth_guard_1 = require("../auth/guards/auth.guard");
 const roles_decorator_1 = require("../../utils/decorators/roles.decorator");
 const withdrawal_swagger_1 = require("./swagger/withdrawal.swagger");
 let WithdrawalController = class WithdrawalController {
@@ -189,9 +188,8 @@ __decorate([
 ], WithdrawalController.prototype, "cancel", null);
 exports.WithdrawalController = WithdrawalController = __decorate([
     (0, swagger_1.ApiTags)('Withdrawal'),
-    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('withdrawal'),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __metadata("design:paramtypes", [withdrawal_service_1.WithdrawalService])
 ], WithdrawalController);
 //# sourceMappingURL=withdrawal.controller.js.map

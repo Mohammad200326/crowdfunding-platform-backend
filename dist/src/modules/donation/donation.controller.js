@@ -49,6 +49,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DonationController.prototype, "getDonation", null);
 exports.DonationController = DonationController = __decorate([
+    (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('donation'),
     __metadata("design:paramtypes", [donation_service_1.DonationService])
 ], DonationController);
