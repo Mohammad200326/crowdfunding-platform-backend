@@ -45,9 +45,8 @@ import {
 } from './swagger/withdrawal.swagger';
 
 @ApiTags('Withdrawal')
-@ApiBearerAuth()
+@ApiBearerAuth('access-token')
 @Controller('withdrawal')
-@UseGuards(AuthGuard)
 export class WithdrawalController {
   constructor(private readonly withdrawalService: WithdrawalService) {}
 
