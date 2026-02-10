@@ -368,7 +368,6 @@ export class CampaignCreatorService {
         where: { id: creator.userId },
         data: {
           isDeleted: true,
-          role: UserRole.DONOR, // Revert role
         },
       });
 
