@@ -28,3 +28,8 @@ export type WithdrawalFeeBreakdown = {
   netAmountInMinor: number;
   currency: string;
 };
+
+export type UpdateWithdrawalStatusDto = {
+  status: 'pending' | 'approved' | 'paid' | 'rejected';
+  notes?: string;
+};

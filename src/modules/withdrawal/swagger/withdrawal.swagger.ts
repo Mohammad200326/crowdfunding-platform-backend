@@ -228,3 +228,47 @@ export const InsufficientBalanceResponse: ApiResponseOptions = {
   status: 422,
   description: 'Insufficient balance for withdrawal',
 };
+
+export const UpdateWithdrawalStatusBody: ApiBodyOptions = {
+  description: 'Update withdrawal status',
+  schema: {
+    type: 'object',
+    required: ['status'],
+    properties: {
+      status: {
+        type: 'string',
+        enum: ['pending', 'approved', 'paid', 'rejected'],
+        description: 'New status for the withdrawal',
+        example: 'approved',
+      },
+      notes: {
+        type: 'string',
+        description: 'Optional notes about the status change',
+        example: 'Approved by admin',
+      },
+    },
+  },
+};
+
+export const WithdrawalStatusUpdatedResponse: ApiResponseOptions = {
+  status: 200,
+  description: 'Withdrawal status updated successfully',
+  schema: {
+    type: 'object',
+    properties: {
+      id: { type: 'string', example: 'withdrawal_123456' },
+      starsNumber: { type: 'number', example: 100 },
+      status: { type: 'string', example: 'approved' },
+      notes: { type: 'string', example: 'Approved by admin' },
+      approvedAt: { type: 'string', format: 'date-time' },
+      bankAccount: {
+        type: 'object',
+        properties: {
+          id: { type: 'string' },
+          bankName: { type: 'string' },
+          iban: { type: 'string' },
+        },
+      },
+    },
+  },
+};

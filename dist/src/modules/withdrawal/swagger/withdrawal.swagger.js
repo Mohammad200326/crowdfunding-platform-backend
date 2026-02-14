@@ -1,6 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+<<<<<<< HEAD
+exports.WithdrawalStatusUpdatedResponse = exports.UpdateWithdrawalStatusBody = exports.InsufficientBalanceResponse = exports.BadRequestResponse = exports.WithdrawalCannotCancelResponse = exports.StripeAccountExistsResponse = exports.WithdrawalNotFoundResponse = exports.StripeAccountNotFoundResponse = exports.NotFoundResponse = exports.ForbiddenResponse = exports.UnauthorizedResponse = exports.WithdrawalCancelledResponse = exports.WithdrawalDetailResponse = exports.WithdrawalListResponse = exports.WithdrawalCreatedResponse = exports.StripeAccountStatusResponse = exports.StripeOnboardingLinkResponse = exports.StripeConnectCreatedResponse = exports.BalanceResponse = exports.CreateWithdrawalBody = exports.WithdrawalIdParam = void 0;
+=======
 exports.InsufficientBalanceResponse = exports.BadRequestResponse = exports.WithdrawalCannotCancelResponse = exports.StripeAccountExistsResponse = exports.WithdrawalNotFoundResponse = exports.StripeAccountNotFoundResponse = exports.NotFoundResponse = exports.ForbiddenResponse = exports.UnauthorizedResponse = exports.WithdrawalCancelledResponse = exports.WithdrawalDetailResponse = exports.WithdrawalListResponse = exports.WithdrawalCreatedResponse = exports.StripeAccountStatusResponse = exports.StripeOnboardingLinkResponse = exports.StripeConnectCreatedResponse = exports.BalanceResponse = exports.CreateWithdrawalBody = exports.WithdrawalIdParam = void 0;
+>>>>>>> develop
 exports.WithdrawalIdParam = {
     name: 'id',
     description: 'Withdrawal ID',
@@ -207,4 +211,49 @@ exports.InsufficientBalanceResponse = {
     status: 422,
     description: 'Insufficient balance for withdrawal',
 };
+<<<<<<< HEAD
+exports.UpdateWithdrawalStatusBody = {
+    description: 'Update withdrawal status',
+    schema: {
+        type: 'object',
+        required: ['status'],
+        properties: {
+            status: {
+                type: 'string',
+                enum: ['pending', 'approved', 'paid', 'rejected'],
+                description: 'New status for the withdrawal',
+                example: 'approved',
+            },
+            notes: {
+                type: 'string',
+                description: 'Optional notes about the status change',
+                example: 'Approved by admin',
+            },
+        },
+    },
+};
+exports.WithdrawalStatusUpdatedResponse = {
+    status: 200,
+    description: 'Withdrawal status updated successfully',
+    schema: {
+        type: 'object',
+        properties: {
+            id: { type: 'string', example: 'withdrawal_123456' },
+            starsNumber: { type: 'number', example: 100 },
+            status: { type: 'string', example: 'approved' },
+            notes: { type: 'string', example: 'Approved by admin' },
+            approvedAt: { type: 'string', format: 'date-time' },
+            bankAccount: {
+                type: 'object',
+                properties: {
+                    id: { type: 'string' },
+                    bankName: { type: 'string' },
+                    iban: { type: 'string' },
+                },
+            },
+        },
+    },
+};
+=======
+>>>>>>> develop
 //# sourceMappingURL=withdrawal.swagger.js.map

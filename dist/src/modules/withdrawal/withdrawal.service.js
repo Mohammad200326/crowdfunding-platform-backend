@@ -110,6 +110,8 @@ let WithdrawalService = class WithdrawalService {
             message: 'Stripe Connect account created. Please complete onboarding.',
         };
     }
+<<<<<<< HEAD
+=======
     async getStripeOnboardingLink(userId) {
         const user = await this.prismaService.user.findUnique({
             where: { id: userId },
@@ -128,6 +130,7 @@ let WithdrawalService = class WithdrawalService {
             onboardingUrl: accountLink.url,
         };
     }
+>>>>>>> develop
     async getStripeAccountStatus(userId) {
         const user = await this.prismaService.user.findUnique({
             where: { id: userId },

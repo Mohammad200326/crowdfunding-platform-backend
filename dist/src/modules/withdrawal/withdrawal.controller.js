@@ -19,6 +19,10 @@ const withdrawal_service_1 = require("./withdrawal.service");
 const user_decorator_1 = require("../../utils/decorators/user.decorator");
 const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
 const withdrawal_validation_1 = require("./utils/withdrawal.validation");
+<<<<<<< HEAD
+const auth_guard_1 = require("../auth/guards/auth.guard");
+=======
+>>>>>>> develop
 const roles_decorator_1 = require("../../utils/decorators/roles.decorator");
 const withdrawal_swagger_1 = require("./swagger/withdrawal.swagger");
 let WithdrawalController = class WithdrawalController {
@@ -32,21 +36,39 @@ let WithdrawalController = class WithdrawalController {
     createStripeConnect(user) {
         return this.withdrawalService.createStripeConnectAccount(user.id);
     }
+<<<<<<< HEAD
+=======
     getStripeOnboardingLink(user) {
         return this.withdrawalService.getStripeOnboardingLink(user.id);
     }
+>>>>>>> develop
     getStripeAccountStatus(user) {
         return this.withdrawalService.getStripeAccountStatus(user.id);
     }
     create(createWithdrawalDto, user) {
         return this.withdrawalService.create(createWithdrawalDto, user.id);
     }
+<<<<<<< HEAD
+    findAllWithdrawals() {
+        return this.withdrawalService.findAll();
+    }
+    findByCreator(creatorId) {
+        return this.withdrawalService.findAllByUser(creatorId);
+    }
+=======
+>>>>>>> develop
     findAll(user) {
         return this.withdrawalService.findAllByUser(user.id);
     }
     findOne(id, user) {
         return this.withdrawalService.findOne(id, user.id);
     }
+<<<<<<< HEAD
+    updateStatus(id, updateDto) {
+        return this.withdrawalService.updateStatus(id, updateDto.status, updateDto.notes);
+    }
+=======
+>>>>>>> develop
     cancel(id, user) {
         return this.withdrawalService.cancel(id, user.id);
     }
@@ -84,6 +106,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "createStripeConnect", null);
 __decorate([
+<<<<<<< HEAD
+=======
     (0, common_1.Get)('stripe/onboarding-link'),
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
     (0, swagger_1.ApiOperation)({
@@ -100,6 +124,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "getStripeOnboardingLink", null);
 __decorate([
+>>>>>>> develop
     (0, common_1.Get)('stripe/status'),
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
     (0, swagger_1.ApiOperation)({
@@ -135,10 +160,50 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "create", null);
 __decorate([
+<<<<<<< HEAD
+    (0, common_1.Get)('all'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get all withdrawals from all creators',
+        description: 'Retrieves all withdrawal requests from all campaign creators. This is typically an admin endpoint.',
+    }),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.WithdrawalListResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.UnauthorizedResponse),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], WithdrawalController.prototype, "findAllWithdrawals", null);
+__decorate([
+    (0, common_1.Get)('creator/:creatorId'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get withdrawals for a specific creator',
+        description: 'Retrieves all withdrawal requests for a specific campaign creator by their ID.',
+    }),
+    (0, swagger_1.ApiParam)({
+        name: 'creatorId',
+        description: 'Campaign Creator ID',
+        type: 'string',
+        example: 'creator_123456',
+    }),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.WithdrawalListResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.UnauthorizedResponse),
+    __param(0, (0, common_1.Param)('creatorId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], WithdrawalController.prototype, "findByCreator", null);
+__decorate([
+    (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get my withdrawals',
+=======
     (0, common_1.Get)(),
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
     (0, swagger_1.ApiOperation)({
         summary: 'Get all withdrawals',
+>>>>>>> develop
         description: 'Retrieves all withdrawal requests for the authenticated campaign creator.',
     }),
     (0, swagger_1.ApiResponse)(withdrawal_swagger_1.WithdrawalListResponse),
@@ -168,6 +233,28 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "findOne", null);
 __decorate([
+<<<<<<< HEAD
+    (0, common_1.Patch)(':id/status'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Update withdrawal status',
+        description: 'Updates the status of a withdrawal request. Can change from pending to approved, approved to paid, or any status to rejected.',
+    }),
+    (0, swagger_1.ApiParam)(withdrawal_swagger_1.WithdrawalIdParam),
+    (0, swagger_1.ApiBody)(withdrawal_swagger_1.UpdateWithdrawalStatusBody),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.WithdrawalStatusUpdatedResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.BadRequestResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.UnauthorizedResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.WithdrawalNotFoundResponse),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], WithdrawalController.prototype, "updateStatus", null);
+__decorate([
+=======
+>>>>>>> develop
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
     (0, swagger_1.ApiOperation)({
