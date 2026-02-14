@@ -19,7 +19,10 @@ const withdrawal_service_1 = require("./withdrawal.service");
 const user_decorator_1 = require("../../utils/decorators/user.decorator");
 const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
 const withdrawal_validation_1 = require("./utils/withdrawal.validation");
+<<<<<<< HEAD
 const auth_guard_1 = require("../auth/guards/auth.guard");
+=======
+>>>>>>> develop
 const roles_decorator_1 = require("../../utils/decorators/roles.decorator");
 const withdrawal_swagger_1 = require("./swagger/withdrawal.swagger");
 let WithdrawalController = class WithdrawalController {
@@ -33,27 +36,39 @@ let WithdrawalController = class WithdrawalController {
     createStripeConnect(user) {
         return this.withdrawalService.createStripeConnectAccount(user.id);
     }
+<<<<<<< HEAD
+=======
+    getStripeOnboardingLink(user) {
+        return this.withdrawalService.getStripeOnboardingLink(user.id);
+    }
+>>>>>>> develop
     getStripeAccountStatus(user) {
         return this.withdrawalService.getStripeAccountStatus(user.id);
     }
     create(createWithdrawalDto, user) {
         return this.withdrawalService.create(createWithdrawalDto, user.id);
     }
+<<<<<<< HEAD
     findAllWithdrawals() {
         return this.withdrawalService.findAll();
     }
     findByCreator(creatorId) {
         return this.withdrawalService.findAllByUser(creatorId);
     }
+=======
+>>>>>>> develop
     findAll(user) {
         return this.withdrawalService.findAllByUser(user.id);
     }
     findOne(id, user) {
         return this.withdrawalService.findOne(id, user.id);
     }
+<<<<<<< HEAD
     updateStatus(id, updateDto) {
         return this.withdrawalService.updateStatus(id, updateDto.status, updateDto.notes);
     }
+=======
+>>>>>>> develop
     cancel(id, user) {
         return this.withdrawalService.cancel(id, user.id);
     }
@@ -91,6 +106,25 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "createStripeConnect", null);
 __decorate([
+<<<<<<< HEAD
+=======
+    (0, common_1.Get)('stripe/onboarding-link'),
+    (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get Stripe onboarding link',
+        description: 'Retrieves the Stripe Connect onboarding link for the campaign creator to complete account setup.',
+    }),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.StripeOnboardingLinkResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.UnauthorizedResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.ForbiddenResponse),
+    (0, swagger_1.ApiResponse)(withdrawal_swagger_1.StripeAccountNotFoundResponse),
+    __param(0, (0, user_decorator_1.User)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], WithdrawalController.prototype, "getStripeOnboardingLink", null);
+__decorate([
+>>>>>>> develop
     (0, common_1.Get)('stripe/status'),
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
     (0, swagger_1.ApiOperation)({
@@ -126,6 +160,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "create", null);
 __decorate([
+<<<<<<< HEAD
     (0, common_1.Get)('all'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, swagger_1.ApiOperation)({
@@ -163,6 +198,12 @@ __decorate([
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
     (0, swagger_1.ApiOperation)({
         summary: 'Get my withdrawals',
+=======
+    (0, common_1.Get)(),
+    (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get all withdrawals',
+>>>>>>> develop
         description: 'Retrieves all withdrawal requests for the authenticated campaign creator.',
     }),
     (0, swagger_1.ApiResponse)(withdrawal_swagger_1.WithdrawalListResponse),
@@ -192,6 +233,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "findOne", null);
 __decorate([
+<<<<<<< HEAD
     (0, common_1.Patch)(':id/status'),
     (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     (0, swagger_1.ApiOperation)({
@@ -211,6 +253,8 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "updateStatus", null);
 __decorate([
+=======
+>>>>>>> develop
     (0, common_1.Delete)(':id'),
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),
     (0, swagger_1.ApiOperation)({

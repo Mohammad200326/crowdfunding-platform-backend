@@ -7,6 +7,8 @@ async function bootstrap() {
   console.log('CURRENT DB URL:', process.env.DATABASE_URL);
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }));
 
   app.use(express.json());

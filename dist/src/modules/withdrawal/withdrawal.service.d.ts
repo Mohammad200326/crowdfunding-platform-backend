@@ -15,6 +15,12 @@ export declare class WithdrawalService {
         onboardingUrl: string;
         message: string;
     }>;
+<<<<<<< HEAD
+=======
+    getStripeOnboardingLink(userId: string): Promise<{
+        onboardingUrl: string;
+    }>;
+>>>>>>> develop
     getStripeAccountStatus(userId: string): Promise<{
         hasStripeAccount: boolean;
         isReadyForTransfers: boolean;
