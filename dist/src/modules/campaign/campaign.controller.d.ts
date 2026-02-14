@@ -1,0 +1,237 @@
+import { CampaignService } from './campaign.service';
+import { UserResponseDTO } from '../auth/dto/auth.dto';
+import type { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto';
+import { CampaignCategory } from '@prisma/client';
+export declare class CampaignController {
+    private readonly campaignService;
+    constructor(campaignService: CampaignService);
+    create(createCampaignDto: CreateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<{
+        assets: {
+            url: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            fileId: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
+            fileType: string;
+            fileSizeInKB: number;
+            kind: import("@prisma/client").$Enums.AssetKind;
+            ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
+            campaignUpdateId: string | null;
+            creatorId: string | null;
+            bankAccountId: string | null;
+            donorIdentityId: string | null;
+        }[];
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+    } & {
+        id: string;
+        notes: string | null;
+        isDeleted: boolean;
+        isVerified: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
+        description: string;
+        creatorId: string;
+        title: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
+        category: import("@prisma/client").$Enums.CampaignCategory;
+        goal: number;
+        startDate: Date;
+        endDate: Date;
+        motivationMessage: string;
+        likes: number;
+    }>;
+    findAll(page: number, limit: number): Promise<({
+        assets: {
+            url: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            fileId: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
+            fileType: string;
+            fileSizeInKB: number;
+            kind: import("@prisma/client").$Enums.AssetKind;
+            ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
+            campaignUpdateId: string | null;
+            creatorId: string | null;
+            bankAccountId: string | null;
+            donorIdentityId: string | null;
+        }[];
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+    } & {
+        id: string;
+        notes: string | null;
+        isDeleted: boolean;
+        isVerified: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
+        description: string;
+        creatorId: string;
+        title: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
+        category: import("@prisma/client").$Enums.CampaignCategory;
+        goal: number;
+        startDate: Date;
+        endDate: Date;
+        motivationMessage: string;
+        likes: number;
+    })[]>;
+    findByCategory(category: CampaignCategory, page: number, limit: number): Promise<({
+        assets: {
+            url: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            fileId: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
+            fileType: string;
+            fileSizeInKB: number;
+            kind: import("@prisma/client").$Enums.AssetKind;
+            ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
+            campaignUpdateId: string | null;
+            creatorId: string | null;
+            bankAccountId: string | null;
+            donorIdentityId: string | null;
+        }[];
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+    } & {
+        id: string;
+        notes: string | null;
+        isDeleted: boolean;
+        isVerified: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
+        description: string;
+        creatorId: string;
+        title: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
+        category: import("@prisma/client").$Enums.CampaignCategory;
+        goal: number;
+        startDate: Date;
+        endDate: Date;
+        motivationMessage: string;
+        likes: number;
+    })[]>;
+    findByCreator(creatorId: string): Promise<({
+        assets: {
+            url: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            fileId: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
+            fileType: string;
+            fileSizeInKB: number;
+            kind: import("@prisma/client").$Enums.AssetKind;
+            ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
+            campaignUpdateId: string | null;
+            creatorId: string | null;
+            bankAccountId: string | null;
+            donorIdentityId: string | null;
+        }[];
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+    } & {
+        id: string;
+        notes: string | null;
+        isDeleted: boolean;
+        isVerified: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
+        description: string;
+        creatorId: string;
+        title: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
+        category: import("@prisma/client").$Enums.CampaignCategory;
+        goal: number;
+        startDate: Date;
+        endDate: Date;
+        motivationMessage: string;
+        likes: number;
+    })[]>;
+    update(id: string, updatePayload: UpdateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<{
+        assets: {
+            url: string;
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            fileId: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
+            fileType: string;
+            fileSizeInKB: number;
+            kind: import("@prisma/client").$Enums.AssetKind;
+            ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
+            campaignUpdateId: string | null;
+            creatorId: string | null;
+            bankAccountId: string | null;
+            donorIdentityId: string | null;
+        }[];
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+    } & {
+        id: string;
+        notes: string | null;
+        isDeleted: boolean;
+        isVerified: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
+        description: string;
+        creatorId: string;
+        title: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
+        isActive: boolean;
+        category: import("@prisma/client").$Enums.CampaignCategory;
+        goal: number;
+        startDate: Date;
+        endDate: Date;
+        motivationMessage: string;
+        likes: number;
+    }>;
+    remove(id: string): Promise<{
+        id: string;
+        isDeleted: boolean;
+    }>;
+}

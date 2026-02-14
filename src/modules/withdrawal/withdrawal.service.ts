@@ -163,34 +163,34 @@ export class WithdrawalService {
   /**
    * Get Stripe onboarding link for existing account
    */
-  async getStripeOnboardingLink(userId: string) {
-    const user = await this.prismaService.user.findUnique({
-      where: { id: userId },
-      include: { creatorProfile: true },
-    });
+  // async getStripeOnboardingLink(userId: string) {
+  //   const user = await this.prismaService.user.findUnique({
+  //     where: { id: userId },
+  //     include: { creatorProfile: true },
+  //   });
 
-    if (!user || user.isDeleted) {
-      throw new NotFoundException('User not found');
-    }
+  //   if (!user || user.isDeleted) {
+  //     throw new NotFoundException('User not found');
+  //   }
 
-    const stripeAccountId = user.creatorProfile?.stripeAccountId;
-    if (!stripeAccountId) {
-      throw new BadRequestException(
-        'No Stripe Connect account found. Please create one first.',
-      );
-    }
+  //   const stripeAccountId = user.creatorProfile?.stripeAccountId;
+  //   if (!stripeAccountId) {
+  //     throw new BadRequestException(
+  //       'No Stripe Connect account found. Please create one first.',
+  //     );
+  //   }
 
-    const appUrl = process.env.APP_URL ?? 'http://localhost:3000';
-    const accountLink = await this.stripeService.createAccountLink(
-      stripeAccountId,
-      `${appUrl}/api/v1/withdrawal/stripe/onboarding-refresh`,
-      `${appUrl}/api/v1/withdrawal/stripe/onboarding-complete`,
-    );
+  //   const appUrl = process.env.APP_URL ?? 'http://localhost:3000';
+  //   const accountLink = await this.stripeService.createAccountLink(
+  //     stripeAccountId,
+  //     `${appUrl}/api/v1/withdrawal/stripe/onboarding-refresh`,
+  //     `${appUrl}/api/v1/withdrawal/stripe/onboarding-complete`,
+  //   );
 
-    return {
-      onboardingUrl: accountLink.url,
-    };
-  }
+  //   return {
+  //     onboardingUrl: accountLink.url,
+  //   };
+  // }
 
   /**
    * Get Stripe Connect account status

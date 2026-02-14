@@ -5,6 +5,7 @@ import {
   Body,
   Param,
   Delete,
+  Patch,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -16,7 +17,10 @@ import {
   ApiBody,
 } from '@nestjs/swagger';
 import { WithdrawalService } from './withdrawal.service';
-import type { CreateWithdrawalDto } from './dto/withdrawal.dto';
+import type {
+  CreateWithdrawalDto,
+  UpdateWithdrawalStatusDto,
+} from './dto/withdrawal.dto';
 import { User } from 'src/utils/decorators/user.decorator';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
@@ -42,6 +46,8 @@ import {
   WithdrawalCannotCancelResponse,
   BadRequestResponse,
   InsufficientBalanceResponse,
+  UpdateWithdrawalStatusBody,
+  WithdrawalStatusUpdatedResponse,
 } from './swagger/withdrawal.swagger';
 
 @ApiTags('Withdrawal')
@@ -88,20 +94,20 @@ export class WithdrawalController {
   /**
    * Get Stripe Connect onboarding link
    */
-  @Get('stripe/onboarding-link')
-  @Roles(['CAMPAIGN_CREATOR'])
-  @ApiOperation({
-    summary: 'Get Stripe onboarding link',
-    description:
-      'Retrieves the Stripe Connect onboarding link for the campaign creator to complete account setup.',
-  })
-  @ApiResponse(StripeOnboardingLinkResponse)
-  @ApiResponse(UnauthorizedResponse)
-  @ApiResponse(ForbiddenResponse)
-  @ApiResponse(StripeAccountNotFoundResponse)
-  getStripeOnboardingLink(@User() user: UserResponseDTO['userData']) {
-    return this.withdrawalService.getStripeOnboardingLink(user.id);
-  }
+  // @Get('stripe/onboarding-link')
+  // @Roles(['CAMPAIGN_CREATOR'])
+  // @ApiOperation({
+  //   summary: 'Get Stripe onboarding link',
+  //   description:
+  //     'Retrieves the Stripe Connect onboarding link for the campaign creator to complete account setup.',
+  // })
+  // @ApiResponse(StripeOnboardingLinkResponse)
+  // @ApiResponse(UnauthorizedResponse)
+  // @ApiResponse(ForbiddenResponse)
+  // @ApiResponse(StripeAccountNotFoundResponse)
+  // getStripeOnboardingLink(@User() user: UserResponseDTO['userData']) {
+  //   return this.withdrawalService.getStripeOnboardingLink(user.id);
+  // }
 
   /**
    * Get Stripe Connect account status
@@ -146,12 +152,50 @@ export class WithdrawalController {
   }
 
   /**
+   * Get all withdrawals (Admin)
+   */
+  @Get('all')
+  @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Get all withdrawals from all creators',
+    description:
+      'Retrieves all withdrawal requests from all campaign creators. This is typically an admin endpoint.',
+  })
+  @ApiResponse(WithdrawalListResponse)
+  @ApiResponse(UnauthorizedResponse)
+  findAllWithdrawals() {
+    return this.withdrawalService.findAll();
+  }
+
+  /**
+   * Get withdrawals for a specific creator by creator ID
+   */
+  @Get('creator/:creatorId')
+  @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Get withdrawals for a specific creator',
+    description:
+      'Retrieves all withdrawal requests for a specific campaign creator by their ID.',
+  })
+  @ApiParam({
+    name: 'creatorId',
+    description: 'Campaign Creator ID',
+    type: 'string',
+    example: 'creator_123456',
+  })
+  @ApiResponse(WithdrawalListResponse)
+  @ApiResponse(UnauthorizedResponse)
+  findByCreator(@Param('creatorId') creatorId: string) {
+    return this.withdrawalService.findAllByUser(creatorId);
+  }
+
+  /**
    * Get all withdrawals for the authenticated user
    */
   @Get()
   @Roles(['CAMPAIGN_CREATOR'])
   @ApiOperation({
-    summary: 'Get all withdrawals',
+    summary: 'Get my withdrawals',
     description:
       'Retrieves all withdrawal requests for the authenticated campaign creator.',
   })
@@ -178,6 +222,33 @@ export class WithdrawalController {
   @ApiResponse(WithdrawalNotFoundResponse)
   findOne(@Param('id') id: string, @User() user: UserResponseDTO['userData']) {
     return this.withdrawalService.findOne(id, user.id);
+  }
+
+  /**
+   * Update withdrawal status (Admin/Approval)
+   */
+  @Patch(':id/status')
+  @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Update withdrawal status',
+    description:
+      'Updates the status of a withdrawal request. Can change from pending to approved, approved to paid, or any status to rejected.',
+  })
+  @ApiParam(WithdrawalIdParam)
+  @ApiBody(UpdateWithdrawalStatusBody)
+  @ApiResponse(WithdrawalStatusUpdatedResponse)
+  @ApiResponse(BadRequestResponse)
+  @ApiResponse(UnauthorizedResponse)
+  @ApiResponse(WithdrawalNotFoundResponse)
+  updateStatus(
+    @Param('id') id: string,
+    @Body() updateDto: UpdateWithdrawalStatusDto,
+  ) {
+    return this.withdrawalService.updateStatus(
+      id,
+      updateDto.status,
+      updateDto.notes,
+    );
   }
 
   /**
