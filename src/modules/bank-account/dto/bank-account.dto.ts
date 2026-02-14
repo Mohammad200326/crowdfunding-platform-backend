@@ -3,17 +3,8 @@ import { BankAccount, Prisma } from '@prisma/client';
 
 // Zod Schemas for validation
 export const CreateBankAccountSchema = z.object({
-  bankName: z
-    .string()
-    .min(1, 'Bank name is required')
-    .max(255, 'Bank name is too long'),
-  iban: z
-    .string()
-    .min(1, 'IBAN is required')
-    .regex(
-      /^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/,
-      'Invalid IBAN format. Must start with 2 letters, 2 digits, followed by alphanumeric characters',
-    ),
+  bankName: z.string().min(1, 'Bank name is required'),
+  iban: z.string().min(1, 'IBAN is required'),
   notes: z.string().optional().default(''),
 });
 
@@ -23,13 +14,17 @@ export const UpdateBankAccountSchema = z.object({
     .min(1, 'Bank name is required')
     .max(255, 'Bank name is too long')
     .optional(),
-  iban: z
-    .string()
-    .min(1, 'IBAN is required')
-    .regex(/^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/, 'Invalid IBAN format')
-    .optional(),
+  iban: z.string().min(1, 'IBAN is required'),
   notes: z.string().optional(),
-  isVerified: z.boolean().optional(),
+  isVerified: z
+    .union([z.boolean(), z.string()])
+    .transform((val) => {
+      if (typeof val === 'boolean') return val;
+      if (val === 'true') return true;
+      if (val === 'false') return false;
+      return undefined;
+    })
+    .optional(),
 });
 
 // TypeScript types inferred from Zod schemas
