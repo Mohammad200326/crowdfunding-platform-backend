@@ -8,18 +8,7 @@ import {
 import { DatabaseService } from '../database/database.service';
 import { CreateCampaignCreatorDto } from './dto/create-campaign-creator.dto';
 import { UpdateCampaignCreatorDto } from './dto/update-campaign-creator.dto';
-import { UserRole, Prisma } from '@prisma/client';
-
-// Type for user data from database
-interface UserSelectData {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  country: string | null;
-  role: UserRole;
-  isDeleted: boolean;
-}
+import { UserRole, Prisma, User } from '@prisma/client';
 
 @Injectable()
 export class CampaignCreatorService {
@@ -32,25 +21,15 @@ export class CampaignCreatorService {
 
     const user = await this.db.user.findUnique({
       where: { id: userId, isDeleted: false },
-      select: {
-        id: true,
-        firstName: true,
-        lastName: true,
-        email: true,
-        country: true,
-        role: true,
-        isDeleted: true,
-      },
     });
 
     if (!user) {
-      throw new NotFoundException('User not found or has been deleted');
+      throw new NotFoundException('User not found or is deactivated');
     }
 
     const existingCreator = await this.db.campaignCreator.findUnique({
       where: { userId },
     });
-
     if (existingCreator) {
       throw new ConflictException(
         'Creator profile already exists for this user',
@@ -59,75 +38,49 @@ export class CampaignCreatorService {
 
     if (assetIds && assetIds.length > 0) {
       const assets = await this.db.asset.findMany({
-        where: {
-          id: { in: assetIds },
-          ownerId: userId,
-        },
+        where: { id: { in: assetIds }, ownerId: userId },
       });
-
       if (assets.length !== assetIds.length) {
-        throw new BadRequestException(
-          'Some assets not found or do not belong to this user',
-        );
+        throw new BadRequestException('Invalid assets provided');
       }
     }
 
     const persistenceData = this.preparePersistenceData(dto, user);
 
     return this.db.$transaction(async (tx) => {
-      // Create the campaign creator profile
       const creator = await tx.campaignCreator.create({
         data: persistenceData,
-        include: {
-          user: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              email: true,
-              role: true,
-              country: true,
-              phoneNumber: true,
-            },
-          },
-        },
+        include: { user: true },
       });
 
-      // Promote user role to CAMPAIGN_CREATOR
       await tx.user.update({
         where: { id: userId },
         data: { role: UserRole.CAMPAIGN_CREATOR },
       });
 
-      // Link assets to creator
-      if (assetIds && assetIds.length > 0) {
+      if (assetIds?.length) {
         await tx.asset.updateMany({
           where: { id: { in: assetIds } },
           data: { creatorId: creator.id },
         });
       }
 
-      this.logger.log(`Created ${dto.type} creator profile for user ${userId}`);
-
-      return {
-        message: 'Campaign creator profile created successfully',
-        creator,
-      };
+      return creator;
     });
   }
 
   async findAll(page = 1, limit = 10) {
     const skip = (page - 1) * limit;
 
+    const whereClause: Prisma.CampaignCreatorWhereInput = {
+      user: { isDeleted: false },
+    };
+
     const [creators, total] = await Promise.all([
       this.db.campaignCreator.findMany({
         skip,
         take: limit,
-        where: {
-          user: {
-            isDeleted: false,
-          },
-        },
+        where: whereClause,
         include: {
           user: {
             select: {
@@ -135,44 +88,18 @@ export class CampaignCreatorService {
               firstName: true,
               lastName: true,
               email: true,
-              role: true,
               country: true,
-              phoneNumber: true,
-              isVerified: true,
-              verificationStatus: true,
-            },
-          },
-          assets: {
-            select: {
-              id: true,
-              url: true,
-              fileType: true,
-              kind: true,
-              createdAt: true,
             },
           },
         },
-        orderBy: {
-          createdAt: 'desc',
-        },
+        orderBy: { createdAt: 'desc' },
       }),
-      this.db.campaignCreator.count({
-        where: {
-          user: {
-            isDeleted: false,
-          },
-        },
-      }),
+      this.db.campaignCreator.count({ where: whereClause }),
     ]);
 
     return {
       data: creators,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
-      },
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
   }
 
@@ -180,97 +107,21 @@ export class CampaignCreatorService {
     const creator = await this.db.campaignCreator.findUnique({
       where: { id },
       include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            role: true,
-            country: true,
-            phoneNumber: true,
-            dateOfBirth: true,
-            isDeleted: true,
-            isVerified: true,
-            verificationStatus: true,
-          },
-        },
-        assets: {
-          select: {
-            id: true,
-            url: true,
-            fileType: true,
-            kind: true,
-            createdAt: true,
-          },
-        },
+        user: true,
+        assets: true,
       },
     });
 
-    if (!creator) {
-      throw new NotFoundException(
-        `Campaign creator profile with ID "${id}" not found`,
-      );
-    }
-
-    // Check if user is deleted
-    if (creator.user.isDeleted) {
-      throw new NotFoundException(
-        `Campaign creator profile with ID "${id}" has been deleted`,
-      );
-    }
-
-    return creator;
-  }
-
-  async findByUserId(userId: string) {
-    const creator = await this.db.campaignCreator.findUnique({
-      where: { userId },
-      include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            role: true,
-            country: true,
-            phoneNumber: true,
-            isDeleted: true,
-          },
-        },
-        assets: {
-          select: {
-            id: true,
-            url: true,
-            fileType: true,
-            kind: true,
-          },
-        },
-      },
-    });
-
-    if (!creator) {
-      throw new NotFoundException(
-        `Campaign creator for user "${userId}" not found`,
-      );
-    }
-
-    // Check if user is deleted
-    if (creator.user.isDeleted) {
-      throw new NotFoundException(
-        `Campaign creator for user "${userId}" has been deleted`,
-      );
+    if (!creator || creator.user.isDeleted) {
+      throw new NotFoundException('Creator not found');
     }
 
     return creator;
   }
 
   async update(id: string, dto: UpdateCampaignCreatorDto) {
-    // Verify creator exists and is not deleted
     await this.findOne(id);
 
-    // Prepare update data with proper Prisma typing
     const updateData: Prisma.CampaignCreatorUpdateInput = {};
 
     if (dto.institutionName !== undefined) {
@@ -281,11 +132,6 @@ export class CampaignCreatorService {
     }
     if (dto.institutionType !== undefined) {
       updateData.institutionType = dto.institutionType;
-    }
-    if (dto.institutionDateOfEstablishment !== undefined) {
-      updateData.institutionDateOfEstablishment = new Date(
-        dto.institutionDateOfEstablishment,
-      );
     }
     if (dto.institutionLegalStatus !== undefined) {
       updateData.institutionLegalStatus = dto.institutionLegalStatus;
@@ -317,37 +163,22 @@ export class CampaignCreatorService {
       updateData.institutionRepresentativeSocialMedia =
         dto.institutionRepresentativeSocialMedia;
     }
+    if (dto.institutionDateOfEstablishment !== undefined) {
+      updateData.institutionDateOfEstablishment = new Date(
+        dto.institutionDateOfEstablishment,
+      );
+    }
 
-    const updatedCreator = await this.db.campaignCreator.update({
+    return this.db.campaignCreator.update({
       where: { id },
       data: updateData,
-      include: {
-        user: {
-          select: {
-            id: true,
-            firstName: true,
-            lastName: true,
-            email: true,
-            role: true,
-          },
-        },
-        assets: true,
-      },
     });
-
-    this.logger.log(`Updated creator profile ${id}`);
-
-    return {
-      message: 'Campaign creator profile updated successfully',
-      creator: updatedCreator,
-    };
   }
 
   async remove(id: string) {
     const creator = await this.findOne(id);
 
-    // Check if creator has any active campaigns
-    const activeCampaignsCount = await this.db.campaign.count({
+    const activeCampaigns = await this.db.campaign.count({
       where: {
         creatorId: creator.userId,
         isActive: true,
@@ -355,71 +186,47 @@ export class CampaignCreatorService {
       },
     });
 
-    if (activeCampaignsCount > 0) {
+    if (activeCampaigns > 0) {
       throw new ConflictException(
-        `Cannot delete creator profile with ${activeCampaignsCount} active campaign(s). ` +
-          'Please deactivate all campaigns first.',
+        'Cannot deactivate creator with active campaigns. Please close/finish campaigns first.',
       );
     }
 
-    // TRANSACTION: delete user
-    return this.db.$transaction(async (tx) => {
-      await tx.user.update({
-        where: { id: creator.userId },
-        data: {
-          isDeleted: true,
-        },
-      });
-
-      this.logger.log(`Deleted creator profile ${id} (user ${creator.userId})`);
-
-      return {
-        message: 'Campaign creator profile deleted successfully',
-        deletedId: id,
-      };
+    await this.db.user.update({
+      where: { id: creator.userId },
+      data: { isDeleted: true },
     });
+
+    return { message: 'Creator account deactivated successfully' };
   }
 
   private preparePersistenceData(
     dto: CreateCampaignCreatorDto,
-    user: UserSelectData,
+    user: User,
   ): Prisma.CampaignCreatorCreateInput {
-    const filler = 'N/A';
+    const FILLER = 'N/A';
 
-    // Check if INDIVIDUAL type (use string comparison to avoid namespace error)
-    const isIndividual = dto.type === 'INDIVIDUAL';
-
-    if (isIndividual) {
-      // For INDIVIDUAL: Auto-fill all fields
+    if (dto.type === 'INDIVIDUAL') {
       return {
-        user: {
-          connect: { id: dto.userId },
-        },
+        user: { connect: { id: dto.userId } },
         type: 'INDIVIDUAL',
         institutionName: `${user.firstName} ${user.lastName}`,
-        institutionCountry: user.country || filler,
+        institutionCountry: user.country || FILLER,
         institutionType: 'Individual',
         institutionDateOfEstablishment: new Date(),
-        institutionLegalStatus: filler,
-        institutionTaxIdentificationNumber: filler,
-        institutionRegistrationNumber: filler,
+        institutionLegalStatus: FILLER,
+        institutionTaxIdentificationNumber: FILLER,
+        institutionRegistrationNumber: FILLER,
         institutionRepresentativeName: `${user.firstName} ${user.lastName}`,
         institutionRepresentativePosition: 'Owner',
-        institutionRepresentativeRegistrationNumber: filler,
-        institutionWebsite: filler,
-        institutionRepresentativeSocialMedia: filler,
+        institutionRepresentativeRegistrationNumber: FILLER,
+        institutionWebsite: FILLER,
+        institutionRepresentativeSocialMedia: FILLER,
       };
     }
 
-    // For INSTITUTION: Use provided data
-    if (dto.type !== 'INSTITUTION') {
-      throw new BadRequestException('Invalid creator type');
-    }
-
     return {
-      user: {
-        connect: { id: dto.userId },
-      },
+      user: { connect: { id: dto.userId } },
       type: 'INSTITUTION',
       institutionName: dto.institutionName,
       institutionCountry: dto.institutionCountry,
@@ -433,9 +240,9 @@ export class CampaignCreatorService {
       institutionRepresentativePosition: dto.institutionRepresentativePosition,
       institutionRepresentativeRegistrationNumber:
         dto.institutionRepresentativeRegistrationNumber,
-      institutionWebsite: dto.institutionWebsite || filler,
+      institutionWebsite: dto.institutionWebsite || FILLER,
       institutionRepresentativeSocialMedia:
-        dto.institutionRepresentativeSocialMedia || filler,
+        dto.institutionRepresentativeSocialMedia || FILLER,
     };
   }
 }

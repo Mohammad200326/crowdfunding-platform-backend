@@ -147,10 +147,9 @@ export class CampaignController {
     return this.campaignService.update(id, updatePayload, user, file);
   }
 
-  // SOFT DELETE
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Soft delete a campaign (Mark as deleted)' })
+  @ApiOperation({ summary: 'delete a campaign (Mark as deleted)' })
   @ApiParam({ name: 'id', description: 'Campaign UUID' })
   @ApiResponse({
     status: 200,
