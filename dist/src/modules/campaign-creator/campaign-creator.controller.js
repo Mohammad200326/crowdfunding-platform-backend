@@ -1,43 +1,10 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
@@ -49,8 +16,8 @@ exports.CampaignCreatorController = void 0;
 const common_1 = require("@nestjs/common");
 const campaign_creator_service_1 = require("./campaign-creator.service");
 const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
-const createCampaignCreatorDto = __importStar(require("./dto/create-campaign-creator.dto"));
-const updateCampaignCreatorDto = __importStar(require("./dto/update-campaign-creator.dto"));
+const create_campaign_creator_dto_1 = require("./dto/create-campaign-creator.dto");
+const update_campaign_creator_dto_1 = require("./dto/update-campaign-creator.dto");
 const swagger_1 = require("@nestjs/swagger");
 const create_campaign_creator_swagger_dto_1 = require("./dto/create-campaign-creator.swagger.dto");
 let CampaignCreatorController = class CampaignCreatorController {
@@ -61,8 +28,8 @@ let CampaignCreatorController = class CampaignCreatorController {
     create(dto) {
         return this.service.create(dto);
     }
-    findAll() {
-        return this.service.findAll();
+    findAll(page, limit) {
+        return this.service.findAll(Number(page) || 1, Number(limit) || 10);
     }
     findOne(id) {
         return this.service.findOne(id);
@@ -78,28 +45,38 @@ exports.CampaignCreatorController = CampaignCreatorController;
 __decorate([
     (0, common_1.Post)(),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
-    (0, swagger_1.ApiOperation)({ summary: 'Create a new campaign creator profile' }),
-    (0, swagger_1.ApiCreatedResponse)({
-        description: 'Profile created',
-        type: create_campaign_creator_swagger_dto_1.CampaignCreatorResponseDto,
+    (0, swagger_1.ApiOperation)({ summary: 'Create creator profile' }),
+    (0, swagger_1.ApiExtraModels)(create_campaign_creator_swagger_dto_1.CreateIndividualCreatorDto, create_campaign_creator_swagger_dto_1.CreateInstitutionCreatorDto),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            oneOf: [
+                { $ref: (0, swagger_1.getSchemaPath)(create_campaign_creator_swagger_dto_1.CreateIndividualCreatorDto) },
+                { $ref: (0, swagger_1.getSchemaPath)(create_campaign_creator_swagger_dto_1.CreateInstitutionCreatorDto) },
+            ],
+        },
     }),
-    (0, common_1.UsePipes)(new zod_validation_pipe_1.ZodValidationPipe(createCampaignCreatorDto.CreateCampaignCreatorSchema)),
-    __param(0, (0, common_1.Body)()),
+    (0, swagger_1.ApiCreatedResponse)({ type: create_campaign_creator_swagger_dto_1.CampaignCreatorResponseDto }),
+    __param(0, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(create_campaign_creator_dto_1.CreateCampaignCreatorSchema))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], CampaignCreatorController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Get all campaign creators' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get all creators' }),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false, example: 1 }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, example: 10 }),
     (0, swagger_1.ApiOkResponse)({ type: [create_campaign_creator_swagger_dto_1.CampaignCreatorResponseDto] }),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Query)('limit')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number, Number]),
     __metadata("design:returntype", void 0)
 ], CampaignCreatorController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get a specific campaign creator by ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get creator details' }),
+    (0, swagger_1.ApiParam)({ name: 'id' }),
     (0, swagger_1.ApiOkResponse)({ type: create_campaign_creator_swagger_dto_1.CampaignCreatorResponseDto }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
@@ -108,18 +85,28 @@ __decorate([
 ], CampaignCreatorController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Update campaign creator details' }),
-    (0, common_1.UsePipes)(new zod_validation_pipe_1.ZodValidationPipe(updateCampaignCreatorDto.UpdateCampaignCreatorSchema)),
+    (0, swagger_1.ApiOperation)({ summary: 'Update creator profile' }),
+    (0, swagger_1.ApiParam)({ name: 'id' }),
+    (0, swagger_1.ApiBody)({ type: create_campaign_creator_swagger_dto_1.UpdateCampaignCreatorSwaggerDto }),
+    (0, swagger_1.ApiOkResponse)({ type: create_campaign_creator_swagger_dto_1.CampaignCreatorResponseDto }),
     __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
+    __param(1, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(update_campaign_creator_dto_1.UpdateCampaignCreatorSchema))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignCreatorController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
-    (0, swagger_1.ApiOperation)({ summary: 'Delete campaign creator profile' }),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({ summary: 'Deactivate creator account' }),
+    (0, swagger_1.ApiParam)({ name: 'id' }),
+    (0, swagger_1.ApiOkResponse)({
+        schema: {
+            properties: {
+                message: { type: 'string' },
+            },
+        },
+    }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

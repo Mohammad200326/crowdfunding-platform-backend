@@ -6,6 +6,8 @@ import {
 import { DatabaseService } from '../database/database.service';
 import { StripeService } from '../stripe/stripe.service';
 import { CreateDonationCheckoutDto } from './dto/create-donation-checkout.dto';
+import { DonationQueryDto } from './dto/donation-query.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class DonationService {
@@ -125,5 +127,105 @@ export class DonationService {
 
     if (!donation) throw new NotFoundException('Donation not found');
     return donation;
+  }
+
+  private buildPagination(query: DonationQueryDto) {
+    const page = query.page ?? 1;
+    const limit = query.limit ?? 10;
+
+    const skip = (page - 1) * limit;
+
+    return { skip, take: limit };
+  }
+
+  async getAll(query: DonationQueryDto) {
+    const { skip, take } = this.buildPagination(query);
+
+    const where: Prisma.DonationWhereInput = {};
+
+    if (query.paymentStatus) {
+      where.paymentStatus = query.paymentStatus;
+    }
+
+    const [items, total] = await this.databaseService.$transaction([
+      this.databaseService.donation.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take,
+      }),
+      this.databaseService.donation.count({ where }),
+    ]);
+
+    return {
+      page: query.page ?? 1,
+      limit: query.limit ?? 10,
+      total,
+      totalPages: Math.ceil(total / (query.limit ?? 10)),
+      items,
+    };
+  }
+
+  async getByCampaignId(campaignId: string, query: DonationQueryDto) {
+    const campaign = await this.databaseService.campaign.findUnique({
+      where: { id: campaignId },
+      select: { id: true, isDeleted: true },
+    });
+
+    if (!campaign || campaign.isDeleted) {
+      throw new NotFoundException('Campaign not found');
+    }
+
+    const { skip, take } = this.buildPagination(query);
+
+    const where: Prisma.DonationWhereInput = {
+      campaignId,
+      paymentStatus: query.paymentStatus ?? 'completed',
+    };
+
+    const [items, total] = await this.databaseService.$transaction([
+      this.databaseService.donation.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take,
+      }),
+      this.databaseService.donation.count({ where }),
+    ]);
+
+    return {
+      page: query.page ?? 1,
+      limit: query.limit ?? 10,
+      total,
+      totalPages: Math.ceil(total / (query.limit ?? 10)),
+      items,
+    };
+  }
+
+  async getByUserId(userId: string, query: DonationQueryDto) {
+    const { skip, take } = this.buildPagination(query);
+
+    const where: Prisma.DonationWhereInput = {
+      userId,
+      ...(query.paymentStatus && { paymentStatus: query.paymentStatus }),
+    };
+
+    const [items, total] = await this.databaseService.$transaction([
+      this.databaseService.donation.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take,
+      }),
+      this.databaseService.donation.count({ where }),
+    ]);
+
+    return {
+      page: query.page ?? 1,
+      limit: query.limit ?? 10,
+      total,
+      totalPages: Math.ceil(total / (query.limit ?? 10)),
+      items,
+    };
   }
 }

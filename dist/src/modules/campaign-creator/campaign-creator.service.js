@@ -24,18 +24,9 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
         const { userId, assetIds } = dto;
         const user = await this.db.user.findUnique({
             where: { id: userId, isDeleted: false },
-            select: {
-                id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-                country: true,
-                role: true,
-                isDeleted: true,
-            },
         });
         if (!user) {
-            throw new common_1.NotFoundException('User not found or has been deleted');
+            throw new common_1.NotFoundException('User not found or is deactivated');
         }
         const existingCreator = await this.db.campaignCreator.findUnique({
             where: { userId },
@@ -45,61 +36,41 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
         }
         if (assetIds && assetIds.length > 0) {
             const assets = await this.db.asset.findMany({
-                where: {
-                    id: { in: assetIds },
-                    ownerId: userId,
-                },
+                where: { id: { in: assetIds }, ownerId: userId },
             });
             if (assets.length !== assetIds.length) {
-                throw new common_1.BadRequestException('Some assets not found or do not belong to this user');
+                throw new common_1.BadRequestException('Invalid assets provided');
             }
         }
         const persistenceData = this.preparePersistenceData(dto, user);
         return this.db.$transaction(async (tx) => {
             const creator = await tx.campaignCreator.create({
                 data: persistenceData,
-                include: {
-                    user: {
-                        select: {
-                            id: true,
-                            firstName: true,
-                            lastName: true,
-                            email: true,
-                            role: true,
-                            country: true,
-                            phoneNumber: true,
-                        },
-                    },
-                },
+                include: { user: true },
             });
             await tx.user.update({
                 where: { id: userId },
                 data: { role: client_1.UserRole.CAMPAIGN_CREATOR },
             });
-            if (assetIds && assetIds.length > 0) {
+            if (assetIds?.length) {
                 await tx.asset.updateMany({
                     where: { id: { in: assetIds } },
                     data: { creatorId: creator.id },
                 });
             }
-            this.logger.log(`Created ${dto.type} creator profile for user ${userId}`);
-            return {
-                message: 'Campaign creator profile created successfully',
-                creator,
-            };
+            return creator;
         });
     }
     async findAll(page = 1, limit = 10) {
         const skip = (page - 1) * limit;
+        const whereClause = {
+            user: { isDeleted: false },
+        };
         const [creators, total] = await Promise.all([
             this.db.campaignCreator.findMany({
                 skip,
                 take: limit,
-                where: {
-                    user: {
-                        isDeleted: false,
-                    },
-                },
+                where: whereClause,
                 include: {
                     user: {
                         select: {
@@ -107,114 +78,29 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
                             firstName: true,
                             lastName: true,
                             email: true,
-                            role: true,
                             country: true,
-                            phoneNumber: true,
-                            isVerified: true,
-                            verificationStatus: true,
-                        },
-                    },
-                    assets: {
-                        select: {
-                            id: true,
-                            url: true,
-                            fileType: true,
-                            kind: true,
-                            createdAt: true,
                         },
                     },
                 },
-                orderBy: {
-                    createdAt: 'desc',
-                },
+                orderBy: { createdAt: 'desc' },
             }),
-            this.db.campaignCreator.count({
-                where: {
-                    user: {
-                        isDeleted: false,
-                    },
-                },
-            }),
+            this.db.campaignCreator.count({ where: whereClause }),
         ]);
         return {
             data: creators,
-            meta: {
-                total,
-                page,
-                limit,
-                totalPages: Math.ceil(total / limit),
-            },
+            meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
         };
     }
     async findOne(id) {
         const creator = await this.db.campaignCreator.findUnique({
             where: { id },
             include: {
-                user: {
-                    select: {
-                        id: true,
-                        firstName: true,
-                        lastName: true,
-                        email: true,
-                        role: true,
-                        country: true,
-                        phoneNumber: true,
-                        dateOfBirth: true,
-                        isDeleted: true,
-                        isVerified: true,
-                        verificationStatus: true,
-                    },
-                },
-                assets: {
-                    select: {
-                        id: true,
-                        url: true,
-                        fileType: true,
-                        kind: true,
-                        createdAt: true,
-                    },
-                },
+                user: true,
+                assets: true,
             },
         });
-        if (!creator) {
-            throw new common_1.NotFoundException(`Campaign creator profile with ID "${id}" not found`);
-        }
-        if (creator.user.isDeleted) {
-            throw new common_1.NotFoundException(`Campaign creator profile with ID "${id}" has been deleted`);
-        }
-        return creator;
-    }
-    async findByUserId(userId) {
-        const creator = await this.db.campaignCreator.findUnique({
-            where: { userId },
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        firstName: true,
-                        lastName: true,
-                        email: true,
-                        role: true,
-                        country: true,
-                        phoneNumber: true,
-                        isDeleted: true,
-                    },
-                },
-                assets: {
-                    select: {
-                        id: true,
-                        url: true,
-                        fileType: true,
-                        kind: true,
-                    },
-                },
-            },
-        });
-        if (!creator) {
-            throw new common_1.NotFoundException(`Campaign creator for user "${userId}" not found`);
-        }
-        if (creator.user.isDeleted) {
-            throw new common_1.NotFoundException(`Campaign creator for user "${userId}" has been deleted`);
+        if (!creator || creator.user.isDeleted) {
+            throw new common_1.NotFoundException('Creator not found');
         }
         return creator;
     }
@@ -229,9 +115,6 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
         }
         if (dto.institutionType !== undefined) {
             updateData.institutionType = dto.institutionType;
-        }
-        if (dto.institutionDateOfEstablishment !== undefined) {
-            updateData.institutionDateOfEstablishment = new Date(dto.institutionDateOfEstablishment);
         }
         if (dto.institutionLegalStatus !== undefined) {
             updateData.institutionLegalStatus = dto.institutionLegalStatus;
@@ -263,85 +146,54 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
             updateData.institutionRepresentativeSocialMedia =
                 dto.institutionRepresentativeSocialMedia;
         }
-        const updatedCreator = await this.db.campaignCreator.update({
+        if (dto.institutionDateOfEstablishment !== undefined) {
+            updateData.institutionDateOfEstablishment = new Date(dto.institutionDateOfEstablishment);
+        }
+        return this.db.campaignCreator.update({
             where: { id },
             data: updateData,
-            include: {
-                user: {
-                    select: {
-                        id: true,
-                        firstName: true,
-                        lastName: true,
-                        email: true,
-                        role: true,
-                    },
-                },
-                assets: true,
-            },
         });
-        this.logger.log(`Updated creator profile ${id}`);
-        return {
-            message: 'Campaign creator profile updated successfully',
-            creator: updatedCreator,
-        };
     }
     async remove(id) {
         const creator = await this.findOne(id);
-        const activeCampaignsCount = await this.db.campaign.count({
+        const activeCampaigns = await this.db.campaign.count({
             where: {
                 creatorId: creator.userId,
                 isActive: true,
                 isDeleted: false,
             },
         });
-        if (activeCampaignsCount > 0) {
-            throw new common_1.ConflictException(`Cannot delete creator profile with ${activeCampaignsCount} active campaign(s). ` +
-                'Please deactivate all campaigns first.');
+        if (activeCampaigns > 0) {
+            throw new common_1.ConflictException('Cannot deactivate creator with active campaigns. Please close/finish campaigns first.');
         }
-        return this.db.$transaction(async (tx) => {
-            await tx.user.update({
-                where: { id: creator.userId },
-                data: {
-                    isDeleted: true,
-                },
-            });
-            this.logger.log(`Deleted creator profile ${id} (user ${creator.userId})`);
-            return {
-                message: 'Campaign creator profile deleted successfully',
-                deletedId: id,
-            };
+        await this.db.user.update({
+            where: { id: creator.userId },
+            data: { isDeleted: true },
         });
+        return { message: 'Creator account deactivated successfully' };
     }
     preparePersistenceData(dto, user) {
-        const filler = 'N/A';
-        const isIndividual = dto.type === 'INDIVIDUAL';
-        if (isIndividual) {
+        const FILLER = 'N/A';
+        if (dto.type === 'INDIVIDUAL') {
             return {
-                user: {
-                    connect: { id: dto.userId },
-                },
+                user: { connect: { id: dto.userId } },
                 type: 'INDIVIDUAL',
                 institutionName: `${user.firstName} ${user.lastName}`,
-                institutionCountry: user.country || filler,
+                institutionCountry: user.country || FILLER,
                 institutionType: 'Individual',
                 institutionDateOfEstablishment: new Date(),
-                institutionLegalStatus: filler,
-                institutionTaxIdentificationNumber: filler,
-                institutionRegistrationNumber: filler,
+                institutionLegalStatus: FILLER,
+                institutionTaxIdentificationNumber: FILLER,
+                institutionRegistrationNumber: FILLER,
                 institutionRepresentativeName: `${user.firstName} ${user.lastName}`,
                 institutionRepresentativePosition: 'Owner',
-                institutionRepresentativeRegistrationNumber: filler,
-                institutionWebsite: filler,
-                institutionRepresentativeSocialMedia: filler,
+                institutionRepresentativeRegistrationNumber: FILLER,
+                institutionWebsite: FILLER,
+                institutionRepresentativeSocialMedia: FILLER,
             };
         }
-        if (dto.type !== 'INSTITUTION') {
-            throw new common_1.BadRequestException('Invalid creator type');
-        }
         return {
-            user: {
-                connect: { id: dto.userId },
-            },
+            user: { connect: { id: dto.userId } },
             type: 'INSTITUTION',
             institutionName: dto.institutionName,
             institutionCountry: dto.institutionCountry,
@@ -353,8 +205,8 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
             institutionRepresentativeName: dto.institutionRepresentativeName,
             institutionRepresentativePosition: dto.institutionRepresentativePosition,
             institutionRepresentativeRegistrationNumber: dto.institutionRepresentativeRegistrationNumber,
-            institutionWebsite: dto.institutionWebsite || filler,
-            institutionRepresentativeSocialMedia: dto.institutionRepresentativeSocialMedia || filler,
+            institutionWebsite: dto.institutionWebsite || FILLER,
+            institutionRepresentativeSocialMedia: dto.institutionRepresentativeSocialMedia || FILLER,
         };
     }
 };
