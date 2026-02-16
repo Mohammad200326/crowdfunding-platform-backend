@@ -1,10 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-<<<<<<< HEAD
 exports.WithdrawalStatusUpdatedResponse = exports.UpdateWithdrawalStatusBody = exports.InsufficientBalanceResponse = exports.BadRequestResponse = exports.WithdrawalCannotCancelResponse = exports.StripeAccountExistsResponse = exports.WithdrawalNotFoundResponse = exports.StripeAccountNotFoundResponse = exports.NotFoundResponse = exports.ForbiddenResponse = exports.UnauthorizedResponse = exports.WithdrawalCancelledResponse = exports.WithdrawalDetailResponse = exports.WithdrawalListResponse = exports.WithdrawalCreatedResponse = exports.StripeAccountStatusResponse = exports.StripeOnboardingLinkResponse = exports.StripeConnectCreatedResponse = exports.BalanceResponse = exports.CreateWithdrawalBody = exports.WithdrawalIdParam = void 0;
-=======
-exports.InsufficientBalanceResponse = exports.BadRequestResponse = exports.WithdrawalCannotCancelResponse = exports.StripeAccountExistsResponse = exports.WithdrawalNotFoundResponse = exports.StripeAccountNotFoundResponse = exports.NotFoundResponse = exports.ForbiddenResponse = exports.UnauthorizedResponse = exports.WithdrawalCancelledResponse = exports.WithdrawalDetailResponse = exports.WithdrawalListResponse = exports.WithdrawalCreatedResponse = exports.StripeAccountStatusResponse = exports.StripeOnboardingLinkResponse = exports.StripeConnectCreatedResponse = exports.BalanceResponse = exports.CreateWithdrawalBody = exports.WithdrawalIdParam = void 0;
->>>>>>> develop
 exports.WithdrawalIdParam = {
     name: 'id',
     description: 'Withdrawal ID',
@@ -211,7 +207,6 @@ exports.InsufficientBalanceResponse = {
     status: 422,
     description: 'Insufficient balance for withdrawal',
 };
-<<<<<<< HEAD
 exports.UpdateWithdrawalStatusBody = {
     description: 'Update withdrawal status',
     schema: {
@@ -254,6 +249,4 @@ exports.WithdrawalStatusUpdatedResponse = {
         },
     },
 };
-=======
->>>>>>> develop
 //# sourceMappingURL=withdrawal.swagger.js.map

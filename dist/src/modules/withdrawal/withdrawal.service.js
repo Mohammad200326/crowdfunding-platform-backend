@@ -110,27 +110,6 @@ let WithdrawalService = class WithdrawalService {
             message: 'Stripe Connect account created. Please complete onboarding.',
         };
     }
-<<<<<<< HEAD
-=======
-    async getStripeOnboardingLink(userId) {
-        const user = await this.prismaService.user.findUnique({
-            where: { id: userId },
-            include: { creatorProfile: true },
-        });
-        if (!user || user.isDeleted) {
-            throw new common_1.NotFoundException('User not found');
-        }
-        const stripeAccountId = user.creatorProfile?.stripeAccountId;
-        if (!stripeAccountId) {
-            throw new common_1.BadRequestException('No Stripe Connect account found. Please create one first.');
-        }
-        const appUrl = process.env.APP_URL ?? 'http://localhost:3000';
-        const accountLink = await this.stripeService.createAccountLink(stripeAccountId, `${appUrl}/api/v1/withdrawal/stripe/onboarding-refresh`, `${appUrl}/api/v1/withdrawal/stripe/onboarding-complete`);
-        return {
-            onboardingUrl: accountLink.url,
-        };
-    }
->>>>>>> develop
     async getStripeAccountStatus(userId) {
         const user = await this.prismaService.user.findUnique({
             where: { id: userId },

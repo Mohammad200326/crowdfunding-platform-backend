@@ -10,7 +10,7 @@ export declare const UpdateCampaignCreatorSchema: z.ZodObject<{
     institutionRepresentativeName: z.ZodOptional<z.ZodString>;
     institutionRepresentativePosition: z.ZodOptional<z.ZodString>;
     institutionRepresentativeRegistrationNumber: z.ZodOptional<z.ZodString>;
-    institutionWebsite: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodLiteral<"">]>>;
+    institutionWebsite: z.ZodOptional<z.ZodString>;
     institutionRepresentativeSocialMedia: z.ZodOptional<z.ZodString>;
 }, z.core.$strict>;
 export type UpdateCampaignCreatorDto = z.infer<typeof UpdateCampaignCreatorSchema>;

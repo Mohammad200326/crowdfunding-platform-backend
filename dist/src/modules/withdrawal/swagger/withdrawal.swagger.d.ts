@@ -18,8 +18,5 @@ export declare const StripeAccountExistsResponse: ApiResponseOptions;
 export declare const WithdrawalCannotCancelResponse: ApiResponseOptions;
 export declare const BadRequestResponse: ApiResponseOptions;
 export declare const InsufficientBalanceResponse: ApiResponseOptions;
-<<<<<<< HEAD
 export declare const UpdateWithdrawalStatusBody: ApiBodyOptions;
 export declare const WithdrawalStatusUpdatedResponse: ApiResponseOptions;
-=======
->>>>>>> develop
