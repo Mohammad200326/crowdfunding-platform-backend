@@ -137,47 +137,73 @@ export class CampaignCreatorService {
   }
 
   async update(id: string, dto: UpdateCampaignCreatorDto) {
-    await this.findOne(id);
+    const creator = await this.findOne(id);
 
-    const updateData: Prisma.CampaignCreatorUpdateInput = {};
+    //  Split fields into User and CampaignCreator
+    const userUpdateData: Prisma.UserUpdateInput = {};
+    const creatorUpdateData: Prisma.CampaignCreatorUpdateInput = {};
 
+    //  User fields
+    if (dto.firstName !== undefined) userUpdateData.firstName = dto.firstName;
+    if (dto.lastName !== undefined) userUpdateData.lastName = dto.lastName;
+    if (dto.phoneNumber !== undefined)
+      userUpdateData.phoneNumber = dto.phoneNumber;
+    if (dto.country !== undefined) userUpdateData.country = dto.country;
+    if (dto.notes !== undefined) userUpdateData.notes = dto.notes;
+
+    //  CampaignCreator fields
     if (dto.institutionName !== undefined)
-      updateData.institutionName = dto.institutionName;
+      creatorUpdateData.institutionName = dto.institutionName;
     if (dto.institutionCountry !== undefined)
-      updateData.institutionCountry = dto.institutionCountry;
+      creatorUpdateData.institutionCountry = dto.institutionCountry;
     if (dto.institutionType !== undefined)
-      updateData.institutionType = dto.institutionType;
+      creatorUpdateData.institutionType = dto.institutionType;
     if (dto.institutionLegalStatus !== undefined)
-      updateData.institutionLegalStatus = dto.institutionLegalStatus;
+      creatorUpdateData.institutionLegalStatus = dto.institutionLegalStatus;
     if (dto.institutionTaxIdentificationNumber !== undefined)
-      updateData.institutionTaxIdentificationNumber =
+      creatorUpdateData.institutionTaxIdentificationNumber =
         dto.institutionTaxIdentificationNumber;
     if (dto.institutionRegistrationNumber !== undefined)
-      updateData.institutionRegistrationNumber =
+      creatorUpdateData.institutionRegistrationNumber =
         dto.institutionRegistrationNumber;
     if (dto.institutionRepresentativeName !== undefined)
-      updateData.institutionRepresentativeName =
+      creatorUpdateData.institutionRepresentativeName =
         dto.institutionRepresentativeName;
     if (dto.institutionRepresentativePosition !== undefined)
-      updateData.institutionRepresentativePosition =
+      creatorUpdateData.institutionRepresentativePosition =
         dto.institutionRepresentativePosition;
     if (dto.institutionRepresentativeRegistrationNumber !== undefined)
-      updateData.institutionRepresentativeRegistrationNumber =
+      creatorUpdateData.institutionRepresentativeRegistrationNumber =
         dto.institutionRepresentativeRegistrationNumber;
     if (dto.institutionWebsite !== undefined)
-      updateData.institutionWebsite = dto.institutionWebsite;
+      creatorUpdateData.institutionWebsite = dto.institutionWebsite;
     if (dto.institutionRepresentativeSocialMedia !== undefined)
-      updateData.institutionRepresentativeSocialMedia =
+      creatorUpdateData.institutionRepresentativeSocialMedia =
         dto.institutionRepresentativeSocialMedia;
     if (dto.institutionDateOfEstablishment !== undefined)
-      updateData.institutionDateOfEstablishment = new Date(
+      creatorUpdateData.institutionDateOfEstablishment = new Date(
         dto.institutionDateOfEstablishment,
       );
 
-    return this.db.campaignCreator.update({
-      where: { id },
-      data: updateData,
-      include: { user: true, assets: true },
+    return this.db.$transaction(async (tx) => {
+      if (Object.keys(userUpdateData).length > 0) {
+        await tx.user.update({
+          where: { id: creator.userId },
+          data: userUpdateData,
+        });
+      }
+
+      if (Object.keys(creatorUpdateData).length > 0) {
+        await tx.campaignCreator.update({
+          where: { id },
+          data: creatorUpdateData,
+        });
+      }
+
+      return tx.campaignCreator.findUnique({
+        where: { id },
+        include: { user: true, assets: true },
+      });
     });
   }
 
@@ -206,7 +232,6 @@ export class CampaignCreatorService {
     return { message: 'Creator account deactivated successfully' };
   }
 
-  // Missing fields auto-filled with N/A
   private preparePersistenceData(
     dto: CreateCampaignCreatorDto,
     user: User,
@@ -230,7 +255,6 @@ export class CampaignCreatorService {
       };
     }
 
-    // INSTITUTION: provided value OR fallback to N/A
     return {
       user: { connect: { id: dto.userId } },
       type: 'INSTITUTION',
