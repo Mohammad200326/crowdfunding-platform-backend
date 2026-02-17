@@ -17,7 +17,6 @@ export const UpdateCampaignCreatorSchema = z
     institutionRepresentativeName: z.string().min(1).optional(),
     institutionRepresentativePosition: z.string().min(1).optional(),
     institutionRepresentativeRegistrationNumber: z.string().min(1).optional(),
-
     institutionWebsite: z
       .string()
       .refine(

@@ -10,6 +10,8 @@ import { CreateCampaignCreatorDto } from './dto/create-campaign-creator.dto';
 import { UpdateCampaignCreatorDto } from './dto/update-campaign-creator.dto';
 import { UserRole, Prisma, User } from '@prisma/client';
 
+const FILLER = 'N/A';
+
 @Injectable()
 export class CampaignCreatorService {
   private readonly logger = new Logger(CampaignCreatorService.name);
@@ -30,6 +32,7 @@ export class CampaignCreatorService {
     const existingCreator = await this.db.campaignCreator.findUnique({
       where: { userId },
     });
+
     if (existingCreator) {
       throw new ConflictException(
         'Creator profile already exists for this user',
@@ -50,7 +53,7 @@ export class CampaignCreatorService {
     return this.db.$transaction(async (tx) => {
       const creator = await tx.campaignCreator.create({
         data: persistenceData,
-        include: { user: true },
+        include: { user: true, assets: true },
       });
 
       await tx.user.update({
@@ -64,6 +67,8 @@ export class CampaignCreatorService {
           data: { creatorId: creator.id },
         });
       }
+
+      this.logger.log(`Created ${dto.type} creator for user ${userId}`);
 
       return creator;
     });
@@ -89,8 +94,10 @@ export class CampaignCreatorService {
               lastName: true,
               email: true,
               country: true,
+              role: true,
             },
           },
+          assets: true,
         },
         orderBy: { createdAt: 'desc' },
       }),
@@ -106,10 +113,20 @@ export class CampaignCreatorService {
   async findOne(id: string) {
     const creator = await this.db.campaignCreator.findUnique({
       where: { id },
-      include: {
-        user: true,
-        assets: true,
-      },
+      include: { user: true, assets: true },
+    });
+
+    if (!creator || creator.user.isDeleted) {
+      throw new NotFoundException('Creator not found');
+    }
+
+    return creator;
+  }
+
+  async findByUserId(userId: string) {
+    const creator = await this.db.campaignCreator.findUnique({
+      where: { userId },
+      include: { user: true, assets: true },
     });
 
     if (!creator || creator.user.isDeleted) {
@@ -124,54 +141,43 @@ export class CampaignCreatorService {
 
     const updateData: Prisma.CampaignCreatorUpdateInput = {};
 
-    if (dto.institutionName !== undefined) {
+    if (dto.institutionName !== undefined)
       updateData.institutionName = dto.institutionName;
-    }
-    if (dto.institutionCountry !== undefined) {
+    if (dto.institutionCountry !== undefined)
       updateData.institutionCountry = dto.institutionCountry;
-    }
-    if (dto.institutionType !== undefined) {
+    if (dto.institutionType !== undefined)
       updateData.institutionType = dto.institutionType;
-    }
-    if (dto.institutionLegalStatus !== undefined) {
+    if (dto.institutionLegalStatus !== undefined)
       updateData.institutionLegalStatus = dto.institutionLegalStatus;
-    }
-    if (dto.institutionTaxIdentificationNumber !== undefined) {
+    if (dto.institutionTaxIdentificationNumber !== undefined)
       updateData.institutionTaxIdentificationNumber =
         dto.institutionTaxIdentificationNumber;
-    }
-    if (dto.institutionRegistrationNumber !== undefined) {
+    if (dto.institutionRegistrationNumber !== undefined)
       updateData.institutionRegistrationNumber =
         dto.institutionRegistrationNumber;
-    }
-    if (dto.institutionRepresentativeName !== undefined) {
+    if (dto.institutionRepresentativeName !== undefined)
       updateData.institutionRepresentativeName =
         dto.institutionRepresentativeName;
-    }
-    if (dto.institutionRepresentativePosition !== undefined) {
+    if (dto.institutionRepresentativePosition !== undefined)
       updateData.institutionRepresentativePosition =
         dto.institutionRepresentativePosition;
-    }
-    if (dto.institutionRepresentativeRegistrationNumber !== undefined) {
+    if (dto.institutionRepresentativeRegistrationNumber !== undefined)
       updateData.institutionRepresentativeRegistrationNumber =
         dto.institutionRepresentativeRegistrationNumber;
-    }
-    if (dto.institutionWebsite !== undefined) {
+    if (dto.institutionWebsite !== undefined)
       updateData.institutionWebsite = dto.institutionWebsite;
-    }
-    if (dto.institutionRepresentativeSocialMedia !== undefined) {
+    if (dto.institutionRepresentativeSocialMedia !== undefined)
       updateData.institutionRepresentativeSocialMedia =
         dto.institutionRepresentativeSocialMedia;
-    }
-    if (dto.institutionDateOfEstablishment !== undefined) {
+    if (dto.institutionDateOfEstablishment !== undefined)
       updateData.institutionDateOfEstablishment = new Date(
         dto.institutionDateOfEstablishment,
       );
-    }
 
     return this.db.campaignCreator.update({
       where: { id },
       data: updateData,
+      include: { user: true, assets: true },
     });
   }
 
@@ -188,7 +194,7 @@ export class CampaignCreatorService {
 
     if (activeCampaigns > 0) {
       throw new ConflictException(
-        'Cannot deactivate creator with active campaigns. Please close/finish campaigns first.',
+        'Cannot deactivate creator with active campaigns. Please close them first.',
       );
     }
 
@@ -200,12 +206,11 @@ export class CampaignCreatorService {
     return { message: 'Creator account deactivated successfully' };
   }
 
+  // Missing fields auto-filled with N/A
   private preparePersistenceData(
     dto: CreateCampaignCreatorDto,
     user: User,
   ): Prisma.CampaignCreatorCreateInput {
-    const FILLER = 'N/A';
-
     if (dto.type === 'INDIVIDUAL') {
       return {
         user: { connect: { id: dto.userId } },
@@ -225,21 +230,26 @@ export class CampaignCreatorService {
       };
     }
 
+    // INSTITUTION: provided value OR fallback to N/A
     return {
       user: { connect: { id: dto.userId } },
       type: 'INSTITUTION',
-      institutionName: dto.institutionName,
-      institutionCountry: dto.institutionCountry,
-      institutionType: dto.institutionType,
-      institutionDateOfEstablishment: dto.institutionDateOfEstablishment,
-      institutionLegalStatus: dto.institutionLegalStatus,
+      institutionName: dto.institutionName || FILLER,
+      institutionCountry: dto.institutionCountry || FILLER,
+      institutionType: dto.institutionType || FILLER,
+      institutionDateOfEstablishment:
+        dto.institutionDateOfEstablishment || new Date(),
+      institutionLegalStatus: dto.institutionLegalStatus || FILLER,
       institutionTaxIdentificationNumber:
-        dto.institutionTaxIdentificationNumber,
-      institutionRegistrationNumber: dto.institutionRegistrationNumber,
-      institutionRepresentativeName: dto.institutionRepresentativeName,
-      institutionRepresentativePosition: dto.institutionRepresentativePosition,
+        dto.institutionTaxIdentificationNumber || FILLER,
+      institutionRegistrationNumber:
+        dto.institutionRegistrationNumber || FILLER,
+      institutionRepresentativeName:
+        dto.institutionRepresentativeName || FILLER,
+      institutionRepresentativePosition:
+        dto.institutionRepresentativePosition || FILLER,
       institutionRepresentativeRegistrationNumber:
-        dto.institutionRepresentativeRegistrationNumber,
+        dto.institutionRepresentativeRegistrationNumber || FILLER,
       institutionWebsite: dto.institutionWebsite || FILLER,
       institutionRepresentativeSocialMedia:
         dto.institutionRepresentativeSocialMedia || FILLER,
