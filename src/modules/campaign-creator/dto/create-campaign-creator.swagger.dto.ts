@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 //  Base
-
 class BaseCreatorDto {
   @ApiProperty({
     example: '550e8400-e29b-41d4-a716-446655440000',
@@ -19,7 +18,6 @@ class BaseCreatorDto {
 }
 
 //  Create
-
 export class CreateIndividualCreatorDto extends BaseCreatorDto {
   @ApiProperty({
     example: 'INDIVIDUAL',
@@ -39,96 +37,86 @@ export class CreateInstitutionCreatorDto extends BaseCreatorDto {
   })
   type!: 'INSTITUTION';
 
-  @ApiProperty({
-    example: 'Palestine Hope Foundation',
-    description: 'Official name of the institution',
-    required: false,
-  })
+  @ApiProperty({ example: 'Palestine Hope Foundation', required: false })
   institutionName?: string;
 
-  @ApiProperty({
-    example: 'Palestine',
-    description: 'Country where the institution is located',
-    required: false,
-  })
+  @ApiProperty({ example: 'Palestine', required: false })
   institutionCountry?: string;
 
-  @ApiProperty({
-    example: 'Non-Profit Organization',
-    description: 'Type of institution (NGO, Charity, Foundation, etc.)',
-    required: false,
-  })
+  @ApiProperty({ example: 'Non-Profit Organization', required: false })
   institutionType?: string;
 
-  @ApiProperty({
-    example: '2020-01-15',
-    format: 'date',
-    description: 'Institution establishment date (YYYY-MM-DD)',
-    required: false,
-  })
+  @ApiProperty({ example: '2020-01-15', format: 'date', required: false })
   institutionDateOfEstablishment?: string;
 
-  @ApiProperty({
-    example: 'Registered NGO',
-    description: 'Legal status of the institution',
-    required: false,
-  })
+  @ApiProperty({ example: 'Registered NGO', required: false })
   institutionLegalStatus?: string;
 
-  @ApiProperty({
-    example: 'TAX-PS-123456',
-    description: 'Tax identification number',
-    required: false,
-  })
+  @ApiProperty({ example: 'TAX-PS-123456', required: false })
   institutionTaxIdentificationNumber?: string;
 
-  @ApiProperty({
-    example: 'REG-NGO-789012',
-    description: 'Official registration number',
-    required: false,
-  })
+  @ApiProperty({ example: 'REG-NGO-789012', required: false })
   institutionRegistrationNumber?: string;
 
-  @ApiProperty({
-    example: 'Ahmad Hassan',
-    description: 'Full name of the institution representative',
-    required: false,
-  })
+  @ApiProperty({ example: 'Ahmad Hassan', required: false })
   institutionRepresentativeName?: string;
 
-  @ApiProperty({
-    example: 'Executive Director',
-    description: 'Position/title of the representative',
-    required: false,
-  })
+  @ApiProperty({ example: 'Executive Director', required: false })
   institutionRepresentativePosition?: string;
 
-  @ApiProperty({
-    example: 'ID-555-2020',
-    description: "Representative's official ID or registration number",
-    required: false,
-  })
+  @ApiProperty({ example: 'ID-555-2020', required: false })
   institutionRepresentativeRegistrationNumber?: string;
 
   @ApiProperty({
     example: 'https://www.palestinehope.org',
     format: 'uri',
-    description: 'Institution website URL (optional, can be empty)',
     required: false,
   })
   institutionWebsite?: string;
 
-  @ApiProperty({
-    example: '@ahmadhassan',
-    description: "Representative's social media handle",
-    required: false,
-  })
+  @ApiProperty({ example: '@ahmadhassan', required: false })
   institutionRepresentativeSocialMedia?: string;
 }
 
 //  Update
-
 export class UpdateCampaignCreatorSwaggerDto {
+  //  User Fields
+  @ApiProperty({
+    example: 'Ahmad',
+    description: 'First name',
+    required: false,
+  })
+  firstName?: string;
+
+  @ApiProperty({
+    example: 'Hassan',
+    description: 'Last name',
+    required: false,
+  })
+  lastName?: string;
+
+  @ApiProperty({
+    example: '+970591234567',
+    description: 'Phone number',
+    required: false,
+  })
+  phoneNumber?: string;
+
+  @ApiProperty({
+    example: 'Palestine',
+    description: 'Country',
+    required: false,
+  })
+  country?: string;
+
+  @ApiProperty({
+    example: 'Some notes about the creator',
+    description: 'Additional notes',
+    required: false,
+  })
+  notes?: string;
+
+  //  Institution Fields
   @ApiProperty({
     example: 'Palestine Hope Foundation Updated',
     description: 'Institution name',
@@ -138,7 +126,7 @@ export class UpdateCampaignCreatorSwaggerDto {
 
   @ApiProperty({
     example: 'Palestine',
-    description: 'Country',
+    description: 'Institution country',
     required: false,
   })
   institutionCountry?: string;
@@ -157,46 +145,22 @@ export class UpdateCampaignCreatorSwaggerDto {
   })
   institutionDateOfEstablishment?: string;
 
-  @ApiProperty({
-    example: 'Registered NGO',
-    description: 'Legal status',
-    required: false,
-  })
+  @ApiProperty({ example: 'Registered NGO', required: false })
   institutionLegalStatus?: string;
 
-  @ApiProperty({
-    example: 'TAX-PS-123456',
-    description: 'Tax identification number',
-    required: false,
-  })
+  @ApiProperty({ example: 'TAX-PS-123456', required: false })
   institutionTaxIdentificationNumber?: string;
 
-  @ApiProperty({
-    example: 'REG-NGO-789012',
-    description: 'Registration number',
-    required: false,
-  })
+  @ApiProperty({ example: 'REG-NGO-789012', required: false })
   institutionRegistrationNumber?: string;
 
-  @ApiProperty({
-    example: 'Ahmad Hassan',
-    description: 'Representative name',
-    required: false,
-  })
+  @ApiProperty({ example: 'Ahmad Hassan', required: false })
   institutionRepresentativeName?: string;
 
-  @ApiProperty({
-    example: 'Executive Director',
-    description: 'Representative position',
-    required: false,
-  })
+  @ApiProperty({ example: 'Executive Director', required: false })
   institutionRepresentativePosition?: string;
 
-  @ApiProperty({
-    example: 'ID-555-2020',
-    description: 'Representative registration number',
-    required: false,
-  })
+  @ApiProperty({ example: 'ID-555-2020', required: false })
   institutionRepresentativeRegistrationNumber?: string;
 
   @ApiProperty({
@@ -206,16 +170,11 @@ export class UpdateCampaignCreatorSwaggerDto {
   })
   institutionWebsite?: string;
 
-  @ApiProperty({
-    example: '@ahmadhassan',
-    description: 'Social media handle',
-    required: false,
-  })
+  @ApiProperty({ example: '@ahmadhassan', required: false })
   institutionRepresentativeSocialMedia?: string;
 }
 
 //  Response
-
 export class CampaignCreatorResponseDto {
   @ApiProperty({ example: '44ed15dc-60b4-4342-b3d6-093818563446' })
   id!: string;

@@ -2,6 +2,12 @@ import { z } from 'zod';
 
 export const UpdateCampaignCreatorSchema = z
   .object({
+    firstName: z.string().min(1).optional(),
+    lastName: z.string().min(1).optional(),
+    phoneNumber: z.string().min(7).optional(),
+    country: z.string().min(2).optional(),
+    notes: z.string().optional(),
+
     institutionName: z.string().min(2).optional(),
     institutionCountry: z.string().min(2).optional(),
     institutionType: z.string().min(2).optional(),
