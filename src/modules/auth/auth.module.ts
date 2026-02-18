@@ -12,6 +12,7 @@ import { EnvVariables } from 'src/types/declartion-mergin';
 import { ConfigService } from '@nestjs/config';
 import { FileModule } from '../file/file.module';
 import { EmailService } from './email.service';
+import { CampaignCreatorModule } from '../campaign-creator/campaign-creator.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { EmailService } from './email.service';
       inject: [ConfigService],
     }),
     FileModule,
+    CampaignCreatorModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, PasswordResetService, OtpService, EmailService],

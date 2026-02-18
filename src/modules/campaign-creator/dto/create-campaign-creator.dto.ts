@@ -1,12 +1,22 @@
 import { z } from 'zod';
 
+export const InstitutionDocumentsSchema = z
+  .object({
+    registrationCertificateId: z.string().uuid().optional(),
+    commercialLicenseId: z.string().uuid().optional(),
+    representativeIdPhotoId: z.string().uuid().optional(),
+    commissionerImageId: z.string().uuid().optional(),
+    authorizationLetterId: z.string().uuid().optional(),
+  })
+  .optional();
+
 const BaseSchema = z.object({
   userId: z.string().uuid({ message: 'Invalid User ID' }),
   assetIds: z.array(z.string().uuid()).optional(),
 });
 
 // All institution fields are optional
-const InstitutionProfileSchema = z.object({
+export const InstitutionProfileSchema = z.object({
   institutionName: z.string().min(2).optional(),
   institutionCountry: z.string().min(2).optional(),
   institutionType: z.string().min(2).optional(),
@@ -43,6 +53,8 @@ export const CreateCampaignCreatorSchema = z.discriminatedUnion('type', [
   BaseSchema.extend({
     type: z.literal('INSTITUTION'),
     ...InstitutionProfileSchema.shape,
+
+    institutionDocuments: InstitutionDocumentsSchema,
   }),
 ]);
 

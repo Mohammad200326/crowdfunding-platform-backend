@@ -272,18 +272,18 @@ model CampaignCreator {
   id                                          String      @id @default(uuid()) @db.Char(36)
   type                                        CreatorType
   userId                                      String      @unique @map("user_id") @db.Char(36)
-  institutionName                             String      @map("institution_name") @db.Text
-  institutionType                             String      @map("institution_type") @db.Text
-  institutionCountry                          String      @map("institution_country") @db.Text
-  institutionDateOfEstablishment              DateTime    @map("institution_date_of_establishment") @db.Date
-  institutionLegalStatus                      String      @map("institution_legal_status") @db.Text
-  institutionTaxIdentificationNumber          String      @map("institution_tax_identification_number") @db.Text
-  institutionRegistrationNumber               String      @map("institution_registration_number") @db.Text
-  institutionRepresentativeName               String      @map("institution_representative_name") @db.Text
-  institutionRepresentativePosition           String      @map("institution_representative_position") @db.Text
-  institutionRepresentativeRegistrationNumber String      @map("institution_representative_registration_number") @db.Text
-  institutionWebsite                          String      @map("institution_website") @db.Text
-  institutionRepresentativeSocialMedia        String      @map("institution_representative_social_media") @db.Text
+  institutionName                             String?      @map("institution_name") @db.Text
+  institutionType                             String?      @map("institution_type") @db.Text
+  institutionCountry                          String?      @map("institution_country") @db.Text
+  institutionDateOfEstablishment              DateTime?    @map("institution_date_of_establishment") @db.Date
+  institutionLegalStatus                      String?      @map("institution_legal_status") @db.Text
+  institutionTaxIdentificationNumber          String?      @map("institution_tax_identification_number") @db.Text
+  institutionRegistrationNumber               String?      @map("institution_registration_number") @db.Text
+  institutionRepresentativeName               String?      @map("institution_representative_name") @db.Text
+  institutionRepresentativePosition           String?      @map("institution_representative_position") @db.Text
+  institutionRepresentativeRegistrationNumber String?      @map("institution_representative_registration_number") @db.Text
+  institutionWebsite                          String?      @map("institution_website") @db.Text
+  institutionRepresentativeSocialMedia        String?      @map("institution_representative_social_media") @db.Text
   createdAt                                   DateTime    @default(now()) @map("created_at")
 updatedAt DateTime @updatedAt @map("updated_at")
   user                                        User        @relation(fields: [userId], references: [id])

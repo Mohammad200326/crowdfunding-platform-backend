@@ -7,5 +7,6 @@ import { FileModule } from '../file/file.module';
   imports: [FileModule],
   controllers: [CampaignCreatorController],
   providers: [CampaignCreatorService],
+  exports: [CampaignCreatorService],
 })
 export class CampaignCreatorModule {}

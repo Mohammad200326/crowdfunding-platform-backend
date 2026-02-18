@@ -4,6 +4,11 @@ exports.UpdateCampaignCreatorSchema = void 0;
 const zod_1 = require("zod");
 exports.UpdateCampaignCreatorSchema = zod_1.z
     .object({
+    firstName: zod_1.z.string().min(1).optional(),
+    lastName: zod_1.z.string().min(1).optional(),
+    phoneNumber: zod_1.z.string().min(7).optional(),
+    country: zod_1.z.string().min(2).optional(),
+    notes: zod_1.z.string().optional(),
     institutionName: zod_1.z.string().min(2).optional(),
     institutionCountry: zod_1.z.string().min(2).optional(),
     institutionType: zod_1.z.string().min(2).optional(),

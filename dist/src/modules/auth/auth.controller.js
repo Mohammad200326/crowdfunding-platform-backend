@@ -24,6 +24,7 @@ const swagger_1 = require("@nestjs/swagger");
 const auth_swagger_dto_1 = require("./dto/auth.swagger.dto");
 const public_decorator_1 = require("../../utils/decorators/public.decorator");
 const register_campaign_creator_schema_1 = require("./dto/register-campaign-creator.schema");
+const platform_express_1 = require("@nestjs/platform-express");
 let AuthController = class AuthController {
     authService;
     passwordResetService;
@@ -34,8 +35,8 @@ let AuthController = class AuthController {
     async registerDonor(registerDonorDto) {
         return await this.authService.registerDonor(registerDonorDto);
     }
-    async newRegisterCampaignCreator(dto) {
-        return await this.authService.registerCampaignCreator(dto);
+    registerCampaignCreator(dto, files) {
+        return this.authService.registerCampaignCreatorForm(dto, files);
     }
     async login(dto) {
         return this.authService.login(dto);
@@ -65,17 +66,28 @@ __decorate([
 __decorate([
     (0, common_1.Post)('register/campaign-creator'),
     (0, public_decorator_1.IsPublic)(true),
-    (0, swagger_1.ApiOperation)({ summary: 'Register a new campaign creator' }),
-    (0, swagger_1.ApiBody)({ type: auth_swagger_dto_1.RegisterCampaignCreatorDto }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Register a new campaign creator (with optional institution documents)',
+    }),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBody)({ type: auth_swagger_dto_1.RegisterCampaignCreatorFormDto }),
     (0, swagger_1.ApiCreatedResponse)({
         description: 'Campaign creator registered successfully',
         type: auth_swagger_dto_1.RegisterCampaignCreatorResponseDto,
     }),
-    __param(0, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(register_campaign_creator_schema_1.RegisterCampaignCreatorSchema))),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([
+        { name: 'registrationCertificate', maxCount: 1 },
+        { name: 'commercialLicense', maxCount: 1 },
+        { name: 'representativeIdPhoto', maxCount: 1 },
+        { name: 'commissionerImage', maxCount: 1 },
+        { name: 'authorizationLetter', maxCount: 1 },
+    ])),
+    __param(0, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(register_campaign_creator_schema_1.RegisterCampaignCreatorFormSchema))),
+    __param(1, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "newRegisterCampaignCreator", null);
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "registerCampaignCreator", null);
 __decorate([
     (0, common_1.Post)('login'),
     (0, public_decorator_1.IsPublic)(true),

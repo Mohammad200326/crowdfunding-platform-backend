@@ -82,47 +82,49 @@ export declare class LoginResponseDto {
     token: string;
 }
 export declare class CampaignCreatorProfileDto {
-    institutionName: string;
-    institutionType: string;
-    institutionCountry: string;
-    institutionDateOfEstablishment: string;
-    institutionLegalStatus: string;
-    institutionTaxIdentificationNumber: string;
-    institutionRegistrationNumber: string;
-    institutionRepresentativeName: string;
-    institutionRepresentativePosition: string;
-    institutionRepresentativeRegistrationNumber: string;
-    institutionWebsite: string;
-    institutionRepresentativeSocialMedia: string;
+    institutionName?: string | null;
+    institutionType?: string | null;
+    institutionCountry?: string | null;
+    institutionDateOfEstablishment?: string | null;
+    institutionLegalStatus?: string | null;
+    institutionTaxIdentificationNumber?: string | null;
+    institutionRegistrationNumber?: string | null;
+    institutionRepresentativeName?: string | null;
+    institutionRepresentativePosition?: string | null;
+    institutionRepresentativeRegistrationNumber?: string | null;
+    institutionWebsite?: string | null;
+    institutionRepresentativeSocialMedia?: string | null;
 }
 export declare class RegisterCampaignCreatorDto {
     firstName: string;
     lastName: string;
     email: string;
     password: string;
-    phoneNumber: string;
-    country: string;
+    phoneNumber?: string | null;
+    country?: string | null;
     notes?: string | null;
-    dateOfBirth?: string;
+    dateOfBirth?: string | null;
     type: CreatorType;
+    assetIds?: string[];
+    institutionDocuments?: InstitutionDocumentsDto | null;
     creatorProfile?: CampaignCreatorProfileDto | null;
 }
 export declare class CampaignCreatorProfileResponseDto {
     id: string;
     type: CreatorType;
     userId: string;
-    institutionName: string;
-    institutionType: string;
-    institutionCountry: string;
-    institutionDateOfEstablishment: string;
-    institutionLegalStatus: string;
-    institutionTaxIdentificationNumber: string;
-    institutionRegistrationNumber: string;
-    institutionRepresentativeName: string;
-    institutionRepresentativePosition: string;
-    institutionRepresentativeRegistrationNumber: string;
-    institutionWebsite: string;
-    institutionRepresentativeSocialMedia: string;
+    institutionName?: string | null;
+    institutionType?: string | null;
+    institutionCountry?: string | null;
+    institutionDateOfEstablishment?: string | null;
+    institutionLegalStatus?: string | null;
+    institutionTaxIdentificationNumber?: string | null;
+    institutionRegistrationNumber?: string | null;
+    institutionRepresentativeName?: string | null;
+    institutionRepresentativePosition?: string | null;
+    institutionRepresentativeRegistrationNumber?: string | null;
+    institutionWebsite?: string | null;
+    institutionRepresentativeSocialMedia?: string | null;
     createdAt: string;
     updatedAt: string;
 }
@@ -147,4 +149,39 @@ export declare class CampaignCreatorUserDataResponseDto {
 export declare class RegisterCampaignCreatorResponseDto {
     token: string;
     userData: CampaignCreatorUserDataResponseDto;
+}
+export declare class InstitutionDocumentsDto {
+    registrationCertificateId?: string;
+    commercialLicenseId?: string;
+    representativeIdPhotoId?: string;
+    commissionerImageId?: string;
+    authorizationLetterId?: string;
+}
+export declare class RegisterCampaignCreatorFormDto {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    phoneNumber?: string;
+    country?: string;
+    notes?: string;
+    dateOfBirth?: string;
+    type: CreatorType;
+    institutionName?: string;
+    institutionType?: string;
+    institutionCountry?: string;
+    institutionDateOfEstablishment?: string;
+    institutionLegalStatus?: string;
+    institutionTaxIdentificationNumber?: string;
+    institutionRegistrationNumber?: string;
+    institutionRepresentativeName?: string;
+    institutionRepresentativePosition?: string;
+    institutionRepresentativeRegistrationNumber?: string;
+    institutionWebsite?: string;
+    institutionRepresentativeSocialMedia?: string;
+    registrationCertificate?: any;
+    commercialLicense?: any;
+    representativeIdPhoto?: any;
+    commissionerImage?: any;
+    authorizationLetter?: any;
 }
