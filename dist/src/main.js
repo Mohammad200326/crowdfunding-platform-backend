@@ -37,9 +37,18 @@ const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const swagger_1 = require("@nestjs/swagger");
 const express = __importStar(require("express"));
+const common_1 = require("@nestjs/common");
 async function bootstrap() {
     console.log('CURRENT DB URL:', process.env.DATABASE_URL);
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+<<<<<<< HEAD
+=======
+    app.useGlobalPipes(new common_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        transformOptions: { enableImplicitConversion: true },
+    }));
+>>>>>>> develop
     app.enableCors();
     app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }));
     app.use(express.json());

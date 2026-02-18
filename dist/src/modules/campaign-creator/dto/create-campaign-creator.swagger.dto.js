@@ -9,12 +9,42 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateCampaignCreatorRequestDto = exports.CreateCreatorResponseWrapper = exports.CampaignCreatorResponseDto = exports.CreateCampaignCreatorRequestDto = void 0;
+exports.CampaignCreatorResponseDto = exports.UpdateCampaignCreatorSwaggerDto = exports.CreateInstitutionCreatorDto = exports.CreateIndividualCreatorDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
-class CreateCampaignCreatorRequestDto {
+class BaseCreatorDto {
     userId;
-    type;
     assetIds;
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '550e8400-e29b-41d4-a716-446655440000',
+        description: 'User ID (must exist in the system)',
+    }),
+    __metadata("design:type", String)
+], BaseCreatorDto.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: ['a1b2c3d4-e5f6-7890-abcd-ef1234567890'],
+        description: 'Optional uploaded asset/document IDs to link to this creator',
+        required: false,
+        type: [String],
+    }),
+    __metadata("design:type", Array)
+], BaseCreatorDto.prototype, "assetIds", void 0);
+class CreateIndividualCreatorDto extends BaseCreatorDto {
+    type;
+}
+exports.CreateIndividualCreatorDto = CreateIndividualCreatorDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'INDIVIDUAL',
+        enum: ['INDIVIDUAL'],
+        description: 'Creator type. For INDIVIDUAL, all institution fields are auto-filled from user data.',
+    }),
+    __metadata("design:type", String)
+], CreateIndividualCreatorDto.prototype, "type", void 0);
+class CreateInstitutionCreatorDto extends BaseCreatorDto {
+    type;
     institutionName;
     institutionCountry;
     institutionType;
@@ -28,192 +58,195 @@ class CreateCampaignCreatorRequestDto {
     institutionWebsite;
     institutionRepresentativeSocialMedia;
 }
-exports.CreateCampaignCreatorRequestDto = CreateCampaignCreatorRequestDto;
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '550e8400-e29b-41d4-a716-446655440000',
-        description: 'Existing User ID',
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "userId", void 0);
+exports.CreateInstitutionCreatorDto = CreateInstitutionCreatorDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
         example: 'INSTITUTION',
-        enum: ['INDIVIDUAL', 'INSTITUTION'],
-        description: 'Type of creator: INDIVIDUAL or INSTITUTION',
+        enum: ['INSTITUTION'],
+        description: 'Creator type. For INSTITUTION, provide institution details below. All fields are optional - missing fields will be filled with N/A.',
     }),
     __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "type", void 0);
+], CreateInstitutionCreatorDto.prototype, "type", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        example: ['asset-uuid-1', 'asset-uuid-2'],
-        description: 'Array of asset IDs (uploaded documents like licenses, ID photos, certificates)',
-        required: false,
-        type: [String],
-    }),
-    __metadata("design:type", Array)
-], CreateCampaignCreatorRequestDto.prototype, "assetIds", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'Hope Foundation',
-        description: 'Name of the institution (required for INSTITUTION type)',
-        required: false,
-    }),
+    (0, swagger_1.ApiProperty)({ example: 'Palestine Hope Foundation', required: false }),
     __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'Palestine',
-        description: 'Country where institution is located (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionCountry", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'Non-Profit Organization',
-        description: 'Type of institution (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionType", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '2020-01-15',
-        format: 'date',
-        description: 'Date when institution was established (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionDateOfEstablishment", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'Registered NGO',
-        description: 'Legal status of institution (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionLegalStatus", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'TAX-123456',
-        description: 'Tax identification number (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionTaxIdentificationNumber", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'REG-789012',
-        description: 'Registration number (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionRegistrationNumber", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'John Doe',
-        description: 'Name of institutional representative (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionRepresentativeName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'Director',
-        description: 'Position of representative (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionRepresentativePosition", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'ID-555',
-        description: 'Registration number of representative (required for INSTITUTION type)',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionRepresentativeRegistrationNumber", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: 'https://www.example.org',
-        description: 'Official institution website',
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionWebsite", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        example: '@johndoe',
-        description: "Representative's social media handle",
-        required: false,
-    }),
-    __metadata("design:type", String)
-], CreateCampaignCreatorRequestDto.prototype, "institutionRepresentativeSocialMedia", void 0);
-class UserInfo {
-    id;
-    firstName;
-    lastName;
-    email;
-    role;
-    country;
-    phoneNumber;
-}
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'user-uuid-123' }),
-    __metadata("design:type", String)
-], UserInfo.prototype, "id", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'John' }),
-    __metadata("design:type", String)
-], UserInfo.prototype, "firstName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Doe' }),
-    __metadata("design:type", String)
-], UserInfo.prototype, "lastName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'john@example.com' }),
-    __metadata("design:type", String)
-], UserInfo.prototype, "email", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'CAMPAIGN_CREATOR' }),
-    __metadata("design:type", String)
-], UserInfo.prototype, "role", void 0);
+], CreateInstitutionCreatorDto.prototype, "institutionName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 'Palestine', required: false }),
     __metadata("design:type", String)
-], UserInfo.prototype, "country", void 0);
+], CreateInstitutionCreatorDto.prototype, "institutionCountry", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '+970123456789', required: false }),
+    (0, swagger_1.ApiProperty)({ example: 'Non-Profit Organization', required: false }),
     __metadata("design:type", String)
-], UserInfo.prototype, "phoneNumber", void 0);
-class AssetInfo {
-    id;
-    url;
-    fileType;
-    kind;
-    createdAt;
+], CreateInstitutionCreatorDto.prototype, "institutionType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '2020-01-15', format: 'date', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionDateOfEstablishment", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Registered NGO', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionLegalStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'TAX-PS-123456', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionTaxIdentificationNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'REG-NGO-789012', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionRegistrationNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Ahmad Hassan', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionRepresentativeName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Executive Director', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionRepresentativePosition", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'ID-555-2020', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionRepresentativeRegistrationNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'https://www.palestinehope.org',
+        format: 'uri',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionWebsite", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '@ahmadhassan', required: false }),
+    __metadata("design:type", String)
+], CreateInstitutionCreatorDto.prototype, "institutionRepresentativeSocialMedia", void 0);
+class UpdateCampaignCreatorSwaggerDto {
+    firstName;
+    lastName;
+    phoneNumber;
+    country;
+    notes;
+    institutionName;
+    institutionCountry;
+    institutionType;
+    institutionDateOfEstablishment;
+    institutionLegalStatus;
+    institutionTaxIdentificationNumber;
+    institutionRegistrationNumber;
+    institutionRepresentativeName;
+    institutionRepresentativePosition;
+    institutionRepresentativeRegistrationNumber;
+    institutionWebsite;
+    institutionRepresentativeSocialMedia;
 }
+exports.UpdateCampaignCreatorSwaggerDto = UpdateCampaignCreatorSwaggerDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'asset-uuid-1' }),
+    (0, swagger_1.ApiProperty)({
+        example: 'Ahmad',
+        description: 'First name',
+        required: false,
+    }),
     __metadata("design:type", String)
-], AssetInfo.prototype, "id", void 0);
+], UpdateCampaignCreatorSwaggerDto.prototype, "firstName", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'https://example.com/license.pdf' }),
+    (0, swagger_1.ApiProperty)({
+        example: 'Hassan',
+        description: 'Last name',
+        required: false,
+    }),
     __metadata("design:type", String)
-], AssetInfo.prototype, "url", void 0);
+], UpdateCampaignCreatorSwaggerDto.prototype, "lastName", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'application/pdf' }),
+    (0, swagger_1.ApiProperty)({
+        example: '+970591234567',
+        description: 'Phone number',
+        required: false,
+    }),
     __metadata("design:type", String)
-], AssetInfo.prototype, "fileType", void 0);
+], UpdateCampaignCreatorSwaggerDto.prototype, "phoneNumber", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'INSTITUTION_COMMERCIAL_LICENSE' }),
+    (0, swagger_1.ApiProperty)({
+        example: 'Palestine',
+        description: 'Country',
+        required: false,
+    }),
     __metadata("design:type", String)
-], AssetInfo.prototype, "kind", void 0);
+], UpdateCampaignCreatorSwaggerDto.prototype, "country", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '2025-01-30T10:00:00.000Z' }),
-    __metadata("design:type", Date)
-], AssetInfo.prototype, "createdAt", void 0);
+    (0, swagger_1.ApiProperty)({
+        example: 'Some notes about the creator',
+        description: 'Additional notes',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "notes", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'Palestine Hope Foundation Updated',
+        description: 'Institution name',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'Palestine',
+        description: 'Institution country',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionCountry", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'Non-Profit Organization',
+        description: 'Institution type',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionType", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: '2020-01-15',
+        description: 'Date of establishment (YYYY-MM-DD)',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionDateOfEstablishment", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Registered NGO', required: false }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionLegalStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'TAX-PS-123456', required: false }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionTaxIdentificationNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'REG-NGO-789012', required: false }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionRegistrationNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Ahmad Hassan', required: false }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionRepresentativeName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Executive Director', required: false }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionRepresentativePosition", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'ID-555-2020', required: false }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionRepresentativeRegistrationNumber", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        example: 'https://www.palestinehope.org',
+        description: 'Website URL or empty string to clear',
+        required: false,
+    }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionWebsite", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: '@ahmadhassan', required: false }),
+    __metadata("design:type", String)
+], UpdateCampaignCreatorSwaggerDto.prototype, "institutionRepresentativeSocialMedia", void 0);
 class CampaignCreatorResponseDto {
     id;
     userId;
@@ -232,24 +265,22 @@ class CampaignCreatorResponseDto {
     institutionRepresentativeSocialMedia;
     createdAt;
     updatedAt;
-    user;
-    assets;
 }
 exports.CampaignCreatorResponseDto = CampaignCreatorResponseDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'creator-uuid-123' }),
+    (0, swagger_1.ApiProperty)({ example: '44ed15dc-60b4-4342-b3d6-093818563446' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "id", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'user-uuid-123' }),
+    (0, swagger_1.ApiProperty)({ example: '1970c273-360d-4080-86fb-29eb8bf66c9b' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "userId", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'INSTITUTION', enum: ['INDIVIDUAL', 'INSTITUTION'] }),
+    (0, swagger_1.ApiProperty)({ enum: ['INDIVIDUAL', 'INSTITUTION'], example: 'INSTITUTION' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "type", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Hope Foundation' }),
+    (0, swagger_1.ApiProperty)({ example: 'Palestine Hope Foundation' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionName", void 0);
 __decorate([
@@ -269,129 +300,39 @@ __decorate([
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionLegalStatus", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'TAX-123456' }),
+    (0, swagger_1.ApiProperty)({ example: 'TAX-PS-123456' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionTaxIdentificationNumber", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'REG-789012' }),
+    (0, swagger_1.ApiProperty)({ example: 'REG-NGO-789012' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionRegistrationNumber", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'John Doe' }),
+    (0, swagger_1.ApiProperty)({ example: 'Ahmad Hassan' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionRepresentativeName", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Director' }),
+    (0, swagger_1.ApiProperty)({ example: 'Executive Director' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionRepresentativePosition", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'ID-555' }),
+    (0, swagger_1.ApiProperty)({ example: 'ID-555-2020' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionRepresentativeRegistrationNumber", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'https://www.example.org' }),
+    (0, swagger_1.ApiProperty)({ example: 'https://www.palestinehope.org' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionWebsite", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '@johndoe' }),
+    (0, swagger_1.ApiProperty)({ example: '@ahmadhassan' }),
     __metadata("design:type", String)
 ], CampaignCreatorResponseDto.prototype, "institutionRepresentativeSocialMedia", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '2025-01-30T10:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({ example: '2026-02-11T15:45:16.307Z' }),
     __metadata("design:type", Date)
 ], CampaignCreatorResponseDto.prototype, "createdAt", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: '2025-01-30T10:00:00.000Z' }),
+    (0, swagger_1.ApiProperty)({ example: '2026-02-15T13:08:34.343Z' }),
     __metadata("design:type", Date)
 ], CampaignCreatorResponseDto.prototype, "updatedAt", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Associated user information',
-        type: UserInfo,
-    }),
-    __metadata("design:type", UserInfo)
-], CampaignCreatorResponseDto.prototype, "user", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Linked assets (documents, certificates, IDs)',
-        type: [AssetInfo],
-    }),
-    __metadata("design:type", Array)
-], CampaignCreatorResponseDto.prototype, "assets", void 0);
-class CreateCreatorResponseWrapper {
-    message;
-    creator;
-}
-exports.CreateCreatorResponseWrapper = CreateCreatorResponseWrapper;
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Campaign creator profile created successfully' }),
-    __metadata("design:type", String)
-], CreateCreatorResponseWrapper.prototype, "message", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ type: CampaignCreatorResponseDto }),
-    __metadata("design:type", CampaignCreatorResponseDto)
-], CreateCreatorResponseWrapper.prototype, "creator", void 0);
-class UpdateCampaignCreatorRequestDto {
-    institutionName;
-    institutionCountry;
-    institutionType;
-    institutionDateOfEstablishment;
-    institutionLegalStatus;
-    institutionTaxIdentificationNumber;
-    institutionRegistrationNumber;
-    institutionRepresentativeName;
-    institutionRepresentativePosition;
-    institutionRepresentativeRegistrationNumber;
-    institutionWebsite;
-    institutionRepresentativeSocialMedia;
-}
-exports.UpdateCampaignCreatorRequestDto = UpdateCampaignCreatorRequestDto;
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Hope Foundation', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Palestine', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionCountry", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Non-Profit Organization', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionType", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: '2020-01-15', format: 'date', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionDateOfEstablishment", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Registered NGO', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionLegalStatus", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'TAX-123456', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionTaxIdentificationNumber", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'REG-789012', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionRegistrationNumber", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'John Doe', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionRepresentativeName", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'Director', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionRepresentativePosition", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'ID-555', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionRepresentativeRegistrationNumber", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'https://www.example.org', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionWebsite", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: '@johndoe', required: false }),
-    __metadata("design:type", String)
-], UpdateCampaignCreatorRequestDto.prototype, "institutionRepresentativeSocialMedia", void 0);
 //# sourceMappingURL=create-campaign-creator.swagger.dto.js.map

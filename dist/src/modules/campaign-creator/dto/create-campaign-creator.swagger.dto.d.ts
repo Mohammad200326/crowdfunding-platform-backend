@@ -1,7 +1,12 @@
-export declare class CreateCampaignCreatorRequestDto {
+declare class BaseCreatorDto {
     userId: string;
-    type: 'INDIVIDUAL' | 'INSTITUTION';
     assetIds?: string[];
+}
+export declare class CreateIndividualCreatorDto extends BaseCreatorDto {
+    type: 'INDIVIDUAL';
+}
+export declare class CreateInstitutionCreatorDto extends BaseCreatorDto {
+    type: 'INSTITUTION';
     institutionName?: string;
     institutionCountry?: string;
     institutionType?: string;
@@ -15,21 +20,24 @@ export declare class CreateCampaignCreatorRequestDto {
     institutionWebsite?: string;
     institutionRepresentativeSocialMedia?: string;
 }
-declare class UserInfo {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    role: string;
-    country?: string;
+export declare class UpdateCampaignCreatorSwaggerDto {
+    firstName?: string;
+    lastName?: string;
     phoneNumber?: string;
-}
-declare class AssetInfo {
-    id: string;
-    url: string;
-    fileType: string;
-    kind: string;
-    createdAt: Date;
+    country?: string;
+    notes?: string;
+    institutionName?: string;
+    institutionCountry?: string;
+    institutionType?: string;
+    institutionDateOfEstablishment?: string;
+    institutionLegalStatus?: string;
+    institutionTaxIdentificationNumber?: string;
+    institutionRegistrationNumber?: string;
+    institutionRepresentativeName?: string;
+    institutionRepresentativePosition?: string;
+    institutionRepresentativeRegistrationNumber?: string;
+    institutionWebsite?: string;
+    institutionRepresentativeSocialMedia?: string;
 }
 export declare class CampaignCreatorResponseDto {
     id: string;
@@ -49,25 +57,5 @@ export declare class CampaignCreatorResponseDto {
     institutionRepresentativeSocialMedia: string;
     createdAt: Date;
     updatedAt: Date;
-    user?: UserInfo;
-    assets?: AssetInfo[];
-}
-export declare class CreateCreatorResponseWrapper {
-    message: string;
-    creator: CampaignCreatorResponseDto;
-}
-export declare class UpdateCampaignCreatorRequestDto {
-    institutionName?: string;
-    institutionCountry?: string;
-    institutionType?: string;
-    institutionDateOfEstablishment?: string;
-    institutionLegalStatus?: string;
-    institutionTaxIdentificationNumber?: string;
-    institutionRegistrationNumber?: string;
-    institutionRepresentativeName?: string;
-    institutionRepresentativePosition?: string;
-    institutionRepresentativeRegistrationNumber?: string;
-    institutionWebsite?: string;
-    institutionRepresentativeSocialMedia?: string;
 }
 export {};

@@ -141,7 +141,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, swagger_1.ApiOperation)({ summary: 'Soft delete a campaign (Mark as deleted)' }),
+    (0, swagger_1.ApiOperation)({ summary: 'delete a campaign (Mark as deleted)' }),
     (0, swagger_1.ApiParam)({ name: 'id', description: 'Campaign UUID' }),
     (0, swagger_1.ApiResponse)({
         status: 200,

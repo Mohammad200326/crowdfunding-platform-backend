@@ -119,6 +119,88 @@ let DonationService = class DonationService {
             throw new common_1.NotFoundException('Donation not found');
         return donation;
     }
+    buildPagination(query) {
+        const page = query.page ?? 1;
+        const limit = query.limit ?? 10;
+        const skip = (page - 1) * limit;
+        return { skip, take: limit };
+    }
+    async getAll(query) {
+        const { skip, take } = this.buildPagination(query);
+        const where = {};
+        if (query.paymentStatus) {
+            where.paymentStatus = query.paymentStatus;
+        }
+        const [items, total] = await this.databaseService.$transaction([
+            this.databaseService.donation.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take,
+            }),
+            this.databaseService.donation.count({ where }),
+        ]);
+        return {
+            page: query.page ?? 1,
+            limit: query.limit ?? 10,
+            total,
+            totalPages: Math.ceil(total / (query.limit ?? 10)),
+            items,
+        };
+    }
+    async getByCampaignId(campaignId, query) {
+        const campaign = await this.databaseService.campaign.findUnique({
+            where: { id: campaignId },
+            select: { id: true, isDeleted: true },
+        });
+        if (!campaign || campaign.isDeleted) {
+            throw new common_1.NotFoundException('Campaign not found');
+        }
+        const { skip, take } = this.buildPagination(query);
+        const where = {
+            campaignId,
+            paymentStatus: query.paymentStatus ?? 'completed',
+        };
+        const [items, total] = await this.databaseService.$transaction([
+            this.databaseService.donation.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take,
+            }),
+            this.databaseService.donation.count({ where }),
+        ]);
+        return {
+            page: query.page ?? 1,
+            limit: query.limit ?? 10,
+            total,
+            totalPages: Math.ceil(total / (query.limit ?? 10)),
+            items,
+        };
+    }
+    async getByUserId(userId, query) {
+        const { skip, take } = this.buildPagination(query);
+        const where = {
+            userId,
+            ...(query.paymentStatus && { paymentStatus: query.paymentStatus }),
+        };
+        const [items, total] = await this.databaseService.$transaction([
+            this.databaseService.donation.findMany({
+                where,
+                orderBy: { createdAt: 'desc' },
+                skip,
+                take,
+            }),
+            this.databaseService.donation.count({ where }),
+        ]);
+        return {
+            page: query.page ?? 1,
+            limit: query.limit ?? 10,
+            total,
+            totalPages: Math.ceil(total / (query.limit ?? 10)),
+            items,
+        };
+    }
 };
 exports.DonationService = DonationService;
 exports.DonationService = DonationService = __decorate([

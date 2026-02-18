@@ -221,42 +221,45 @@ export class LoginResponseDto {
 }
 
 export class CampaignCreatorProfileDto {
-  @ApiProperty({ example: 'Institution' })
-  institutionName: string;
+  @ApiPropertyOptional({ example: 'Institution', nullable: true })
+  institutionName?: string | null;
 
-  @ApiProperty({ example: 'NGO' })
-  institutionType: string;
+  @ApiPropertyOptional({ example: 'NGO', nullable: true })
+  institutionType?: string | null;
 
-  @ApiProperty({ example: 'Palestine' })
-  institutionCountry: string;
+  @ApiPropertyOptional({ example: 'Palestine', nullable: true })
+  institutionCountry?: string | null;
 
-  // NOTE: request comes as string, Zod will coerce to Date
-  @ApiProperty({ example: '2015-01-01', format: 'date' })
-  institutionDateOfEstablishment: string;
+  @ApiPropertyOptional({
+    example: '2015-01-01',
+    format: 'date',
+    nullable: true,
+  })
+  institutionDateOfEstablishment?: string | null;
 
-  @ApiProperty({ example: 'Registered NGO' })
-  institutionLegalStatus: string;
+  @ApiPropertyOptional({ example: 'Registered NGO', nullable: true })
+  institutionLegalStatus?: string | null;
 
-  @ApiProperty({ example: 'TAX-123456' })
-  institutionTaxIdentificationNumber: string;
+  @ApiPropertyOptional({ example: 'TAX-123456', nullable: true })
+  institutionTaxIdentificationNumber?: string | null;
 
-  @ApiProperty({ example: 'REG-987654' })
-  institutionRegistrationNumber: string;
+  @ApiPropertyOptional({ example: 'REG-987654', nullable: true })
+  institutionRegistrationNumber?: string | null;
 
-  @ApiProperty({ example: 'Lina Hassan' })
-  institutionRepresentativeName: string;
+  @ApiPropertyOptional({ example: 'Lina Hassan', nullable: true })
+  institutionRepresentativeName?: string | null;
 
-  @ApiProperty({ example: 'Director' })
-  institutionRepresentativePosition: string;
+  @ApiPropertyOptional({ example: 'Director', nullable: true })
+  institutionRepresentativePosition?: string | null;
 
-  @ApiProperty({ example: 'REP-001' })
-  institutionRepresentativeRegistrationNumber: string;
+  @ApiPropertyOptional({ example: 'REP-001', nullable: true })
+  institutionRepresentativeRegistrationNumber?: string | null;
 
-  @ApiProperty({ example: 'https://example.org' })
-  institutionWebsite: string;
+  @ApiPropertyOptional({ example: 'https://example.org', nullable: true })
+  institutionWebsite?: string | null;
 
-  @ApiProperty({ example: '@example_org' })
-  institutionRepresentativeSocialMedia: string;
+  @ApiPropertyOptional({ example: '@example_org', nullable: true })
+  institutionRepresentativeSocialMedia?: string | null;
 }
 
 export class RegisterCampaignCreatorDto {
@@ -272,27 +275,46 @@ export class RegisterCampaignCreatorDto {
   @ApiProperty({ example: '123456789', minLength: 8 })
   password: string;
 
-  @ApiProperty({ example: '+970599111223' })
-  phoneNumber: string;
+  @ApiPropertyOptional({ example: '+970599111223', nullable: true })
+  phoneNumber?: string | null;
 
-  @ApiProperty({ example: 'Palestine' })
-  country: string;
+  @ApiPropertyOptional({ example: 'Palestine', nullable: true })
+  country?: string | null;
 
   @ApiPropertyOptional({ example: 'Campaign creator account', nullable: true })
   notes?: string | null;
 
-  // NOTE: request is string (Swagger); Zod coerces it to Date
-  @ApiPropertyOptional({ example: '1998-06-12', format: 'date' })
-  dateOfBirth?: string;
+  @ApiPropertyOptional({
+    example: '1998-06-12',
+    format: 'date',
+    nullable: true,
+  })
+  dateOfBirth?: string | null;
 
   @ApiProperty({ enum: CreatorType, example: CreatorType.INSTITUTION })
   type: CreatorType;
 
+  // ✅ جديد
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'Optional general asset ids to be attached to the creator',
+    example: ['uuid1', 'uuid2'],
+  })
+  assetIds?: string[];
+
+  @ApiPropertyOptional({
+    type: () => InstitutionDocumentsDto,
+    nullable: true,
+    description:
+      'Optional institution documents (asset IDs) to attach to creator',
+  })
+  @Type(() => InstitutionDocumentsDto)
+  institutionDocuments?: InstitutionDocumentsDto | null;
+
   @ApiPropertyOptional({
     type: () => CampaignCreatorProfileDto,
     nullable: true,
-    description:
-      'Optional. If provided, a CampaignCreator profile will be created in the same transaction.',
+    description: 'Optional creator profile data (can be partial).',
   })
   @Type(() => CampaignCreatorProfileDto)
   creatorProfile?: CampaignCreatorProfileDto | null;
@@ -303,51 +325,54 @@ export class RegisterCampaignCreatorDto {
  */
 
 export class CampaignCreatorProfileResponseDto {
-  @ApiProperty({ example: '22d19b2a-2c3a-494d-98ce-98b5328a7c26' })
+  @ApiProperty({ example: 'uuid' })
   id: string;
 
   @ApiProperty({ enum: CreatorType, example: CreatorType.INSTITUTION })
   type: CreatorType;
 
-  @ApiProperty({ example: '1a0a3cd3-3341-43ff-aa4a-32552c8d2346' })
+  @ApiProperty({ example: 'uuid' })
   userId: string;
 
-  @ApiProperty({ example: 'Institution' })
-  institutionName: string;
+  @ApiPropertyOptional({ example: 'Institution', nullable: true })
+  institutionName?: string | null;
 
-  @ApiProperty({ example: 'NGO' })
-  institutionType: string;
+  @ApiPropertyOptional({ example: 'NGO', nullable: true })
+  institutionType?: string | null;
 
-  @ApiProperty({ example: 'Palestine' })
-  institutionCountry: string;
+  @ApiPropertyOptional({ example: 'Palestine', nullable: true })
+  institutionCountry?: string | null;
 
-  // DB usually returns ISO date-time string
-  @ApiProperty({ example: '2015-01-01T00:00:00.000Z', format: 'date-time' })
-  institutionDateOfEstablishment: string;
+  @ApiPropertyOptional({
+    example: '2015-01-01T00:00:00.000Z',
+    format: 'date-time',
+    nullable: true,
+  })
+  institutionDateOfEstablishment?: string | null;
 
-  @ApiProperty({ example: 'Registered NGO' })
-  institutionLegalStatus: string;
+  @ApiPropertyOptional({ example: 'Registered NGO', nullable: true })
+  institutionLegalStatus?: string | null;
 
-  @ApiProperty({ example: 'TAX-123456' })
-  institutionTaxIdentificationNumber: string;
+  @ApiPropertyOptional({ example: 'TAX-123456', nullable: true })
+  institutionTaxIdentificationNumber?: string | null;
 
-  @ApiProperty({ example: 'REG-987654' })
-  institutionRegistrationNumber: string;
+  @ApiPropertyOptional({ example: 'REG-987654', nullable: true })
+  institutionRegistrationNumber?: string | null;
 
-  @ApiProperty({ example: 'Lina Hassan' })
-  institutionRepresentativeName: string;
+  @ApiPropertyOptional({ example: 'Lina Hassan', nullable: true })
+  institutionRepresentativeName?: string | null;
 
-  @ApiProperty({ example: 'Director' })
-  institutionRepresentativePosition: string;
+  @ApiPropertyOptional({ example: 'Director', nullable: true })
+  institutionRepresentativePosition?: string | null;
 
-  @ApiProperty({ example: 'REP-001' })
-  institutionRepresentativeRegistrationNumber: string;
+  @ApiPropertyOptional({ example: 'REP-001', nullable: true })
+  institutionRepresentativeRegistrationNumber?: string | null;
 
-  @ApiProperty({ example: 'https://example.org' })
-  institutionWebsite: string;
+  @ApiPropertyOptional({ example: 'https://example.org', nullable: true })
+  institutionWebsite?: string | null;
 
-  @ApiProperty({ example: '@example_org' })
-  institutionRepresentativeSocialMedia: string;
+  @ApiPropertyOptional({ example: '@example_org', nullable: true })
+  institutionRepresentativeSocialMedia?: string | null;
 
   @ApiProperty({ example: '2026-02-01T12:00:00.000Z', format: 'date-time' })
   createdAt: string;
@@ -407,7 +432,6 @@ export class CampaignCreatorUserDataResponseDto {
   @ApiProperty({ example: '2026-02-01T12:00:00.000Z', format: 'date-time' })
   updatedAt: string;
 
-  // أنت بترجّع type يدويًا في الـ response
   @ApiProperty({ enum: CreatorType, example: CreatorType.INSTITUTION })
   type: CreatorType;
 
@@ -426,4 +450,126 @@ export class RegisterCampaignCreatorResponseDto {
 
   @ApiProperty({ type: () => CampaignCreatorUserDataResponseDto })
   userData: CampaignCreatorUserDataResponseDto;
+}
+
+export class InstitutionDocumentsDto {
+  @ApiPropertyOptional({
+    example: 'uuid',
+    description: 'INSTITUTION_REGISTRATION_CERTIFICATE asset id',
+  })
+  registrationCertificateId?: string;
+
+  @ApiPropertyOptional({
+    example: 'uuid',
+    description: 'INSTITUTION_COMMERCIAL_LICENSE asset id',
+  })
+  commercialLicenseId?: string;
+
+  @ApiPropertyOptional({
+    example: 'uuid',
+    description: 'INSTITUTION_REPRESENTATIVE_ID_PHOTO asset id',
+  })
+  representativeIdPhotoId?: string;
+
+  @ApiPropertyOptional({
+    example: 'uuid',
+    description: 'INSTITUTION_COMMISSIONER_IMAGE asset id',
+  })
+  commissionerImageId?: string;
+
+  @ApiPropertyOptional({
+    example: 'uuid',
+    description: 'INSTITUTION_AUTHORIZATION_LETTER asset id',
+  })
+  authorizationLetterId?: string;
+}
+
+export class RegisterCampaignCreatorFormDto {
+  @ApiProperty({ example: 'Ahmad' })
+  firstName: string;
+
+  @ApiProperty({ example: 'Saleh' })
+  lastName: string;
+
+  @ApiProperty({ example: 'creator@example.com' })
+  email: string;
+
+  @ApiProperty({ example: '123456789', minLength: 8 })
+  password: string;
+
+  @ApiPropertyOptional({ example: '+970599111223', nullable: true })
+  phoneNumber?: string;
+
+  @ApiPropertyOptional({ example: 'Palestine', nullable: true })
+  country?: string;
+
+  @ApiPropertyOptional({ example: 'Campaign creator account', nullable: true })
+  notes?: string;
+
+  @ApiPropertyOptional({
+    example: '1998-06-12',
+    format: 'date',
+    nullable: true,
+  })
+  dateOfBirth?: string;
+
+  @ApiProperty({ enum: CreatorType, example: CreatorType.INSTITUTION })
+  type: CreatorType;
+
+  // ===== Institution profile (flat) — optional because DB nullable now =====
+  @ApiPropertyOptional({ example: 'Institution', nullable: true })
+  institutionName?: string;
+
+  @ApiPropertyOptional({ example: 'NGO', nullable: true })
+  institutionType?: string;
+
+  @ApiPropertyOptional({ example: 'Palestine', nullable: true })
+  institutionCountry?: string;
+
+  @ApiPropertyOptional({
+    example: '2015-01-01',
+    format: 'date',
+    nullable: true,
+  })
+  institutionDateOfEstablishment?: string;
+
+  @ApiPropertyOptional({ example: 'Registered NGO', nullable: true })
+  institutionLegalStatus?: string;
+
+  @ApiPropertyOptional({ example: 'TAX-123456', nullable: true })
+  institutionTaxIdentificationNumber?: string;
+
+  @ApiPropertyOptional({ example: 'REG-987654', nullable: true })
+  institutionRegistrationNumber?: string;
+
+  @ApiPropertyOptional({ example: 'Lina Hassan', nullable: true })
+  institutionRepresentativeName?: string;
+
+  @ApiPropertyOptional({ example: 'Director', nullable: true })
+  institutionRepresentativePosition?: string;
+
+  @ApiPropertyOptional({ example: 'REP-001', nullable: true })
+  institutionRepresentativeRegistrationNumber?: string;
+
+  @ApiPropertyOptional({ example: 'https://example.org', nullable: true })
+  institutionWebsite?: string;
+
+  @ApiPropertyOptional({ example: '@example_org', nullable: true })
+  institutionRepresentativeSocialMedia?: string;
+
+  // ===== Files (optional) =====
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  registrationCertificate?: any;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  commercialLicense?: any;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  representativeIdPhoto?: any;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  commissionerImage?: any;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  authorizationLetter?: any;
 }

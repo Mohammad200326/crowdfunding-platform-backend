@@ -7,9 +7,9 @@ export declare const CreateBankAccountSchema: z.ZodObject<{
 }, z.core.$strip>;
 export declare const UpdateBankAccountSchema: z.ZodObject<{
     bankName: z.ZodOptional<z.ZodString>;
-    iban: z.ZodOptional<z.ZodString>;
+    iban: z.ZodString;
     notes: z.ZodOptional<z.ZodString>;
-    isVerified: z.ZodOptional<z.ZodBoolean>;
+    isVerified: z.ZodOptional<z.ZodPipe<z.ZodUnion<readonly [z.ZodBoolean, z.ZodString]>, z.ZodTransform<boolean | undefined, string | boolean>>>;
 }, z.core.$strip>;
 export type CreateBankAccountDto = z.infer<typeof CreateBankAccountSchema>;
 export type UpdateBankAccountDto = z.infer<typeof UpdateBankAccountSchema>;

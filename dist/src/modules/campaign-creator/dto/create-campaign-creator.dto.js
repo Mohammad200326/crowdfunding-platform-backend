@@ -1,34 +1,46 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateCampaignCreatorSchema = void 0;
+exports.CreateCampaignCreatorSchema = exports.InstitutionProfileSchema = exports.InstitutionDocumentsSchema = void 0;
 const zod_1 = require("zod");
+exports.InstitutionDocumentsSchema = zod_1.z
+    .object({
+    registrationCertificateId: zod_1.z.string().uuid().optional(),
+    commercialLicenseId: zod_1.z.string().uuid().optional(),
+    representativeIdPhotoId: zod_1.z.string().uuid().optional(),
+    commissionerImageId: zod_1.z.string().uuid().optional(),
+    authorizationLetterId: zod_1.z.string().uuid().optional(),
+})
+    .optional();
 const BaseSchema = zod_1.z.object({
     userId: zod_1.z.string().uuid({ message: 'Invalid User ID' }),
     assetIds: zod_1.z.array(zod_1.z.string().uuid()).optional(),
 });
-const InstitutionProfileSchema = zod_1.z.object({
-    institutionName: zod_1.z.string().min(2, 'Institution name is required'),
-    institutionCountry: zod_1.z.string().min(2, 'Country is required'),
-    institutionType: zod_1.z.string().min(2, 'Institution type is required'),
-    institutionDateOfEstablishment: zod_1.z.coerce.date(),
-    institutionLegalStatus: zod_1.z.string().min(1, 'Legal status is required'),
-    institutionTaxIdentificationNumber: zod_1.z
+exports.InstitutionProfileSchema = zod_1.z.object({
+    institutionName: zod_1.z.string().min(2).optional(),
+    institutionCountry: zod_1.z.string().min(2).optional(),
+    institutionType: zod_1.z.string().min(2).optional(),
+    institutionDateOfEstablishment: zod_1.z.coerce.date().optional(),
+    institutionLegalStatus: zod_1.z.string().min(1).optional(),
+    institutionTaxIdentificationNumber: zod_1.z.string().min(1).optional(),
+    institutionRegistrationNumber: zod_1.z.string().min(1).optional(),
+    institutionRepresentativeName: zod_1.z.string().min(1).optional(),
+    institutionRepresentativePosition: zod_1.z.string().min(1).optional(),
+    institutionRepresentativeRegistrationNumber: zod_1.z.string().min(1).optional(),
+    institutionWebsite: zod_1.z
         .string()
-        .min(1, 'Tax identification number is required'),
-    institutionRegistrationNumber: zod_1.z
-        .string()
-        .min(1, 'Registration number is required'),
-    institutionRepresentativeName: zod_1.z
-        .string()
-        .min(1, 'Representative name is required'),
-    institutionRepresentativePosition: zod_1.z
-        .string()
-        .min(1, 'Representative position is required'),
-    institutionRepresentativeRegistrationNumber: zod_1.z
-        .string()
-        .min(1, 'Representative registration number is required'),
-    institutionWebsite: zod_1.z.string().url().optional().or(zod_1.z.literal('')),
-    institutionRepresentativeSocialMedia: zod_1.z.string().optional().or(zod_1.z.literal('')),
+        .refine((val) => {
+        if (!val || val.trim() === '')
+            return true;
+        try {
+            new URL(val);
+            return true;
+        }
+        catch {
+            return false;
+        }
+    }, { message: 'Must be a valid URL or leave empty' })
+        .optional(),
+    institutionRepresentativeSocialMedia: zod_1.z.string().optional(),
 });
 exports.CreateCampaignCreatorSchema = zod_1.z.discriminatedUnion('type', [
     BaseSchema.extend({
@@ -36,7 +48,8 @@ exports.CreateCampaignCreatorSchema = zod_1.z.discriminatedUnion('type', [
     }),
     BaseSchema.extend({
         type: zod_1.z.literal('INSTITUTION'),
-        ...InstitutionProfileSchema.shape,
+        ...exports.InstitutionProfileSchema.shape,
+        institutionDocuments: exports.InstitutionDocumentsSchema,
     }),
 ]);
 //# sourceMappingURL=create-campaign-creator.dto.js.map

@@ -1,5 +1,10 @@
 import { z } from 'zod';
 export declare const UpdateCampaignCreatorSchema: z.ZodObject<{
+    firstName: z.ZodOptional<z.ZodString>;
+    lastName: z.ZodOptional<z.ZodString>;
+    phoneNumber: z.ZodOptional<z.ZodString>;
+    country: z.ZodOptional<z.ZodString>;
+    notes: z.ZodOptional<z.ZodString>;
     institutionName: z.ZodOptional<z.ZodString>;
     institutionCountry: z.ZodOptional<z.ZodString>;
     institutionType: z.ZodOptional<z.ZodString>;
@@ -10,7 +15,7 @@ export declare const UpdateCampaignCreatorSchema: z.ZodObject<{
     institutionRepresentativeName: z.ZodOptional<z.ZodString>;
     institutionRepresentativePosition: z.ZodOptional<z.ZodString>;
     institutionRepresentativeRegistrationNumber: z.ZodOptional<z.ZodString>;
-    institutionWebsite: z.ZodOptional<z.ZodUnion<[z.ZodString, z.ZodLiteral<"">]>>;
+    institutionWebsite: z.ZodOptional<z.ZodString>;
     institutionRepresentativeSocialMedia: z.ZodOptional<z.ZodString>;
 }, z.core.$strict>;
 export type UpdateCampaignCreatorDto = z.infer<typeof UpdateCampaignCreatorSchema>;

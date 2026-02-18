@@ -52,6 +52,8 @@ const user_service_1 = require("../user/user.service");
 const donor_service_1 = require("../donor/donor.service");
 const otp_service_1 = require("./otp.service");
 const email_service_1 = require("./email.service");
+const campaign_creator_service_1 = require("../campaign-creator/campaign-creator.service");
+const file_service_1 = require("../file/file.service");
 let AuthService = class AuthService {
     userService;
     donorService;
@@ -59,13 +61,17 @@ let AuthService = class AuthService {
     jwtService;
     otpService;
     emailService;
-    constructor(userService, donorService, databaseService, jwtService, otpService, emailService) {
+    campaignCreatorService;
+    fileService;
+    constructor(userService, donorService, databaseService, jwtService, otpService, emailService, campaignCreatorService, fileService) {
         this.userService = userService;
         this.donorService = donorService;
         this.databaseService = databaseService;
         this.jwtService = jwtService;
         this.otpService = otpService;
         this.emailService = emailService;
+        this.campaignCreatorService = campaignCreatorService;
+        this.fileService = fileService;
     }
     async login(dto) {
         const user = await this.databaseService.user.findUnique({
@@ -119,7 +125,7 @@ let AuthService = class AuthService {
             token,
         };
     }
-    async registerCampaignCreator(dto) {
+    async registerCampaignCreatorForm(dto, files) {
         const email = dto.email.trim().toLowerCase();
         const existing = await this.databaseService.user.findUnique({
             where: { email },
@@ -129,7 +135,6 @@ let AuthService = class AuthService {
             throw new common_1.ConflictException('Email already exists');
         const hashedPassword = await this.hashPassword(dto.password);
         const notes = dto.notes ?? null;
-        const { creatorProfile, type } = dto;
         const result = await this.databaseService.$transaction(async (tx) => {
             const user = await tx.user.create({
                 data: {
@@ -137,25 +142,60 @@ let AuthService = class AuthService {
                     lastName: dto.lastName,
                     email,
                     password: hashedPassword,
-                    phoneNumber: dto.phoneNumber,
-                    dateOfBirth: dto.dateOfBirth,
-                    country: dto.country,
-                    notes: notes,
+                    phoneNumber: dto.phoneNumber ?? null,
+                    dateOfBirth: dto.dateOfBirth ?? null,
+                    country: dto.country ?? null,
+                    notes,
                     role: client_1.UserRole.CAMPAIGN_CREATOR,
                     isVerified: false,
                     verificationStatus: 'pending',
                 },
             });
-            const profile = creatorProfile
-                ? await tx.campaignCreator.create({
-                    data: {
-                        userId: user.id,
-                        type,
-                        ...creatorProfile,
-                    },
-                })
-                : null;
-            return { user, profile };
+            let creator = null;
+            if (dto.type === 'INSTITUTION') {
+                creator = await this.campaignCreatorService.createForUser({
+                    userId: user.id,
+                    type: 'INSTITUTION',
+                    institutionName: dto.institutionName,
+                    institutionType: dto.institutionType,
+                    institutionCountry: dto.institutionCountry,
+                    institutionDateOfEstablishment: dto.institutionDateOfEstablishment,
+                    institutionLegalStatus: dto.institutionLegalStatus,
+                    institutionTaxIdentificationNumber: dto.institutionTaxIdentificationNumber,
+                    institutionRegistrationNumber: dto.institutionRegistrationNumber,
+                    institutionRepresentativeName: dto.institutionRepresentativeName,
+                    institutionRepresentativePosition: dto.institutionRepresentativePosition,
+                    institutionRepresentativeRegistrationNumber: dto.institutionRepresentativeRegistrationNumber,
+                    institutionWebsite: dto.institutionWebsite,
+                    institutionRepresentativeSocialMedia: dto.institutionRepresentativeSocialMedia,
+                }, tx);
+                const assets = [];
+                const regCert = files?.registrationCertificate?.[0];
+                const commLic = files?.commercialLicense?.[0];
+                const repId = files?.representativeIdPhoto?.[0];
+                const commissioner = files?.commissionerImage?.[0];
+                const authLetter = files?.authorizationLetter?.[0];
+                if (regCert) {
+                    assets.push(this.fileService.createFileAssetData(regCert, user.id, client_1.AssetKind.INSTITUTION_REGISTRATION_CERTIFICATE));
+                }
+                if (commLic) {
+                    assets.push(this.fileService.createFileAssetData(commLic, user.id, client_1.AssetKind.INSTITUTION_COMMERCIAL_LICENSE));
+                }
+                if (repId) {
+                    assets.push(this.fileService.createFileAssetData(repId, user.id, client_1.AssetKind.INSTITUTION_REPRESENTATIVE_ID_PHOTO));
+                }
+                if (commissioner) {
+                    assets.push(this.fileService.createFileAssetData(commissioner, user.id, client_1.AssetKind.INSTITUTION_COMMISSIONER_IMAGE));
+                }
+                if (authLetter) {
+                    assets.push(this.fileService.createFileAssetData(authLetter, user.id, client_1.AssetKind.INSTITUTION_AUTHORIZATION_LETTER));
+                }
+                if (assets.length) {
+                    assets.forEach((a) => (a.creatorId = creator.id));
+                    await tx.asset.createMany({ data: assets });
+                }
+            }
+            return { user, creator };
         });
         const token = this.generateJwtToken(result.user.id, result.user.role);
         const { password, ...userData } = result.user;
@@ -163,8 +203,8 @@ let AuthService = class AuthService {
             token,
             userData: {
                 ...userData,
-                type,
-                creatorProfile: result.profile,
+                type: dto.type,
+                creatorProfile: result.creator,
             },
         };
     }
@@ -191,6 +231,8 @@ exports.AuthService = AuthService = __decorate([
         database_service_1.DatabaseService,
         jwt_1.JwtService,
         otp_service_1.OtpService,
-        email_service_1.EmailService])
+        email_service_1.EmailService,
+        campaign_creator_service_1.CampaignCreatorService,
+        file_service_1.FileService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

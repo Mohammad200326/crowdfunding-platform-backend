@@ -19,6 +19,7 @@ exports.CampaignCreatorModule = CampaignCreatorModule = __decorate([
         imports: [file_module_1.FileModule],
         controllers: [campaign_creator_controller_1.CampaignCreatorController],
         providers: [campaign_creator_service_1.CampaignCreatorService],
+        exports: [campaign_creator_service_1.CampaignCreatorService],
     })
 ], CampaignCreatorModule);
 //# sourceMappingURL=campaign-creator.module.js.map
