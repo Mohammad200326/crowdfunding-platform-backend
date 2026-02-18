@@ -81,6 +81,19 @@ export class StripeService {
   }
 
   /**
+   * List external bank accounts for a Connect account
+   */
+  async listExternalBankAccounts(
+    accountId: string,
+  ): Promise<Stripe.BankAccount[]> {
+    const externalAccounts = await this.stripe.accounts.listExternalAccounts(
+      accountId,
+      { object: 'bank_account', limit: 10 },
+    );
+    return externalAccounts.data as Stripe.BankAccount[];
+  }
+
+  /**
    * Get transfer details
    */
   async getTransfer(transferId: string): Promise<Stripe.Transfer> {

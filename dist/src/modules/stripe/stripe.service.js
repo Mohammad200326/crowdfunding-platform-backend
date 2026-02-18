@@ -60,6 +60,10 @@ let StripeService = class StripeService {
             metadata,
         });
     }
+    async listExternalBankAccounts(accountId) {
+        const externalAccounts = await this.stripe.accounts.listExternalAccounts(accountId, { object: 'bank_account', limit: 10 });
+        return externalAccounts.data;
+    }
     async getTransfer(transferId) {
         return this.stripe.transfers.retrieve(transferId);
     }

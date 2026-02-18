@@ -252,7 +252,7 @@ export class WithdrawalService {
     // Verify user is a campaign creator
     const user = await this.prismaService.user.findUnique({
       where: { id: userId },
-      select: { id: true, role: true, isDeleted: true, isVerified: true },
+      include: { creatorProfile: { select: { stripeAccountId: true } } },
     });
 
     if (!user || user.isDeleted) {
@@ -342,6 +342,37 @@ export class WithdrawalService {
     //     'Bank account must be verified before withdrawals',
     //   );
     // }
+
+    // Verify bank account matches the one registered in Stripe Connect
+    const stripeAccountId = user.creatorProfile?.stripeAccountId;
+    if (!stripeAccountId) {
+      throw new BadRequestException(
+        'No Stripe Connect account found. Please complete Stripe onboarding before requesting a withdrawal.',
+      );
+    }
+
+    const stripeBankAccounts =
+      await this.stripeService.listExternalBankAccounts(stripeAccountId);
+
+    if (!stripeBankAccounts || stripeBankAccounts.length === 0) {
+      throw new BadRequestException(
+        'No bank account found in Stripe Connect. Please add a bank account through Stripe onboarding.',
+      );
+    }
+
+    const normalizedIban = bankAccount.iban.replace(/\s+/g, '').toUpperCase();
+    const ibanLast4 = normalizedIban.slice(-4);
+
+    const matchFound = stripeBankAccounts.some(
+      (stripeBankAcc) => stripeBankAcc.last4 === ibanLast4,
+    );
+
+    if (!matchFound) {
+      throw new BadRequestException(
+        `Bank account mismatch: the bank account on file (IBAN ending in ${ibanLast4}) does not match any bank account registered in Stripe. ` +
+        'Please make sure the same bank account is used on both the platform and Stripe Connect.',
+      );
+    }
 
     // Check available balance
     const balance = await this.getBalance(userId);
@@ -483,6 +514,13 @@ export class WithdrawalService {
     const withdrawal = await this.prismaService.withdrawal.findUnique({
       where: { id },
       include: {
+        bankAccount: {
+          select: {
+            id: true,
+            iban: true,
+            bankName: true,
+          },
+        },
         creator: {
           include: {
             creatorProfile: true,
@@ -523,6 +561,34 @@ export class WithdrawalService {
         throw new BadRequestException(
           'Stripe Connect account is not ready to receive transfers. Please complete account verification.',
         );
+      }
+
+      // Verify that the bank account in our system matches the one in Stripe
+      const stripeBankAccounts =
+        await this.stripeService.listExternalBankAccounts(stripeAccountId);
+
+      if (!stripeBankAccounts || stripeBankAccounts.length === 0) {
+        throw new BadRequestException(
+          'No bank account found in Stripe Connect. Please add a bank account through Stripe onboarding.',
+        );
+      }
+
+      const withdrawalIban = withdrawal.bankAccount?.iban;
+      if (withdrawalIban) {
+        const normalizedIban = withdrawalIban.replace(/\s+/g, '').toUpperCase();
+        const ibanLast4 = normalizedIban.slice(-4);
+
+        const matchFound = stripeBankAccounts.some((stripeBankAcc) => {
+          const stripeLast4 = stripeBankAcc.last4;
+          return stripeLast4 === ibanLast4;
+        });
+
+        if (!matchFound) {
+          throw new BadRequestException(
+            `Bank account mismatch: the bank account on file (IBAN ending in ${ibanLast4}) does not match any bank account registered in Stripe Connect. ` +
+            'Please ensure the same bank account is used in both the platform and Stripe.',
+          );
+        }
       }
 
       // Calculate transfer amount (using netStars after platform fee deduction)
