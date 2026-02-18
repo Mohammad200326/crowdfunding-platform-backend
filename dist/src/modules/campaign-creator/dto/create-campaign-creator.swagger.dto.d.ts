@@ -21,6 +21,11 @@ export declare class CreateInstitutionCreatorDto extends BaseCreatorDto {
     institutionRepresentativeSocialMedia?: string;
 }
 export declare class UpdateCampaignCreatorSwaggerDto {
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+    country?: string;
+    notes?: string;
     institutionName?: string;
     institutionCountry?: string;
     institutionType?: string;

@@ -6,7 +6,9 @@ import { DonorService } from '../donor/donor.service';
 import { OtpService } from './otp.service';
 import { EmailService } from './email.service';
 import { LoginDTO } from './dto/auth.dto';
-import { RegisterCampaignCreatorDTO } from './dto/register-campaign-creator.schema';
+import { RegisterCampaignCreatorFormDTO } from './dto/register-campaign-creator.schema';
+import { CampaignCreatorService } from '../campaign-creator/campaign-creator.service';
+import { FileService } from '../file/file.service';
 export declare class AuthService {
     private userService;
     private donorService;
@@ -14,7 +16,9 @@ export declare class AuthService {
     private jwtService;
     private readonly otpService;
     private readonly emailService;
-    constructor(userService: UserService, donorService: DonorService, databaseService: DatabaseService, jwtService: JwtService, otpService: OtpService, emailService: EmailService);
+    private readonly campaignCreatorService;
+    private readonly fileService;
+    constructor(userService: UserService, donorService: DonorService, databaseService: DatabaseService, jwtService: JwtService, otpService: OtpService, emailService: EmailService, campaignCreatorService: CampaignCreatorService, fileService: FileService);
     login(dto: LoginDTO): Promise<{
         user: {
             id: string;
@@ -46,29 +50,18 @@ export declare class AuthService {
         };
         token: string;
     }>;
-    registerCampaignCreator(dto: RegisterCampaignCreatorDTO): Promise<{
+    registerCampaignCreatorForm(dto: RegisterCampaignCreatorFormDTO, files: {
+        registrationCertificate?: Express.Multer.File[];
+        commercialLicense?: Express.Multer.File[];
+        representativeIdPhoto?: Express.Multer.File[];
+        commissionerImage?: Express.Multer.File[];
+        authorizationLetter?: Express.Multer.File[];
+    }): Promise<{
         token: string;
         userData: {
             type: "INDIVIDUAL" | "INSTITUTION";
             creatorProfile: {
-                type: import("@prisma/client").$Enums.CreatorType;
                 id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                userId: string;
-                institutionName: string;
-                institutionType: string;
-                institutionCountry: string;
-                institutionDateOfEstablishment: Date;
-                institutionLegalStatus: string;
-                institutionTaxIdentificationNumber: string;
-                institutionRegistrationNumber: string;
-                institutionRepresentativeName: string;
-                institutionRepresentativePosition: string;
-                institutionRepresentativeRegistrationNumber: string;
-                institutionWebsite: string;
-                institutionRepresentativeSocialMedia: string;
-                stripeAccountId: string | null;
             } | null;
             email: string;
             id: string;

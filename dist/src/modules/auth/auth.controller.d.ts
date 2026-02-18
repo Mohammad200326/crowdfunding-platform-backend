@@ -1,7 +1,7 @@
 import { AuthService } from './auth.service';
 import { PasswordResetService } from './password-reset.service';
 import type { ForgotPasswordDTO, ResetPasswordDTO, VerifyOtpDTO, LoginDTO, registerDonorDTO } from './dto/auth.dto';
-import type { RegisterCampaignCreatorDTO } from './dto/register-campaign-creator.schema';
+import type { RegisterCampaignCreatorFormDTO } from './dto/register-campaign-creator.schema';
 export declare class AuthController {
     private authService;
     private passwordResetService;
@@ -26,29 +26,18 @@ export declare class AuthController {
         };
         token: string;
     }>;
-    newRegisterCampaignCreator(dto: RegisterCampaignCreatorDTO): Promise<{
+    registerCampaignCreator(dto: RegisterCampaignCreatorFormDTO, files: {
+        registrationCertificate?: Express.Multer.File[];
+        commercialLicense?: Express.Multer.File[];
+        representativeIdPhoto?: Express.Multer.File[];
+        commissionerImage?: Express.Multer.File[];
+        authorizationLetter?: Express.Multer.File[];
+    }): Promise<{
         token: string;
         userData: {
             type: "INDIVIDUAL" | "INSTITUTION";
             creatorProfile: {
-                type: import("@prisma/client").$Enums.CreatorType;
                 id: string;
-                createdAt: Date;
-                updatedAt: Date;
-                userId: string;
-                institutionName: string;
-                institutionType: string;
-                institutionCountry: string;
-                institutionDateOfEstablishment: Date;
-                institutionLegalStatus: string;
-                institutionTaxIdentificationNumber: string;
-                institutionRegistrationNumber: string;
-                institutionRepresentativeName: string;
-                institutionRepresentativePosition: string;
-                institutionRepresentativeRegistrationNumber: string;
-                institutionWebsite: string;
-                institutionRepresentativeSocialMedia: string;
-                stripeAccountId: string | null;
             } | null;
             email: string;
             id: string;

@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -12,19 +11,15 @@ import {
 } from '@nestjs/common';
 import { CampaignCreatorService } from './campaign-creator.service';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
-import { CreateCampaignCreatorSchema } from './dto/create-campaign-creator.dto';
 import { UpdateCampaignCreatorSchema } from './dto/update-campaign-creator.dto';
-import type { CreateCampaignCreatorDto } from './dto/create-campaign-creator.dto';
 import type { UpdateCampaignCreatorDto } from './dto/update-campaign-creator.dto';
 import {
   ApiTags,
   ApiOperation,
   ApiBearerAuth,
-  ApiCreatedResponse,
   ApiOkResponse,
   ApiBody,
   ApiExtraModels,
-  getSchemaPath,
   ApiQuery,
   ApiParam,
   ApiNotFoundResponse,
@@ -50,39 +45,39 @@ export class CampaignCreatorController {
   constructor(private readonly service: CampaignCreatorService) {}
 
   //  POST /campaign-creator
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({
-    summary: 'Create creator profile',
-    description:
-      'Registers a user as a campaign creator. ' +
-      'INDIVIDUAL type auto-fills institution fields from user data. ' +
-      'INSTITUTION type accepts optional institution details (missing fields saved as N/A).',
-  })
-  @ApiBody({
-    description:
-      'Use type INDIVIDUAL for personal accounts or INSTITUTION for organizations',
-    schema: {
-      oneOf: [
-        { $ref: getSchemaPath(CreateIndividualCreatorDto) },
-        { $ref: getSchemaPath(CreateInstitutionCreatorDto) },
-      ],
-    },
-  })
-  @ApiCreatedResponse({
-    description: 'Creator profile created successfully',
-    type: CampaignCreatorResponseDto,
-  })
-  @ApiBadRequestResponse({ description: 'Invalid input or assets not found' })
-  @ApiConflictResponse({
-    description: 'Creator profile already exists for this user',
-  })
-  create(
-    @Body(new ZodValidationPipe(CreateCampaignCreatorSchema))
-    dto: CreateCampaignCreatorDto,
-  ) {
-    return this.service.create(dto);
-  }
+  // @Post()
+  // @HttpCode(HttpStatus.CREATED)
+  // @ApiOperation({
+  //   summary: 'Create creator profile',
+  //   description:
+  //     'Registers a user as a campaign creator. ' +
+  //     'INDIVIDUAL type auto-fills institution fields from user data. ' +
+  //     'INSTITUTION type accepts optional institution details (missing fields saved as N/A).',
+  // })
+  // @ApiBody({
+  //   description:
+  //     'Use type INDIVIDUAL for personal accounts or INSTITUTION for organizations',
+  //   schema: {
+  //     oneOf: [
+  //       { $ref: getSchemaPath(CreateIndividualCreatorDto) },
+  //       { $ref: getSchemaPath(CreateInstitutionCreatorDto) },
+  //     ],
+  //   },
+  // })
+  // @ApiCreatedResponse({
+  //   description: 'Creator profile created successfully',
+  //   type: CampaignCreatorResponseDto,
+  // })
+  // @ApiBadRequestResponse({ description: 'Invalid input or assets not found' })
+  // @ApiConflictResponse({
+  //   description: 'Creator profile already exists for this user',
+  // })
+  // create(
+  //   @Body(new ZodValidationPipe(CreateCampaignCreatorSchema))
+  //   dto: CreateCampaignCreatorDto,
+  // ) {
+  //   return this.service.create(dto);
+  // }
 
   //  GET /campaign-creator
   @Get()

@@ -16,7 +16,6 @@ exports.CampaignCreatorController = void 0;
 const common_1 = require("@nestjs/common");
 const campaign_creator_service_1 = require("./campaign-creator.service");
 const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
-const create_campaign_creator_dto_1 = require("./dto/create-campaign-creator.dto");
 const update_campaign_creator_dto_1 = require("./dto/update-campaign-creator.dto");
 const swagger_1 = require("@nestjs/swagger");
 const create_campaign_creator_swagger_dto_1 = require("./dto/create-campaign-creator.swagger.dto");
@@ -24,9 +23,6 @@ let CampaignCreatorController = class CampaignCreatorController {
     service;
     constructor(service) {
         this.service = service;
-    }
-    create(dto) {
-        return this.service.create(dto);
     }
     findAll(page, limit) {
         return this.service.findAll(Number(page) || 1, Number(limit) || 10);
@@ -45,37 +41,6 @@ let CampaignCreatorController = class CampaignCreatorController {
     }
 };
 exports.CampaignCreatorController = CampaignCreatorController;
-__decorate([
-    (0, common_1.Post)(),
-    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
-    (0, swagger_1.ApiOperation)({
-        summary: 'Create creator profile',
-        description: 'Registers a user as a campaign creator. ' +
-            'INDIVIDUAL type auto-fills institution fields from user data. ' +
-            'INSTITUTION type accepts optional institution details (missing fields saved as N/A).',
-    }),
-    (0, swagger_1.ApiBody)({
-        description: 'Use type INDIVIDUAL for personal accounts or INSTITUTION for organizations',
-        schema: {
-            oneOf: [
-                { $ref: (0, swagger_1.getSchemaPath)(create_campaign_creator_swagger_dto_1.CreateIndividualCreatorDto) },
-                { $ref: (0, swagger_1.getSchemaPath)(create_campaign_creator_swagger_dto_1.CreateInstitutionCreatorDto) },
-            ],
-        },
-    }),
-    (0, swagger_1.ApiCreatedResponse)({
-        description: 'Creator profile created successfully',
-        type: create_campaign_creator_swagger_dto_1.CampaignCreatorResponseDto,
-    }),
-    (0, swagger_1.ApiBadRequestResponse)({ description: 'Invalid input or assets not found' }),
-    (0, swagger_1.ApiConflictResponse)({
-        description: 'Creator profile already exists for this user',
-    }),
-    __param(0, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(create_campaign_creator_dto_1.CreateCampaignCreatorSchema))),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], CampaignCreatorController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({

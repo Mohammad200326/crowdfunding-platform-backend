@@ -1,12 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateCampaignCreatorSchema = void 0;
+exports.CreateCampaignCreatorSchema = exports.InstitutionProfileSchema = exports.InstitutionDocumentsSchema = void 0;
 const zod_1 = require("zod");
+exports.InstitutionDocumentsSchema = zod_1.z
+    .object({
+    registrationCertificateId: zod_1.z.string().uuid().optional(),
+    commercialLicenseId: zod_1.z.string().uuid().optional(),
+    representativeIdPhotoId: zod_1.z.string().uuid().optional(),
+    commissionerImageId: zod_1.z.string().uuid().optional(),
+    authorizationLetterId: zod_1.z.string().uuid().optional(),
+})
+    .optional();
 const BaseSchema = zod_1.z.object({
     userId: zod_1.z.string().uuid({ message: 'Invalid User ID' }),
     assetIds: zod_1.z.array(zod_1.z.string().uuid()).optional(),
 });
-const InstitutionProfileSchema = zod_1.z.object({
+exports.InstitutionProfileSchema = zod_1.z.object({
     institutionName: zod_1.z.string().min(2).optional(),
     institutionCountry: zod_1.z.string().min(2).optional(),
     institutionType: zod_1.z.string().min(2).optional(),
@@ -39,7 +48,8 @@ exports.CreateCampaignCreatorSchema = zod_1.z.discriminatedUnion('type', [
     }),
     BaseSchema.extend({
         type: zod_1.z.literal('INSTITUTION'),
-        ...InstitutionProfileSchema.shape,
+        ...exports.InstitutionProfileSchema.shape,
+        institutionDocuments: exports.InstitutionDocumentsSchema,
     }),
 ]);
 //# sourceMappingURL=create-campaign-creator.dto.js.map

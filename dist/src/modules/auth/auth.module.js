@@ -20,6 +20,7 @@ const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const file_module_1 = require("../file/file.module");
 const email_service_1 = require("./email.service");
+const campaign_creator_module_1 = require("../campaign-creator/campaign-creator.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -38,6 +39,7 @@ exports.AuthModule = AuthModule = __decorate([
                 inject: [config_1.ConfigService],
             }),
             file_module_1.FileModule,
+            campaign_creator_module_1.CampaignCreatorModule,
         ],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService, password_reset_service_1.PasswordResetService, otp_service_1.OtpService, email_service_1.EmailService],

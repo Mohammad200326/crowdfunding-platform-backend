@@ -1,5 +1,10 @@
 import { z } from 'zod';
 export declare const UpdateCampaignCreatorSchema: z.ZodObject<{
+    firstName: z.ZodOptional<z.ZodString>;
+    lastName: z.ZodOptional<z.ZodString>;
+    phoneNumber: z.ZodOptional<z.ZodString>;
+    country: z.ZodOptional<z.ZodString>;
+    notes: z.ZodOptional<z.ZodString>;
     institutionName: z.ZodOptional<z.ZodString>;
     institutionCountry: z.ZodOptional<z.ZodString>;
     institutionType: z.ZodOptional<z.ZodString>;

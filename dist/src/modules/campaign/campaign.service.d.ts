@@ -43,14 +43,14 @@ export declare class CampaignService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
         description: string;
         creatorId: string;
-        title: string;
-        status: import("@prisma/client").$Enums.CampaignStatus;
         isActive: boolean;
+        title: string;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
     }>;
     findAll(page: number, limit: number): Promise<({
         assets: {
@@ -87,14 +87,14 @@ export declare class CampaignService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
         description: string;
         creatorId: string;
-        title: string;
-        status: import("@prisma/client").$Enums.CampaignStatus;
         isActive: boolean;
+        title: string;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
     })[]>;
     findByCategory(category: CampaignCategory, page: number, limit: number): Promise<({
         assets: {
@@ -131,14 +131,14 @@ export declare class CampaignService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
         description: string;
         creatorId: string;
-        title: string;
-        status: import("@prisma/client").$Enums.CampaignStatus;
         isActive: boolean;
+        title: string;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
     })[]>;
     findByCreator(creatorId: string): Promise<({
         assets: {
@@ -175,14 +175,14 @@ export declare class CampaignService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
         description: string;
         creatorId: string;
-        title: string;
-        status: import("@prisma/client").$Enums.CampaignStatus;
         isActive: boolean;
+        title: string;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
     })[]>;
     findOne(id: string): Promise<{
         assets: {
@@ -219,14 +219,14 @@ export declare class CampaignService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
         description: string;
         creatorId: string;
-        title: string;
-        status: import("@prisma/client").$Enums.CampaignStatus;
         isActive: boolean;
+        title: string;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
     }>;
     softDelete(id: string): Promise<{
         id: string;
@@ -267,13 +267,13 @@ export declare class CampaignService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
         description: string;
         creatorId: string;
-        title: string;
-        status: import("@prisma/client").$Enums.CampaignStatus;
         isActive: boolean;
+        title: string;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
         endDate: Date;
         motivationMessage: string;
+        status: import("@prisma/client").$Enums.CampaignStatus;
     }>;
 }
