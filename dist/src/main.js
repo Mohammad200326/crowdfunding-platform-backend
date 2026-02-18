@@ -40,6 +40,7 @@ const express = __importStar(require("express"));
 async function bootstrap() {
     console.log('CURRENT DB URL:', process.env.DATABASE_URL);
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.enableCors();
     app.use('/api/v1/webhooks/stripe', express.raw({ type: 'application/json' }));
     app.use(express.json());
     app.setGlobalPrefix('api/v1');

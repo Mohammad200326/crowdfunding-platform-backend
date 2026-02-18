@@ -110,27 +110,6 @@ let WithdrawalService = class WithdrawalService {
             message: 'Stripe Connect account created. Please complete onboarding.',
         };
     }
-<<<<<<< HEAD
-=======
-    async getStripeOnboardingLink(userId) {
-        const user = await this.prismaService.user.findUnique({
-            where: { id: userId },
-            include: { creatorProfile: true },
-        });
-        if (!user || user.isDeleted) {
-            throw new common_1.NotFoundException('User not found');
-        }
-        const stripeAccountId = user.creatorProfile?.stripeAccountId;
-        if (!stripeAccountId) {
-            throw new common_1.BadRequestException('No Stripe Connect account found. Please create one first.');
-        }
-        const appUrl = process.env.APP_URL ?? 'http://localhost:3000';
-        const accountLink = await this.stripeService.createAccountLink(stripeAccountId, `${appUrl}/api/v1/withdrawal/stripe/onboarding-refresh`, `${appUrl}/api/v1/withdrawal/stripe/onboarding-complete`);
-        return {
-            onboardingUrl: accountLink.url,
-        };
-    }
->>>>>>> develop
     async getStripeAccountStatus(userId) {
         const user = await this.prismaService.user.findUnique({
             where: { id: userId },
@@ -174,7 +153,7 @@ let WithdrawalService = class WithdrawalService {
     async create(createWithdrawalDto, userId) {
         const user = await this.prismaService.user.findUnique({
             where: { id: userId },
-            select: { id: true, role: true, isDeleted: true, isVerified: true },
+            include: { creatorProfile: { select: { stripeAccountId: true } } },
         });
         if (!user || user.isDeleted) {
             throw new common_1.NotFoundException('User not found');
@@ -234,6 +213,21 @@ let WithdrawalService = class WithdrawalService {
             if (!bankAccount) {
                 throw new common_1.NotFoundException('No bank account found. Please add a bank account first.');
             }
+        }
+        const stripeAccountId = user.creatorProfile?.stripeAccountId;
+        if (!stripeAccountId) {
+            throw new common_1.BadRequestException('No Stripe Connect account found. Please complete Stripe onboarding before requesting a withdrawal.');
+        }
+        const stripeBankAccounts = await this.stripeService.listExternalBankAccounts(stripeAccountId);
+        if (!stripeBankAccounts || stripeBankAccounts.length === 0) {
+            throw new common_1.BadRequestException('No bank account found in Stripe Connect. Please add a bank account through Stripe onboarding.');
+        }
+        const normalizedIban = bankAccount.iban.replace(/\s+/g, '').toUpperCase();
+        const ibanLast4 = normalizedIban.slice(-4);
+        const matchFound = stripeBankAccounts.some((stripeBankAcc) => stripeBankAcc.last4 === ibanLast4);
+        if (!matchFound) {
+            throw new common_1.BadRequestException(`Bank account mismatch: the bank account on file (IBAN ending in ${ibanLast4}) does not match any bank account registered in Stripe. ` +
+                'Please make sure the same bank account is used on both the platform and Stripe Connect.');
         }
         const balance = await this.getBalance(userId);
         if (createWithdrawalDto.starsNumber > balance.availableBalance) {
@@ -335,6 +329,13 @@ let WithdrawalService = class WithdrawalService {
         const withdrawal = await this.prismaService.withdrawal.findUnique({
             where: { id },
             include: {
+                bankAccount: {
+                    select: {
+                        id: true,
+                        iban: true,
+                        bankName: true,
+                    },
+                },
                 creator: {
                     include: {
                         creatorProfile: true,
@@ -360,6 +361,23 @@ let WithdrawalService = class WithdrawalService {
             const isReady = await this.stripeService.isAccountReadyForTransfers(stripeAccountId);
             if (!isReady) {
                 throw new common_1.BadRequestException('Stripe Connect account is not ready to receive transfers. Please complete account verification.');
+            }
+            const stripeBankAccounts = await this.stripeService.listExternalBankAccounts(stripeAccountId);
+            if (!stripeBankAccounts || stripeBankAccounts.length === 0) {
+                throw new common_1.BadRequestException('No bank account found in Stripe Connect. Please add a bank account through Stripe onboarding.');
+            }
+            const withdrawalIban = withdrawal.bankAccount?.iban;
+            if (withdrawalIban) {
+                const normalizedIban = withdrawalIban.replace(/\s+/g, '').toUpperCase();
+                const ibanLast4 = normalizedIban.slice(-4);
+                const matchFound = stripeBankAccounts.some((stripeBankAcc) => {
+                    const stripeLast4 = stripeBankAcc.last4;
+                    return stripeLast4 === ibanLast4;
+                });
+                if (!matchFound) {
+                    throw new common_1.BadRequestException(`Bank account mismatch: the bank account on file (IBAN ending in ${ibanLast4}) does not match any bank account registered in Stripe Connect. ` +
+                        'Please ensure the same bank account is used in both the platform and Stripe.');
+                }
             }
             const amountInMinor = withdrawal.netStars * this.getStarValueInMinor();
             try {
