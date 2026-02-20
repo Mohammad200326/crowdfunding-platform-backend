@@ -35,7 +35,7 @@ let BankAccountController = class BankAccountController {
     }
     async findByUserId(userId, user) {
         if (userId !== user.id) {
-            throw new common_1.NotFoundException('Bank accounts not found');
+            throw new common_1.ForbiddenException('You are not authorized to view other users bank accounts');
         }
         return this.bankAccountService.findByUserId(userId);
     }

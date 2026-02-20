@@ -113,6 +113,7 @@ __decorate([
 ], AuthController.prototype, "forgot", null);
 __decorate([
     (0, common_1.Post)('password/verify-otp'),
+    (0, public_decorator_1.IsPublic)(true),
     (0, swagger_1.ApiOperation)({ summary: 'Verify OTP and return reset token' }),
     (0, swagger_1.ApiBody)({ type: auth_swagger_dto_1.VerifyForgotOtpDto }),
     (0, swagger_1.ApiOkResponse)({
@@ -131,6 +132,7 @@ __decorate([
 ], AuthController.prototype, "verifyOTP", null);
 __decorate([
     (0, common_1.Post)('password/reset'),
+    (0, public_decorator_1.IsPublic)(true),
     (0, swagger_1.ApiOperation)({ summary: 'Reset password using reset token' }),
     (0, swagger_1.ApiBody)({ type: auth_swagger_dto_1.ResetPasswordDto }),
     (0, swagger_1.ApiOkResponse)({

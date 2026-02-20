@@ -8,7 +8,12 @@ export declare class CampaignService {
     private readonly prismaService;
     constructor(filesService: FileService, prismaService: DatabaseService);
     private readonly campaignIncludes;
-    create(createCampaignDto: CreateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<{
+    private readonly donationsInclude;
+    private enrichCampaign;
+    create(createCampaignDto: CreateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<Omit<{
+        donations: {
+            stars: number;
+        }[];
         assets: {
             url: string;
             id: string;
@@ -27,6 +32,9 @@ export declare class CampaignService {
             bankAccountId: string | null;
             donorIdentityId: string | null;
         }[];
+        _count: {
+            likes: number;
+        };
         creator: {
             id: string;
             firstName: string;
@@ -51,8 +59,13 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+    }, "donations"> & {
+        raisedStars: number;
     }>;
-    findAll(page: number, limit: number): Promise<({
+    findAll(page: number, limit: number): Promise<(Omit<{
+        donations: {
+            stars: number;
+        }[];
         assets: {
             url: string;
             id: string;
@@ -71,6 +84,9 @@ export declare class CampaignService {
             bankAccountId: string | null;
             donorIdentityId: string | null;
         }[];
+        _count: {
+            likes: number;
+        };
         creator: {
             id: string;
             firstName: string;
@@ -95,8 +111,13 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+    }, "donations"> & {
+        raisedStars: number;
     })[]>;
-    findByCategory(category: CampaignCategory, page: number, limit: number): Promise<({
+    findByCategory(category: CampaignCategory, page: number, limit: number): Promise<(Omit<{
+        donations: {
+            stars: number;
+        }[];
         assets: {
             url: string;
             id: string;
@@ -115,6 +136,9 @@ export declare class CampaignService {
             bankAccountId: string | null;
             donorIdentityId: string | null;
         }[];
+        _count: {
+            likes: number;
+        };
         creator: {
             id: string;
             firstName: string;
@@ -139,8 +163,13 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+    }, "donations"> & {
+        raisedStars: number;
     })[]>;
-    findByCreator(creatorId: string): Promise<({
+    findByCreator(creatorId: string): Promise<(Omit<{
+        donations: {
+            stars: number;
+        }[];
         assets: {
             url: string;
             id: string;
@@ -159,6 +188,9 @@ export declare class CampaignService {
             bankAccountId: string | null;
             donorIdentityId: string | null;
         }[];
+        _count: {
+            likes: number;
+        };
         creator: {
             id: string;
             firstName: string;
@@ -183,8 +215,13 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+    }, "donations"> & {
+        raisedStars: number;
     })[]>;
-    findOne(id: string): Promise<{
+    findOne(id: string): Promise<Omit<{
+        donations: {
+            stars: number;
+        }[];
         assets: {
             url: string;
             id: string;
@@ -203,6 +240,9 @@ export declare class CampaignService {
             bankAccountId: string | null;
             donorIdentityId: string | null;
         }[];
+        _count: {
+            likes: number;
+        };
         creator: {
             id: string;
             firstName: string;
@@ -227,12 +267,20 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+    }, "donations"> & {
+        raisedStars: number;
+    }>;
+    toggleLike(campaignId: string, userId: string): Promise<{
+        liked: boolean;
     }>;
     softDelete(id: string): Promise<{
         id: string;
         isDeleted: boolean;
     }>;
-    update(id: string, updateCampaignDto: UpdateCampaignDto, user: Express.Request['user'], file?: Express.Multer.File): Promise<{
+    update(id: string, updateCampaignDto: UpdateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<Omit<{
+        donations: {
+            stars: number;
+        }[];
         assets: {
             url: string;
             id: string;
@@ -251,6 +299,9 @@ export declare class CampaignService {
             bankAccountId: string | null;
             donorIdentityId: string | null;
         }[];
+        _count: {
+            likes: number;
+        };
         creator: {
             id: string;
             firstName: string;
@@ -275,5 +326,7 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
+    }, "donations"> & {
+        raisedStars: number;
     }>;
 }

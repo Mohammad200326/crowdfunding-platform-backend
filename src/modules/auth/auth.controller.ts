@@ -143,6 +143,7 @@ export class AuthController {
   }
 
   @Post('password/verify-otp')
+  @IsPublic(true)
   @ApiOperation({ summary: 'Verify OTP and return reset token' })
   @ApiBody({ type: VerifyForgotOtpDto })
   @ApiOkResponse({
@@ -165,6 +166,7 @@ export class AuthController {
   }
 
   @Post('password/reset')
+  @IsPublic(true)
   @ApiOperation({ summary: 'Reset password using reset token' })
   @ApiBody({ type: ResetPasswordDto })
   @ApiOkResponse({
