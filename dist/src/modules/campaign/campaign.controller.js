@@ -45,6 +45,9 @@ let CampaignController = class CampaignController {
     update(id, updatePayload, user, file) {
         return this.campaignService.update(id, updatePayload, user, file);
     }
+    toggleLike(id, user) {
+        return this.campaignService.toggleLike(id, user.id);
+    }
     remove(id) {
         return this.campaignService.softDelete(id);
     }
@@ -138,6 +141,24 @@ __decorate([
     __metadata("design:paramtypes", [String, Object, Object, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "update", null);
+__decorate([
+    (0, common_1.Post)(':id/like'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({ summary: 'Toggle like on a campaign' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'Campaign UUID' }),
+    (0, swagger_1.ApiOkResponse)({
+        description: 'Like toggled',
+        schema: {
+            type: 'object',
+            properties: { liked: { type: 'boolean' } },
+        },
+    }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(1, (0, user_decorator_1.User)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], CampaignController.prototype, "toggleLike", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
