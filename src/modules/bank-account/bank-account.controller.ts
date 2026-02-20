@@ -12,6 +12,7 @@ import {
   HttpCode,
   HttpStatus,
   NotFoundException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -109,9 +110,10 @@ export class BankAccountController {
     @Param('userId', ParseUUIDPipe) userId: string,
     @User() user: UserResponseDTO['userData'],
   ): Promise<BankAccountWithAssetsDto[]> {
-    // Users can only view their own bank accounts
     if (userId !== user.id) {
-      throw new NotFoundException('Bank accounts not found');
+      throw new ForbiddenException(
+        'You are not authorized to view other users bank accounts',
+      );
     }
     return this.bankAccountService.findByUserId(userId);
   }
