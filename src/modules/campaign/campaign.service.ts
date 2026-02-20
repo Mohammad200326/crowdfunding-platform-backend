@@ -4,7 +4,12 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto';
-import { Prisma, CampaignCategory } from '@prisma/client';
+import {
+  Prisma,
+  CampaignCategory,
+  PaymentStatus,
+  PrismaClient,
+} from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { FileService } from '../file/file.service';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
@@ -25,8 +30,26 @@ export class CampaignService {
         country: true,
       },
     },
-    assets: true, // Fetch images/thumbnails
+    assets: true,
+    _count: { select: { likes: true } },
   };
+
+  private readonly donationsInclude = {
+    donations: {
+      where: { paymentStatus: PaymentStatus.completed },
+      select: { stars: true },
+    },
+  };
+
+  private enrichCampaign<
+    T extends { donations: { stars: number }[]; goal: number },
+  >(campaign: T) {
+    const { donations, ...rest } = campaign;
+    return {
+      ...rest,
+      raisedStars: donations.reduce((sum, d) => sum + d.stars, 0),
+    };
+  }
 
   // CREATE CAMPAIGN (With File Upload)
   async create(
@@ -50,28 +73,32 @@ export class CampaignService {
       };
     }
 
-    return this.prismaService.campaign.create({
+    const campaign = await this.prismaService.campaign.create({
       data: dataPayload,
-      include: this.campaignIncludes, // Use consistent include
+      include: { ...this.campaignIncludes, ...this.donationsInclude },
     });
+
+    return this.enrichCampaign(campaign);
   }
 
   // GET ALL ACTIVE CAMPAIGNS (Feed + Pagination)
   async findAll(page: number, limit: number) {
     const skip = (page - 1) * limit;
 
-    return this.prismaService.campaign.findMany({
+    const campaigns = await this.prismaService.campaign.findMany({
       where: {
         isDeleted: false,
         isActive: true,
       },
       take: limit,
       skip: skip,
-      include: this.campaignIncludes,
+      include: { ...this.campaignIncludes, ...this.donationsInclude },
       orderBy: {
-        createdAt: 'desc', // Newest first
+        createdAt: 'desc',
       },
     });
+
+    return campaigns.map((c) => this.enrichCampaign(c));
   }
 
   // GET BY CATEGORY
@@ -82,7 +109,7 @@ export class CampaignService {
   ) {
     const skip = (page - 1) * limit;
 
-    return this.prismaService.campaign.findMany({
+    const campaigns = await this.prismaService.campaign.findMany({
       where: {
         category: category,
         isDeleted: false,
@@ -90,37 +117,73 @@ export class CampaignService {
       },
       take: limit,
       skip: skip,
-      include: this.campaignIncludes,
+      include: { ...this.campaignIncludes, ...this.donationsInclude },
       orderBy: {
         createdAt: 'desc',
       },
     });
+
+    return campaigns.map((c) => this.enrichCampaign(c));
   }
 
   // GET BY CREATOR (Profile)
   async findByCreator(creatorId: string) {
-    return this.prismaService.campaign.findMany({
+    const campaigns = await this.prismaService.campaign.findMany({
       where: {
         creatorId: creatorId,
         isDeleted: false,
       },
-      include: this.campaignIncludes,
+      include: { ...this.campaignIncludes, ...this.donationsInclude },
       orderBy: { createdAt: 'desc' },
     });
+
+    return campaigns.map((c) => this.enrichCampaign(c));
   }
 
   // GET ONE (Details Page)
   async findOne(id: string) {
     const campaign = await this.prismaService.campaign.findUnique({
       where: { id },
-      include: this.campaignIncludes,
+      include: { ...this.campaignIncludes, ...this.donationsInclude },
     });
 
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${id} not found`);
     }
 
-    return campaign;
+    return this.enrichCampaign(campaign);
+  }
+
+  // TOGGLE LIKE
+  async toggleLike(campaignId: string, userId: string) {
+    const campaign = await this.prismaService.campaign.findUnique({
+      where: { id: campaignId },
+      select: { id: true, isDeleted: true },
+    });
+
+    if (!campaign || campaign.isDeleted) {
+      throw new NotFoundException(`Campaign with ID ${campaignId} not found`);
+    }
+
+    const prisma = this.prismaService as unknown as PrismaClient;
+
+    /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
+    const existingLike = await prisma.campaignLike.findUnique({
+      where: { userId_campaignId: { userId, campaignId } },
+    });
+
+    if (existingLike) {
+      await prisma.campaignLike.delete({
+        where: { userId_campaignId: { userId, campaignId } },
+      });
+      return { liked: false };
+    }
+
+    await prisma.campaignLike.create({
+      data: { userId, campaignId },
+    });
+    /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
+    return { liked: true };
   }
 
   // SOFT DELETE
@@ -152,7 +215,7 @@ export class CampaignService {
   async update(
     id: string,
     updateCampaignDto: UpdateCampaignDto,
-    user: Express.Request['user'],
+    user: UserResponseDTO['userData'],
     file?: Express.Multer.File,
   ) {
     // Check if campaign exists
@@ -169,7 +232,7 @@ export class CampaignService {
     }
 
     // Check if user is the owner of the campaign
-    if (campaign.creatorId !== user!.id) {
+    if (campaign.creatorId !== user.id) {
       throw new ForbiddenException(
         `You are not authorized to update this campaign`,
       );
@@ -212,16 +275,18 @@ export class CampaignService {
       dataPayload.assets = {
         create: this.filesService.createFileAssetData(
           file,
-          user!.id,
+          user.id,
           'CAMPAIGN_THUMBNAIL',
         ),
       };
     }
 
-    return this.prismaService.campaign.update({
-      where: { id },
-      data: dataPayload,
-      include: this.campaignIncludes,
-    });
+    return this.enrichCampaign(
+      await this.prismaService.campaign.update({
+        where: { id },
+        data: dataPayload,
+        include: { ...this.campaignIncludes, ...this.donationsInclude },
+      }),
+    );
   }
 }

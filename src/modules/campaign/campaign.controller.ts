@@ -42,11 +42,7 @@ import {
   createCampaignApiBody,
   updateCampaignApiBody,
 } from './dto/campaign.swagger.dto';
-import type {
-  CampaignResponseDTO,
-  CreateCampaignDto,
-  UpdateCampaignDto,
-} from './dto/campaign.dto'; // Ensure this import exists
+import type { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto'; // Ensure this import exists
 import { CampaignCategory } from '@prisma/client';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
 
@@ -145,6 +141,24 @@ export class CampaignController {
     @UploadedFile() file?: Express.Multer.File,
   ) {
     return this.campaignService.update(id, updatePayload, user, file);
+  }
+
+  @Post(':id/like')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Toggle like on a campaign' })
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  @ApiOkResponse({
+    description: 'Like toggled',
+    schema: {
+      type: 'object',
+      properties: { liked: { type: 'boolean' } },
+    },
+  })
+  toggleLike(
+    @Param('id', ParseUUIDPipe) id: string,
+    @User() user: UserResponseDTO['userData'],
+  ) {
+    return this.campaignService.toggleLike(id, user.id);
   }
 
   @Delete(':id')
