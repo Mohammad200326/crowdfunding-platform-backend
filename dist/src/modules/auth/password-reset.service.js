@@ -49,7 +49,7 @@ let PasswordResetService = class PasswordResetService {
             await this.emailService.sendOtp(email, otp);
             return { expiresIn };
         }
-        return { message: 'Error' };
+        return { message: 'Email not found!' };
     }
     async verify(emailRaw, otp) {
         const email = emailRaw.trim().toLowerCase();
