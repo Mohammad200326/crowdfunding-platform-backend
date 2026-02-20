@@ -82,7 +82,4 @@ export declare class AuthService {
     hashPassword(password: string): Promise<string>;
     verifyPassword(password: string, hashedPassword: string): Promise<boolean>;
     private generateJwtToken;
-    forgotPassword(email: string): Promise<{
-        expiresIn: number;
-    }>;
 }

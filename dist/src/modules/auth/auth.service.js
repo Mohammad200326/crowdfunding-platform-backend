@@ -217,11 +217,6 @@ let AuthService = class AuthService {
     generateJwtToken(userId, role) {
         return this.jwtService.sign({ sub: String(userId), role }, { expiresIn: '30d' });
     }
-    async forgotPassword(email) {
-        const { otp, expiresIn } = await this.otpService.sendOtp(email, 'forgot_password');
-        await this.emailService.sendOtp(email, otp);
-        return { expiresIn };
-    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([

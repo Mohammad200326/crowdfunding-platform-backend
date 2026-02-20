@@ -339,14 +339,14 @@ export class AuthService {
     );
   }
 
-  async forgotPassword(email: string) {
-    const { otp, expiresIn } = await this.otpService.sendOtp(
-      email,
-      'forgot_password',
-    );
+  // async forgotPassword(email: string) {
+  //   const { otp, expiresIn } = await this.otpService.sendOtp(
+  //     email,
+  //     'forgot_password',
+  //   );
 
-    await this.emailService.sendOtp(email, otp);
+  //   await this.emailService.sendOtp(email, otp);
 
-    return { expiresIn };
-  }
+  //   return { expiresIn };
+  // }
 }

@@ -5,6 +5,7 @@ import { randomUUID } from 'crypto';
 import { AuthService } from './auth.service';
 import Redis from 'ioredis';
 import { REDIS } from 'src/lib/redis.provider';
+import { EmailService } from './email.service';
 
 @Injectable()
 export class PasswordResetService {
@@ -15,6 +16,7 @@ export class PasswordResetService {
     private userService: UserService,
     private otpService: OtpService,
     private authService: AuthService,
+    private emailService: EmailService,
     @Inject(REDIS) private readonly redis: Redis,
   ) {}
 
@@ -26,9 +28,15 @@ export class PasswordResetService {
     console.log('user found?', !!user);
 
     if (user) {
-      await this.otpService.sendOtp(email, this.PURPOSE);
+      // await this.otpService.sendOtp(email, this.PURPOSE);
+      const { otp, expiresIn } = await this.otpService.sendOtp(
+        email,
+        'forgot_password',
+      );
+      await this.emailService.sendOtp(email, otp);
+      return { expiresIn };
     }
-    return { message: 'If the email exists, an OTP has been sent.' };
+    return { message: 'Error' };
   }
 
   async verify(emailRaw: string, otp: string) {
