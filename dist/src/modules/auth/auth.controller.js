@@ -42,7 +42,7 @@ let AuthController = class AuthController {
         return this.authService.login(dto);
     }
     async forgot(forgotPasswordDTO) {
-        return this.authService.forgotPassword(forgotPasswordDTO.email);
+        return this.passwordResetService.forgot(forgotPasswordDTO.email);
     }
     async verifyOTP(verifyOTPSchema) {
         return this.passwordResetService.verify(verifyOTPSchema.email, verifyOTPSchema.otp);

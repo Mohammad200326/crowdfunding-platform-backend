@@ -23,17 +23,20 @@ const crypto_1 = require("crypto");
 const auth_service_1 = require("./auth.service");
 const ioredis_1 = __importDefault(require("ioredis"));
 const redis_provider_1 = require("../../lib/redis.provider");
+const email_service_1 = require("./email.service");
 let PasswordResetService = class PasswordResetService {
     userService;
     otpService;
     authService;
+    emailService;
     redis;
     RESET_TOKEN_TTL = 15 * 60;
     PURPOSE = 'forgot_password';
-    constructor(userService, otpService, authService, redis) {
+    constructor(userService, otpService, authService, emailService, redis) {
         this.userService = userService;
         this.otpService = otpService;
         this.authService = authService;
+        this.emailService = emailService;
         this.redis = redis;
     }
     async forgot(emailRaw) {
@@ -42,9 +45,11 @@ let PasswordResetService = class PasswordResetService {
         const user = await this.userService.findByEmail(email);
         console.log('user found?', !!user);
         if (user) {
-            await this.otpService.sendOtp(email, this.PURPOSE);
+            const { otp, expiresIn } = await this.otpService.sendOtp(email, 'forgot_password');
+            await this.emailService.sendOtp(email, otp);
+            return { expiresIn };
         }
-        return { message: 'If the email exists, an OTP has been sent.' };
+        return { message: 'Error' };
     }
     async verify(emailRaw, otp) {
         const email = emailRaw.trim().toLowerCase();
@@ -88,10 +93,11 @@ let PasswordResetService = class PasswordResetService {
 exports.PasswordResetService = PasswordResetService;
 exports.PasswordResetService = PasswordResetService = __decorate([
     (0, common_1.Injectable)(),
-    __param(3, (0, common_1.Inject)(redis_provider_1.REDIS)),
+    __param(4, (0, common_1.Inject)(redis_provider_1.REDIS)),
     __metadata("design:paramtypes", [user_service_1.UserService,
         otp_service_1.OtpService,
         auth_service_1.AuthService,
+        email_service_1.EmailService,
         ioredis_1.default])
 ], PasswordResetService);
 //# sourceMappingURL=password-reset.service.js.map
