@@ -48,6 +48,7 @@ export declare class CampaignController {
         creatorId: string;
         isActive: boolean;
         title: string;
+        longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
@@ -100,6 +101,7 @@ export declare class CampaignController {
         creatorId: string;
         isActive: boolean;
         title: string;
+        longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
@@ -152,6 +154,7 @@ export declare class CampaignController {
         creatorId: string;
         isActive: boolean;
         title: string;
+        longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
@@ -204,6 +207,7 @@ export declare class CampaignController {
         creatorId: string;
         isActive: boolean;
         title: string;
+        longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
@@ -256,6 +260,7 @@ export declare class CampaignController {
         creatorId: string;
         isActive: boolean;
         title: string;
+        longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
         startDate: Date;
