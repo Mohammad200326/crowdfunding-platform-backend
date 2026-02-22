@@ -97,6 +97,7 @@ export class AuthController {
   })
   @UseInterceptors(
     FileFieldsInterceptor([
+      { name: 'avatar', maxCount: 1 },
       { name: 'registrationCertificate', maxCount: 1 },
       { name: 'commercialLicense', maxCount: 1 },
       { name: 'representativeIdPhoto', maxCount: 1 },
@@ -109,6 +110,7 @@ export class AuthController {
     dto: RegisterCampaignCreatorFormDTO,
     @UploadedFiles()
     files: {
+      avatar?: Express.Multer.File[];
       registrationCertificate?: Express.Multer.File[];
       commercialLicense?: Express.Multer.File[];
       representativeIdPhoto?: Express.Multer.File[];

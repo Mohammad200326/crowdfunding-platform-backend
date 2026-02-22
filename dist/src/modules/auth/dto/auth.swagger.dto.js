@@ -773,6 +773,7 @@ class RegisterCampaignCreatorFormDto {
     representativeIdPhoto;
     commissionerImage;
     authorizationLetter;
+    avatar;
 }
 exports.RegisterCampaignCreatorFormDto = RegisterCampaignCreatorFormDto;
 __decorate([
@@ -887,4 +888,8 @@ __decorate([
     (0, swagger_2.ApiPropertyOptional)({ type: 'string', format: 'binary' }),
     __metadata("design:type", Object)
 ], RegisterCampaignCreatorFormDto.prototype, "authorizationLetter", void 0);
+__decorate([
+    (0, swagger_2.ApiPropertyOptional)({ type: 'string', format: 'binary' }),
+    __metadata("design:type", Object)
+], RegisterCampaignCreatorFormDto.prototype, "avatar", void 0);
 //# sourceMappingURL=auth.swagger.dto.js.map

@@ -76,6 +76,7 @@ __decorate([
         type: auth_swagger_dto_1.RegisterCampaignCreatorResponseDto,
     }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([
+        { name: 'avatar', maxCount: 1 },
         { name: 'registrationCertificate', maxCount: 1 },
         { name: 'commercialLicense', maxCount: 1 },
         { name: 'representativeIdPhoto', maxCount: 1 },

@@ -27,6 +27,7 @@ export declare class AuthController {
         token: string;
     }>;
     registerCampaignCreator(dto: RegisterCampaignCreatorFormDTO, files: {
+        avatar?: Express.Multer.File[];
         registrationCertificate?: Express.Multer.File[];
         commercialLicense?: Express.Multer.File[];
         representativeIdPhoto?: Express.Multer.File[];

@@ -572,4 +572,7 @@ export class RegisterCampaignCreatorFormDto {
 
   @ApiPropertyOptional({ type: 'string', format: 'binary' })
   authorizationLetter?: any;
+
+  @ApiPropertyOptional({ type: 'string', format: 'binary' })
+  avatar?: any;
 }

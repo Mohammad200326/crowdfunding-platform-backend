@@ -179,6 +179,7 @@ export class AuthService {
   async registerCampaignCreatorForm(
     dto: RegisterCampaignCreatorFormDTO,
     files: {
+      avatar?: Express.Multer.File[];
       registrationCertificate?: Express.Multer.File[];
       commercialLicense?: Express.Multer.File[];
       representativeIdPhoto?: Express.Multer.File[];
@@ -214,6 +215,22 @@ export class AuthService {
           verificationStatus: 'pending',
         },
       });
+
+      const avatar = files?.avatar?.[0];
+      if (avatar) {
+        const avatarAsset = this.fileService.createFileAssetData(
+          avatar,
+          user.id,
+          AssetKind.USER_AVATAR,
+        );
+
+        await tx.asset.create({
+          data: {
+            ...avatarAsset,
+            userId: user.id,
+          },
+        });
+      }
 
       // 2) create creator profile (optional) - only if INSTITUTION
       let creator: { id: string } | null = null;

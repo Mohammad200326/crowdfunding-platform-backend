@@ -151,6 +151,16 @@ let AuthService = class AuthService {
                     verificationStatus: 'pending',
                 },
             });
+            const avatar = files?.avatar?.[0];
+            if (avatar) {
+                const avatarAsset = this.fileService.createFileAssetData(avatar, user.id, client_1.AssetKind.USER_AVATAR);
+                await tx.asset.create({
+                    data: {
+                        ...avatarAsset,
+                        userId: user.id,
+                    },
+                });
+            }
             let creator = null;
             if (dto.type === 'INSTITUTION') {
                 creator = await this.campaignCreatorService.createForUser({
