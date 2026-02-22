@@ -1,5 +1,5 @@
 import { Campaign, Prisma } from '@prisma/client';
-export type CreateCampaignDto = Omit<Campaign, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'isVerified' | 'verificationStatus' | 'isActive' | 'isDeleted' | 'creatorId' | 'likes' | 'notes'> & Partial<Pick<Campaign, 'notes'>>;
+export type CreateCampaignDto = Omit<Campaign, 'id' | 'createdAt' | 'updatedAt' | 'status' | 'isVerified' | 'verificationStatus' | 'isActive' | 'isDeleted' | 'creatorId' | 'likes' | 'notes' | 'longDescription'> & Partial<Pick<Campaign, 'notes'>>;
 export type UpdateCampaignDto = Partial<CreateCampaignDto & {
     status: Campaign['status'];
     isVerified: Campaign['isVerified'];

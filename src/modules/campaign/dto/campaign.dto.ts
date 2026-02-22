@@ -13,6 +13,7 @@ export type CreateCampaignDto = Omit<
   | 'creatorId'
   | 'likes'
   | 'notes'
+  | 'longDescription'
 > &
   Partial<Pick<Campaign, 'notes'>>;
 

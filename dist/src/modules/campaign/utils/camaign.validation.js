@@ -20,6 +20,7 @@ exports.campaignValidationSchema = zod_1.z.object({
     endDate: zod_1.z.coerce.date().min(new Date()),
     motivationMessage: zod_1.z.string().min(2).max(1000),
     notes: zod_1.z.string().max(1000).optional(),
+    longDescription: zod_1.z.string().min(10).nullable().optional(),
 });
 exports.updateCampaignValidationSchema = exports.campaignValidationSchema
     .partial()
