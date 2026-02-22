@@ -184,4 +184,5 @@ export declare class RegisterCampaignCreatorFormDto {
     representativeIdPhoto?: any;
     commissionerImage?: any;
     authorizationLetter?: any;
+    avatar?: any;
 }
