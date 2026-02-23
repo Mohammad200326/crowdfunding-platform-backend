@@ -50,6 +50,67 @@ export type RegisterCampaignCreatorDTO = z.infer<
   typeof RegisterCampaignCreatorSchema
 >;
 
+const CampaignCategoryEnum = z.enum([
+  'WATER',
+  'HEALTH',
+  'ENVIROMENT',
+  'FOOD',
+  'EDUCATION',
+  'SHELTER',
+  'ANIMALS',
+]);
+const PreferencesSchema = z.preprocess((val) => {
+  if (val === undefined || val === null || val === '') return undefined;
+
+  const normalize = (s: string) =>
+    s
+      .trim()
+      .replace(/^"+|"+$/g, '')
+      .replace(/^'+|'+$/g, '');
+
+  // If repeated form-data keys => array of strings
+  if (Array.isArray(val)) {
+    return val
+      .flatMap((x) => String(x).split(','))
+      .map((x) => normalize(x))
+      .filter(Boolean);
+  }
+
+  if (typeof val === 'string') {
+    const s = val.trim();
+
+    // JSON string array: ["WATER","HEALTH"]
+    if (s.startsWith('[') && s.endsWith(']')) {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        const parsed = JSON.parse(s);
+        if (Array.isArray(parsed)) {
+          return parsed.map((x) => normalize(String(x))).filter(Boolean);
+        }
+      } catch {
+        // لو فشل الـ JSON parse، جرّب كـ comma-separated بدل ما نخليه عنصر واحد غلط
+        return s
+          .replace(/^\[|\]$/g, '')
+          .split(',')
+          .map((x) => normalize(x))
+          .filter(Boolean);
+      }
+    }
+
+    // comma-separated: WATER,HEALTH
+    if (s.includes(',')) {
+      return s
+        .split(',')
+        .map((x) => normalize(x))
+        .filter(Boolean);
+    }
+
+    // single value: WATER
+    return [normalize(s)].filter(Boolean);
+  }
+
+  return undefined;
+}, z.array(CampaignCategoryEnum).optional());
 // register-campaign-creator.form.schema.ts
 export const RegisterCampaignCreatorFormSchema = z.object({
   firstName: z.string().min(1),
@@ -63,6 +124,7 @@ export const RegisterCampaignCreatorFormSchema = z.object({
   dateOfBirth: z.coerce.date().optional(),
 
   type: z.enum(['INDIVIDUAL', 'INSTITUTION']),
+  preferences: PreferencesSchema,
 
   // institution fields (all optional)
   institutionName: z.string().optional(),

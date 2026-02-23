@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   Injectable,
+  InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as argon from 'argon2';
@@ -231,7 +232,17 @@ export class AuthService {
           },
         });
       }
+      const prefs = Array.from(new Set(dto.preferences ?? []));
 
+      if (prefs.length) {
+        await tx.userPreference.createMany({
+          data: prefs.map((p) => ({
+            userId: user.id,
+            preference: p,
+          })),
+          skipDuplicates: true,
+        });
+      }
       // 2) create creator profile (optional) - only if INSTITUTION
       let creator: { id: string } | null = null;
 
@@ -319,7 +330,6 @@ export class AuthService {
         }
 
         if (assets.length) {
-          // اربطها بالـ creatorId
           assets.forEach((a) => (a.creatorId = creator!.id));
           await tx.asset.createMany({ data: assets });
         }
@@ -331,12 +341,36 @@ export class AuthService {
     const token = this.generateJwtToken(result.user.id, result.user.role);
     const { password, ...userData } = result.user;
 
+    const userWithPrefs = await this.databaseService.user.findUnique({
+      where: { id: result.user.id },
+      select: {
+        id: true,
+        firstName: true,
+        lastName: true,
+        email: true,
+        role: true,
+        country: true,
+        phoneNumber: true,
+        notes: true,
+        dateOfBirth: true,
+        isVerified: true,
+        verificationStatus: true,
+        createdAt: true,
+        updatedAt: true,
+        preferences: { select: { preference: true } },
+      },
+    });
+    if (!userWithPrefs) {
+      throw new InternalServerErrorException('User not found');
+    }
+
     return {
       token,
       userData: {
-        ...userData,
+        ...userWithPrefs,
         type: dto.type,
-        creatorProfile: result.creator, // أو رجّع select كامل لو بدك
+        creatorProfile: result.creator,
+        preferences: userWithPrefs.preferences.map((x) => x.preference),
       },
     };
   }
