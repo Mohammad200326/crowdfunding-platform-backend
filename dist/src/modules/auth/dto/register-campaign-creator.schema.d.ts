@@ -58,6 +58,15 @@ export declare const RegisterCampaignCreatorFormSchema: z.ZodObject<{
         INDIVIDUAL: "INDIVIDUAL";
         INSTITUTION: "INSTITUTION";
     }>;
+    preferences: z.ZodPipe<z.ZodTransform<string[] | undefined, unknown>, z.ZodOptional<z.ZodArray<z.ZodEnum<{
+        WATER: "WATER";
+        HEALTH: "HEALTH";
+        ENVIROMENT: "ENVIROMENT";
+        FOOD: "FOOD";
+        EDUCATION: "EDUCATION";
+        SHELTER: "SHELTER";
+        ANIMALS: "ANIMALS";
+    }>>>>;
     institutionName: z.ZodOptional<z.ZodString>;
     institutionType: z.ZodOptional<z.ZodString>;
     institutionCountry: z.ZodOptional<z.ZodString>;

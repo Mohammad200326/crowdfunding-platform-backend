@@ -611,6 +611,7 @@ class CampaignCreatorUserDataResponseDto {
     createdAt;
     updatedAt;
     type;
+    preferences;
     creatorProfile;
 }
 exports.CampaignCreatorUserDataResponseDto = CampaignCreatorUserDataResponseDto;
@@ -681,6 +682,16 @@ __decorate([
     (0, swagger_1.ApiProperty)({ enum: client_1.CreatorType, example: client_1.CreatorType.INSTITUTION }),
     __metadata("design:type", String)
 ], CampaignCreatorUserDataResponseDto.prototype, "type", void 0);
+__decorate([
+    (0, swagger_2.ApiPropertyOptional)({
+        description: 'Preferred campaign categories (optional)',
+        isArray: true,
+        enum: client_1.CampaignCategory,
+        example: [client_1.CampaignCategory.WATER, client_1.CampaignCategory.HEALTH],
+        nullable: true,
+    }),
+    __metadata("design:type", Object)
+], CampaignCreatorUserDataResponseDto.prototype, "preferences", void 0);
 __decorate([
     (0, swagger_2.ApiPropertyOptional)({
         type: () => CampaignCreatorProfileResponseDto,
@@ -756,6 +767,7 @@ class RegisterCampaignCreatorFormDto {
     notes;
     dateOfBirth;
     type;
+    preferences;
     institutionName;
     institutionType;
     institutionCountry;
@@ -816,6 +828,15 @@ __decorate([
     (0, swagger_1.ApiProperty)({ enum: client_1.CreatorType, example: client_1.CreatorType.INSTITUTION }),
     __metadata("design:type", String)
 ], RegisterCampaignCreatorFormDto.prototype, "type", void 0);
+__decorate([
+    (0, swagger_2.ApiPropertyOptional)({
+        description: 'Preferred campaign categories (optional, one or more)',
+        isArray: true,
+        enum: client_1.CampaignCategory,
+        example: [client_1.CampaignCategory.WATER, client_1.CampaignCategory.HEALTH],
+    }),
+    __metadata("design:type", Array)
+], RegisterCampaignCreatorFormDto.prototype, "preferences", void 0);
 __decorate([
     (0, swagger_2.ApiPropertyOptional)({ example: 'Institution', nullable: true }),
     __metadata("design:type", String)

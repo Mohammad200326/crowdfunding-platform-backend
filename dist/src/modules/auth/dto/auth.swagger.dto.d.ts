@@ -1,4 +1,4 @@
-import { CreatorType, UserRole, VerificationStatus } from '@prisma/client';
+import { CampaignCategory, CreatorType, UserRole, VerificationStatus } from '@prisma/client';
 export declare class DonorProfileDto {
     areasOfInterest: string;
     preferredCampaignTypes: string;
@@ -144,6 +144,7 @@ export declare class CampaignCreatorUserDataResponseDto {
     createdAt: string;
     updatedAt: string;
     type: CreatorType;
+    preferences?: CampaignCategory[] | null;
     creatorProfile?: CampaignCreatorProfileResponseDto | null;
 }
 export declare class RegisterCampaignCreatorResponseDto {
@@ -167,6 +168,7 @@ export declare class RegisterCampaignCreatorFormDto {
     notes?: string;
     dateOfBirth?: string;
     type: CreatorType;
+    preferences?: CampaignCategory[];
     institutionName?: string;
     institutionType?: string;
     institutionCountry?: string;
