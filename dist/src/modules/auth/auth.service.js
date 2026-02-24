@@ -161,6 +161,16 @@ let AuthService = class AuthService {
                     },
                 });
             }
+            const prefs = Array.from(new Set(dto.preferences ?? []));
+            if (prefs.length) {
+                await tx.userPreference.createMany({
+                    data: prefs.map((p) => ({
+                        userId: user.id,
+                        preference: p,
+                    })),
+                    skipDuplicates: true,
+                });
+            }
             let creator = null;
             if (dto.type === 'INSTITUTION') {
                 creator = await this.campaignCreatorService.createForUser({
@@ -209,12 +219,35 @@ let AuthService = class AuthService {
         });
         const token = this.generateJwtToken(result.user.id, result.user.role);
         const { password, ...userData } = result.user;
+        const userWithPrefs = await this.databaseService.user.findUnique({
+            where: { id: result.user.id },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                role: true,
+                country: true,
+                phoneNumber: true,
+                notes: true,
+                dateOfBirth: true,
+                isVerified: true,
+                verificationStatus: true,
+                createdAt: true,
+                updatedAt: true,
+                preferences: { select: { preference: true } },
+            },
+        });
+        if (!userWithPrefs) {
+            throw new common_1.InternalServerErrorException('User not found');
+        }
         return {
             token,
             userData: {
-                ...userData,
+                ...userWithPrefs,
                 type: dto.type,
                 creatorProfile: result.creator,
+                preferences: userWithPrefs.preferences.map((x) => x.preference),
             },
         };
     }

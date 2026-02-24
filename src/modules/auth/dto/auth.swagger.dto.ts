@@ -1,5 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CreatorType, UserRole, VerificationStatus } from '@prisma/client';
+import {
+  CampaignCategory,
+  CreatorType,
+  UserRole,
+  VerificationStatus,
+} from '@prisma/client';
 import { Type } from 'class-transformer';
 
 import { ApiPropertyOptional } from '@nestjs/swagger';
@@ -436,6 +441,15 @@ export class CampaignCreatorUserDataResponseDto {
   type: CreatorType;
 
   @ApiPropertyOptional({
+    description: 'Preferred campaign categories (optional)',
+    isArray: true,
+    enum: CampaignCategory,
+    example: [CampaignCategory.WATER, CampaignCategory.HEALTH],
+    nullable: true,
+  })
+  preferences?: CampaignCategory[] | null;
+
+  @ApiPropertyOptional({
     type: () => CampaignCreatorProfileResponseDto,
     nullable: true,
   })
@@ -516,6 +530,13 @@ export class RegisterCampaignCreatorFormDto {
   @ApiProperty({ enum: CreatorType, example: CreatorType.INSTITUTION })
   type: CreatorType;
 
+  @ApiPropertyOptional({
+    description: 'Preferred campaign categories (optional, one or more)',
+    isArray: true,
+    enum: CampaignCategory,
+    example: [CampaignCategory.WATER, CampaignCategory.HEALTH],
+  })
+  preferences?: CampaignCategory[];
   // ===== Institution profile (flat) — optional because DB nullable now =====
   @ApiPropertyOptional({ example: 'Institution', nullable: true })
   institutionName?: string;

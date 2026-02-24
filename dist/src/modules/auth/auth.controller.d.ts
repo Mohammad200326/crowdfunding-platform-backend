@@ -40,6 +40,7 @@ export declare class AuthController {
             creatorProfile: {
                 id: string;
             } | null;
+            preferences: import("@prisma/client").$Enums.CampaignCategory[];
             email: string;
             id: string;
             firstName: string;
@@ -49,7 +50,6 @@ export declare class AuthController {
             country: string | null;
             phoneNumber: string | null;
             notes: string | null;
-            isDeleted: boolean;
             isVerified: boolean;
             createdAt: Date;
             updatedAt: Date;
