@@ -13,9 +13,8 @@ export type CreateCampaignDto = Omit<
   | 'creatorId'
   | 'likes'
   | 'notes'
-  | 'longDescription'
 > &
-  Partial<Pick<Campaign, 'notes'>>;
+  Partial<Pick<Campaign, 'notes' | 'longDescription'>>;
 
 export type UpdateCampaignDto = Partial<
   CreateCampaignDto & {

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateDonorDto } from './dto/create-donor.dto';
 import { DonorResponseDTO, UpdateDonorDTO } from './dto/donor.dto';
 import { PaginatedResult, PaginationQueryType } from 'src/types/util.types';
@@ -92,10 +96,10 @@ export class DonorService {
     updateDonorDto: UpdateDonorDTO,
     files?: DonorIdentityUpdateFiles,
   ): Promise<DonorResponseDTO> {
-    // First, get the donor by userId
+    // 1. تعديل الاستعلام لجلب الهوية للتحقق من وجودها
     const donorRecord = await this.prismaService.donor.findUnique({
       where: { userId },
-      select: { id: true },
+      include: { identity: true },
     });
 
     if (!donorRecord) {
@@ -103,6 +107,7 @@ export class DonorService {
     }
 
     const donorId = donorRecord.id;
+    const existingIdentity = donorRecord.identity; // <--- هل يوجد هوية مسبقاً؟
 
     // Extract identity fields from dto
     const { fullNameOnId, idNumber, donorProfile, ...userFields } =
@@ -114,12 +119,30 @@ export class DonorService {
       ...(idNumber !== undefined ? { idNumber } : {}),
     };
 
-    const hasIdentityUpdate =
-      Object.keys(identityDto).length > 0 ||
-      (files && Object.keys(files).length > 0);
+    const hasIdentityData = Object.keys(identityDto).length > 0;
+    const hasIdentityFiles = files && Object.keys(files).length > 0;
+    const isAttemptingToUpdateIdentity = hasIdentityData || hasIdentityFiles;
 
-    // Update donor identity if needed (uses its own transaction)
-    if (hasIdentityUpdate) {
+    if (isAttemptingToUpdateIdentity) {
+      if (!existingIdentity) {
+        const missingFields: string[] = [];
+
+        // Validate required text fields
+        if (!fullNameOnId) missingFields.push('fullNameOnId');
+        if (!idNumber) missingFields.push('idNumber');
+
+        // Validate required files
+        if (!files?.idFront?.[0]) missingFields.push('idFront');
+        if (!files?.idBack?.[0]) missingFields.push('idBack');
+        if (!files?.selfieWithId?.[0]) missingFields.push('selfieWithId');
+
+        if (missingFields.length > 0) {
+          throw new BadRequestException(
+            `To add a new identity, the following fields are required: ${missingFields.join(', ')}`,
+          );
+        }
+      }
+
       await this.donorIdentityService.updateByDonorId(
         donorId,
         identityDto,

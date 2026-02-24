@@ -35,6 +35,7 @@ exports.createCampaignApiBody = {
             endDate: { type: 'string', format: 'date-time' },
             motivationMessage: { type: 'string', minLength: 2, maxLength: 1000 },
             notes: { type: 'string', maxLength: 1000, nullable: true },
+            longDescription: { type: 'string', maxLength: 5000, nullable: true },
             file: {
                 type: 'string',
                 format: 'binary',
