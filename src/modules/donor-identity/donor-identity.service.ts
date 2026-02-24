@@ -144,8 +144,86 @@ export class DonorIdentityService {
       },
     });
 
+    // If no existing identity, create a new one instead of throwing an error
     if (!existing) {
-      throw new NotFoundException('Donor identity not found for this donor');
+      const donor = await this.databaseService.donor.findUnique({
+        where: { id: donorId },
+        select: { userId: true },
+      });
+
+      if (!donor) throw new NotFoundException('Donor not found');
+
+      const front = files?.idFront?.[0];
+      const back = files?.idBack?.[0];
+      const selfie = files?.selfieWithId?.[0];
+
+      if (!front || !back || !selfie) {
+        throw new NotFoundException(
+          'idFront, idBack, and selfieWithId files are all required to create a new identity',
+        );
+      }
+
+      const result = await this.databaseService.$transaction(async (tx) => {
+        const donorIdentity = await tx.donorIdentity.create({
+          data: {
+            donorId,
+            fullNameOnId: dto.fullNameOnId ?? '',
+            idNumber: dto.idNumber ?? null,
+          },
+          select: {
+            id: true,
+            donorId: true,
+            fullNameOnId: true,
+            idNumber: true,
+            updatedAt: true,
+          },
+        });
+
+        const ownerId = donor.userId;
+        const assetsToCreate: Prisma.AssetUncheckedCreateInput[] = [];
+
+        if (front) {
+          assetsToCreate.push(
+            this.fileService.createFileAssetData(
+              front,
+              ownerId,
+              AssetKind.DONOR_ID_FRONT,
+              donorIdentity.id,
+            ),
+          );
+        }
+        if (back) {
+          assetsToCreate.push(
+            this.fileService.createFileAssetData(
+              back,
+              ownerId,
+              AssetKind.DONOR_ID_BACK,
+              donorIdentity.id,
+            ),
+          );
+        }
+        if (selfie) {
+          assetsToCreate.push(
+            this.fileService.createFileAssetData(
+              selfie,
+              ownerId,
+              AssetKind.DONOR_ID_SELFIE_WITH_ID,
+              donorIdentity.id,
+            ),
+          );
+        }
+
+        if (assetsToCreate.length) {
+          await tx.asset.createMany({ data: assetsToCreate });
+        }
+
+        return donorIdentity;
+      });
+
+      return {
+        message: 'Donor identity created successfully',
+        donorIdentity: result,
+      };
     }
 
     const front = files?.idFront?.[0];

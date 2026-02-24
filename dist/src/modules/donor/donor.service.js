@@ -81,20 +81,38 @@ let DonorService = class DonorService {
     async update(userId, updateDonorDto, files) {
         const donorRecord = await this.prismaService.donor.findUnique({
             where: { userId },
-            select: { id: true },
+            include: { identity: true },
         });
         if (!donorRecord) {
             throw new common_1.NotFoundException('Donor not found for this user');
         }
         const donorId = donorRecord.id;
+        const existingIdentity = donorRecord.identity;
         const { fullNameOnId, idNumber, donorProfile, ...userFields } = updateDonorDto;
         const identityDto = {
             ...(fullNameOnId !== undefined ? { fullNameOnId } : {}),
             ...(idNumber !== undefined ? { idNumber } : {}),
         };
-        const hasIdentityUpdate = Object.keys(identityDto).length > 0 ||
-            (files && Object.keys(files).length > 0);
-        if (hasIdentityUpdate) {
+        const hasIdentityData = Object.keys(identityDto).length > 0;
+        const hasIdentityFiles = files && Object.keys(files).length > 0;
+        const isAttemptingToUpdateIdentity = hasIdentityData || hasIdentityFiles;
+        if (isAttemptingToUpdateIdentity) {
+            if (!existingIdentity) {
+                const missingFields = [];
+                if (!fullNameOnId)
+                    missingFields.push('fullNameOnId');
+                if (!idNumber)
+                    missingFields.push('idNumber');
+                if (!files?.idFront?.[0])
+                    missingFields.push('idFront');
+                if (!files?.idBack?.[0])
+                    missingFields.push('idBack');
+                if (!files?.selfieWithId?.[0])
+                    missingFields.push('selfieWithId');
+                if (missingFields.length > 0) {
+                    throw new common_1.BadRequestException(`To add a new identity, the following fields are required: ${missingFields.join(', ')}`);
+                }
+            }
             await this.donorIdentityService.updateByDonorId(donorId, identityDto, files);
         }
         const updatedDonor = await this.prismaService.$transaction(async (tx) => {
