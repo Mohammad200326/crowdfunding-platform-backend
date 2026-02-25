@@ -42,19 +42,37 @@ export class CampaignService {
   };
 
   private enrichCampaign<
-    T extends { donations: { stars: number }[]; goal: number },
-  >(campaign: T) {
-    const { donations, ...rest } = campaign;
+    T extends {
+      donations: { stars: number }[];
+      goal: number;
+      likes?: { userId: string }[];
+    },
+  >(campaign: T, userId?: string) {
+    const { donations, likes, ...rest } = campaign;
     return {
       ...rest,
       raisedStars: donations.reduce((sum, d) => sum + d.stars, 0),
+      numberOfContributions: donations.length,
+      isLikedByMe: userId
+        ? (likes ?? []).some((l) => l.userId === userId)
+        : false,
+    };
+  }
+
+  private getInclude(userId?: string) {
+    return {
+      ...this.campaignIncludes,
+      ...this.donationsInclude,
+      likes: userId
+        ? { where: { userId }, select: { userId: true } }
+        : (false as const),
     };
   }
 
   // CREATE CAMPAIGN (With File Upload)
   async create(
     createCampaignDto: CreateCampaignDto,
-    user: UserResponseDTO['userData'], // Typed correctly
+    user: UserResponseDTO['userData'],
     file?: Express.Multer.File,
   ) {
     const dataPayload: Prisma.CampaignUncheckedCreateInput = {
@@ -75,14 +93,14 @@ export class CampaignService {
 
     const campaign = await this.prismaService.campaign.create({
       data: dataPayload,
-      include: { ...this.campaignIncludes, ...this.donationsInclude },
+      include: this.getInclude(user.id),
     });
 
-    return this.enrichCampaign(campaign);
+    return this.enrichCampaign(campaign, user.id);
   }
 
   // GET ALL ACTIVE CAMPAIGNS (Feed + Pagination)
-  async findAll(page: number, limit: number) {
+  async findAll(page: number, limit: number, userId?: string) {
     const skip = (page - 1) * limit;
 
     const campaigns = await this.prismaService.campaign.findMany({
@@ -92,13 +110,13 @@ export class CampaignService {
       },
       take: limit,
       skip: skip,
-      include: { ...this.campaignIncludes, ...this.donationsInclude },
+      include: this.getInclude(userId),
       orderBy: {
         createdAt: 'desc',
       },
     });
 
-    return campaigns.map((c) => this.enrichCampaign(c));
+    return campaigns.map((c) => this.enrichCampaign(c, userId));
   }
 
   // GET BY CATEGORY
@@ -106,6 +124,7 @@ export class CampaignService {
     category: CampaignCategory,
     page: number,
     limit: number,
+    userId?: string,
   ) {
     const skip = (page - 1) * limit;
 
@@ -117,41 +136,41 @@ export class CampaignService {
       },
       take: limit,
       skip: skip,
-      include: { ...this.campaignIncludes, ...this.donationsInclude },
+      include: this.getInclude(userId),
       orderBy: {
         createdAt: 'desc',
       },
     });
 
-    return campaigns.map((c) => this.enrichCampaign(c));
+    return campaigns.map((c) => this.enrichCampaign(c, userId));
   }
 
   // GET BY CREATOR (Profile)
-  async findByCreator(creatorId: string) {
+  async findByCreator(creatorId: string, userId?: string) {
     const campaigns = await this.prismaService.campaign.findMany({
       where: {
         creatorId: creatorId,
         isDeleted: false,
       },
-      include: { ...this.campaignIncludes, ...this.donationsInclude },
+      include: this.getInclude(userId),
       orderBy: { createdAt: 'desc' },
     });
 
-    return campaigns.map((c) => this.enrichCampaign(c));
+    return campaigns.map((c) => this.enrichCampaign(c, userId));
   }
 
   // GET ONE (Details Page)
-  async findOne(id: string) {
+  async findOne(id: string, userId?: string) {
     const campaign = await this.prismaService.campaign.findUnique({
       where: { id },
-      include: { ...this.campaignIncludes, ...this.donationsInclude },
+      include: this.getInclude(userId),
     });
 
     if (!campaign) {
       throw new NotFoundException(`Campaign with ID ${id} not found`);
     }
 
-    return this.enrichCampaign(campaign);
+    return this.enrichCampaign(campaign, userId);
   }
 
   // TOGGLE LIKE
@@ -167,7 +186,6 @@ export class CampaignService {
 
     const prisma = this.prismaService as unknown as PrismaClient;
 
-    /* eslint-disable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
     const existingLike = await prisma.campaignLike.findUnique({
       where: { userId_campaignId: { userId, campaignId } },
     });
@@ -182,7 +200,6 @@ export class CampaignService {
     await prisma.campaignLike.create({
       data: { userId, campaignId },
     });
-    /* eslint-enable @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment */
     return { liked: true };
   }
 
@@ -285,8 +302,9 @@ export class CampaignService {
       await this.prismaService.campaign.update({
         where: { id },
         data: dataPayload,
-        include: { ...this.campaignIncludes, ...this.donationsInclude },
+        include: this.getInclude(user.id),
       }),
+      user.id,
     );
   }
 }

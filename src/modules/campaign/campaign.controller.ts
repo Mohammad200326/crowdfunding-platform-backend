@@ -77,8 +77,9 @@ export class CampaignController {
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @User() user?: UserResponseDTO['userData'],
   ) {
-    return this.campaignService.findAll(page, limit);
+    return this.campaignService.findAll(page, limit, user?.id);
   }
 
   // GET BY CATEGORY
@@ -99,8 +100,9 @@ export class CampaignController {
     category: CampaignCategory,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @User() user?: UserResponseDTO['userData'],
   ) {
-    return this.campaignService.findByCategory(category, page, limit);
+    return this.campaignService.findByCategory(category, page, limit, user?.id);
   }
 
   // GET BY CREATOR
@@ -114,8 +116,27 @@ export class CampaignController {
     description: 'List of campaigns by creator',
     type: [CampaignResponseDto],
   })
-  findByCreator(@Param('creatorId', ParseUUIDPipe) creatorId: string) {
-    return this.campaignService.findByCreator(creatorId);
+  findByCreator(
+    @Param('creatorId', ParseUUIDPipe) creatorId: string,
+    @User() user?: UserResponseDTO['userData'],
+  ) {
+    return this.campaignService.findByCreator(creatorId, user?.id);
+  }
+
+  @Get(':id')
+  @IsPublic(true)
+  @ApiOperation({ summary: 'Get single campaign by ID' })
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  @ApiOkResponse({
+    description: 'Campaign details',
+    type: CampaignResponseDto,
+  })
+  @ApiResponse({ status: 404, description: 'Campaign not found' })
+  findOne(
+    @Param('id', ParseUUIDPipe) id: string,
+    @User() user?: UserResponseDTO['userData'],
+  ) {
+    return this.campaignService.findOne(id, user?.id);
   }
 
   @Patch(':id')
