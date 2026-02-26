@@ -33,14 +33,17 @@ let CampaignController = class CampaignController {
     create(createCampaignDto, user, file) {
         return this.campaignService.create(createCampaignDto, user, file);
     }
-    findAll(page, limit) {
-        return this.campaignService.findAll(page, limit);
+    findAll(page, limit, user) {
+        return this.campaignService.findAll(page, limit, user?.id);
     }
-    findByCategory(category, page, limit) {
-        return this.campaignService.findByCategory(category, page, limit);
+    findByCategory(category, page, limit, user) {
+        return this.campaignService.findByCategory(category, page, limit, user?.id);
     }
-    findByCreator(creatorId) {
-        return this.campaignService.findByCreator(creatorId);
+    findByCreator(creatorId, user) {
+        return this.campaignService.findByCreator(creatorId, user?.id);
+    }
+    findOne(id, user) {
+        return this.campaignService.findOne(id, user?.id);
     }
     update(id, updatePayload, user, file) {
         return this.campaignService.update(id, updatePayload, user, file);
@@ -77,8 +80,9 @@ __decorate([
     }),
     __param(0, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
     __param(1, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(10), common_1.ParseIntPipe)),
+    __param(2, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:paramtypes", [Number, Number, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "findAll", null);
 __decorate([
@@ -97,8 +101,9 @@ __decorate([
     __param(0, (0, common_1.Param)('category', new common_1.ParseEnumPipe(client_1.CampaignCategory))),
     __param(1, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
     __param(2, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(10), common_1.ParseIntPipe)),
+    __param(3, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number]),
+    __metadata("design:paramtypes", [String, Number, Number, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "findByCategory", null);
 __decorate([
@@ -113,10 +118,27 @@ __decorate([
         type: [campaign_swagger_dto_1.CampaignResponseDto],
     }),
     __param(0, (0, common_1.Param)('creatorId', common_1.ParseUUIDPipe)),
+    __param(1, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "findByCreator", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, public_decorator_1.IsPublic)(true),
+    (0, swagger_1.ApiOperation)({ summary: 'Get single campaign by ID' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'Campaign UUID' }),
+    (0, swagger_1.ApiOkResponse)({
+        description: 'Campaign details',
+        type: campaign_swagger_dto_1.CampaignResponseDto,
+    }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Campaign not found' }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(1, (0, user_decorator_1.User)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], CampaignController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update campaign' }),
