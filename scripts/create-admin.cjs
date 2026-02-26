@@ -1,19 +1,24 @@
 require('dotenv').config();
 
 const argon = require('argon2');
-const { UserRole } = require('@prisma/client');
-const { DatabaseService } = require('../src/modules/database/database.service');
+const { PrismaClient, UserRole } = require('@prisma/client');
 
 async function run() {
-  const prisma = new DatabaseService();
-  await prisma.$connect();
-
-  const email = 'admin@gmail.com';
-  const password = 'admin123';
-
-  if (!email || !password) {
-    throw new Error('Missing EMAIL or PASSWORD');
+  // شغله مرة واحدة (اختياري) — إذا مش حاطط المتغير رح يتخطى
+  if (process.env.ADMIN_SEED_ENABLED !== 'true') {
+    console.log('Admin seed skipped');
+    return;
   }
+
+  const email = (process.env.ADMIN_EMAIL || 'admin@gmail.com').trim().toLowerCase();
+  const password = process.env.ADMIN_PASSWORD || 'admin123';
+
+  if (!email || !password) throw new Error('Missing EMAIL or PASSWORD');
+
+  // مهم: datasourceUrl عشان يضمن Railway DATABASE_URL
+  const prisma = new PrismaClient({
+    datasourceUrl: process.env.DATABASE_URL,
+  });
 
   const hashed = await argon.hash(password);
 
