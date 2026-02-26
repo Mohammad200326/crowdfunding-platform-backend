@@ -25,7 +25,18 @@ export declare class AuthService {
             firstName: string;
             lastName: string;
             email: string;
-            role: import("@prisma/client").$Enums.UserRole;
+            role: "DONOR" | "CAMPAIGN_CREATOR";
+            country: string | null;
+        };
+        token: string;
+    }>;
+    adminLogin(dto: LoginDTO): Promise<{
+        user: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            role: "ADMIN";
             country: string | null;
         };
         token: string;
@@ -33,8 +44,8 @@ export declare class AuthService {
     registerDonor(registerDonorDto: registerDonorDTO): Promise<{
         user: {
             donorProfile: null;
-            email: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;
@@ -65,8 +76,8 @@ export declare class AuthService {
                 id: string;
             } | null;
             preferences: import("@prisma/client").$Enums.CampaignCategory[];
-            email: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;

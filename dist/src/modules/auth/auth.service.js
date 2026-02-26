@@ -77,7 +77,32 @@ let AuthService = class AuthService {
         const user = await this.databaseService.user.findUnique({
             where: { email: dto.email },
         });
-        if (!user || !(await this.verifyPassword(dto.password, user.password))) {
+        if (!user ||
+            user.role === 'ADMIN' ||
+            !(await this.verifyPassword(dto.password, user.password))) {
+            throw new common_1.UnauthorizedException('Invalid credentials');
+        }
+        const payload = { sub: user.id, email: user.email, role: user.role };
+        const token = await this.jwtService.signAsync(payload);
+        return {
+            user: {
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+                country: user.country,
+            },
+            token,
+        };
+    }
+    async adminLogin(dto) {
+        const user = await this.databaseService.user.findUnique({
+            where: { email: dto.email },
+        });
+        if (!user ||
+            user.role !== 'ADMIN' ||
+            !(await this.verifyPassword(dto.password, user.password))) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         const payload = { sub: user.id, email: user.email, role: user.role };

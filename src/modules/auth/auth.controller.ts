@@ -132,6 +132,17 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
+  // Admin LOGIN
+  @Post('login/admin')
+  @IsPublic(true)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Login with email and password' })
+  @ApiBody({ type: LoginRequestDto })
+  @ApiOkResponse({ type: LoginResponseDto })
+  async adminLogin(@Body(new ZodValidationPipe(LoginSchema)) dto: LoginDTO) {
+    return this.authService.adminLogin(dto);
+  }
+
   @Post('password/forgot')
   @IsPublic(true)
   @ApiOperation({ summary: 'Send OTP for forgot password' })
