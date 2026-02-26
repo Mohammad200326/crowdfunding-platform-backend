@@ -12,11 +12,11 @@ export declare class UserService {
         password: string;
     }, role: UserRole, tx?: Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$transaction' | '$use' | '$extends'>): Promise<User>;
     createUser(registerUserDTO: registerUserDTO): import("@prisma/client").Prisma.Prisma__UserClient<{
-        id: string;
         email: string;
+        password: string;
+        id: string;
         firstName: string;
         lastName: string;
-        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;
@@ -29,11 +29,11 @@ export declare class UserService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     }, never, import("@prisma/client/runtime/client").DefaultArgs, import("@prisma/client").Prisma.PrismaClientOptions>;
     create(createUserDto: CreateUserDto, avatar?: Express.Multer.File): Promise<{
-        id: string;
         email: string;
+        password: string;
+        id: string;
         firstName: string;
         lastName: string;
-        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;
@@ -46,8 +46,8 @@ export declare class UserService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     }>;
     findAll(): Promise<{
-        id: string;
         email: string;
+        id: string;
         firstName: string;
         lastName: string;
         role: import("@prisma/client").$Enums.UserRole;
@@ -59,8 +59,8 @@ export declare class UserService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     }[]>;
     findOne(id: string): Promise<{
-        id: string;
         email: string;
+        id: string;
         firstName: string;
         lastName: string;
         role: import("@prisma/client").$Enums.UserRole;
@@ -73,11 +73,11 @@ export declare class UserService {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     } | null>;
     update(id: string, updateUserDto: UpdateUserDto, avatar?: Express.Multer.File): Promise<{
-        id: string;
         email: string;
+        password: string;
+        id: string;
         firstName: string;
         lastName: string;
-        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;
@@ -91,11 +91,11 @@ export declare class UserService {
     }>;
     remove(id: string): Promise<User | null>;
     findByEmail(email: string): Promise<{
-        id: string;
         email: string;
+        password: string;
+        id: string;
         firstName: string;
         lastName: string;
-        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;

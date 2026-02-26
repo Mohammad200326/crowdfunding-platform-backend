@@ -44,8 +44,8 @@ export declare class AuthService {
     registerDonor(registerDonorDto: registerDonorDTO): Promise<{
         user: {
             donorProfile: null;
-            id: string;
             email: string;
+            id: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;
@@ -76,8 +76,8 @@ export declare class AuthService {
                 id: string;
             } | null;
             preferences: import("@prisma/client").$Enums.CampaignCategory[];
-            id: string;
             email: string;
+            id: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;

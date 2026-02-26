@@ -14,8 +14,8 @@ export declare class DonorService {
     findAll(query: PaginationQueryType): Promise<PaginatedResult<Omit<User, 'password'>>>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__DonorClient<({
         user: {
-            id: string;
             email: string;
+            id: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;
