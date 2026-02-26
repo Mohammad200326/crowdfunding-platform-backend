@@ -116,7 +116,7 @@ export class CampaignUpdateService {
     return this.prismaService.campaignUpdate.findMany({
       where: {
         campaignId,
-        ...(status && { campaign: { status } }),
+        ...(status && { status }),
       },
       include: {
         assets: true,
@@ -135,7 +135,7 @@ export class CampaignUpdateService {
   ): Promise<CampaignUpdateWithAssetsDto[]> {
     return this.prismaService.campaignUpdate.findMany({
       where: {
-        ...(status && { campaign: { status } }),
+        ...(status && { status }),
       },
       include: {
         assets: true,

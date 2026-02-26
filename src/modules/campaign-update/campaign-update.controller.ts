@@ -91,7 +91,7 @@ export class CampaignUpdateController {
     name: 'status',
     enum: CampaignStatus,
     required: false,
-    description: 'Filter by parent campaign status',
+    description: 'Filter by campaign update status',
   })
   @ApiOkResponse({ description: 'List of all campaign updates' })
   async findAll(
@@ -121,7 +121,7 @@ export class CampaignUpdateController {
     name: 'status',
     enum: CampaignStatus,
     required: false,
-    description: 'Filter by parent campaign status',
+    description: 'Filter by campaign update status',
   })
   @ApiOkResponse({
     description: 'List of campaign updates for the specified campaign',
