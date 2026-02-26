@@ -36,6 +36,7 @@ import {
   ApiTags,
   ApiBearerAuth,
   ApiParam,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 import {
@@ -71,6 +72,12 @@ export class CampaignController {
   @Get()
   @IsPublic(true)
   @ApiOperation({ summary: 'Get all active campaigns (Feed)' })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign status',
+  })
   @ApiOkResponse({
     description: 'List of all active and non-deleted campaigns',
     type: [CampaignResponseDto],
@@ -92,6 +99,12 @@ export class CampaignController {
     name: 'category',
     enum: CampaignCategory,
     description: 'The category to filter by',
+  })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign status',
   })
   @ApiOkResponse({
     description: 'Filtered campaigns',
@@ -120,6 +133,12 @@ export class CampaignController {
   @ApiParam({
     name: 'creatorId',
     description: 'UUID of the Campaign Creator (User ID)',
+  })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign status',
   })
   @ApiOkResponse({
     description: 'List of campaigns by creator',
