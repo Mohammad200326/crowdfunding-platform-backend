@@ -10,7 +10,7 @@ import {
   UpdateCampaignUpdateDto,
   CampaignUpdateWithAssetsDto,
 } from './dto/campaign-update.dto';
-import { CampaignUpdate, AssetKind } from '@prisma/client';
+import { CampaignUpdate, AssetKind, CampaignStatus } from '@prisma/client';
 
 @Injectable()
 export class CampaignUpdateService {
@@ -101,6 +101,7 @@ export class CampaignUpdateService {
    */
   async findByCampaign(
     campaignId: string,
+    status?: CampaignStatus,
   ): Promise<CampaignUpdateWithAssetsDto[]> {
     // Verify campaign exists
     const campaign = await this.prismaService.campaign.findUnique({
@@ -113,7 +114,10 @@ export class CampaignUpdateService {
     }
 
     return this.prismaService.campaignUpdate.findMany({
-      where: { campaignId },
+      where: {
+        campaignId,
+        ...(status && { campaign: { status } }),
+      },
       include: {
         assets: true,
       },
@@ -126,8 +130,13 @@ export class CampaignUpdateService {
   /**
    * Get all campaign updates (admin/general listing)
    */
-  async findAll(): Promise<CampaignUpdateWithAssetsDto[]> {
+  async findAll(
+    status?: CampaignStatus,
+  ): Promise<CampaignUpdateWithAssetsDto[]> {
     return this.prismaService.campaignUpdate.findMany({
+      where: {
+        ...(status && { campaign: { status } }),
+      },
       include: {
         assets: true,
       },
