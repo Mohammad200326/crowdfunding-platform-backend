@@ -25,9 +25,6 @@ export class AuthGuard implements CanActivate {
       context.getHandler(),
       context.getClass(),
     ]);
-    if (isPublic) {
-      return true;
-    }
 
     // get request
     const req = context.switchToHttp().getRequest<Request>();
@@ -36,7 +33,9 @@ export class AuthGuard implements CanActivate {
     const authHeader = req.headers.authorization;
     // auth header = "Bearer <token>"
     const jwt = authHeader?.split(' ')[1];
+
     if (!jwt) {
+      if (isPublic) return true;
       throw new UnauthorizedException();
     }
 
@@ -55,6 +54,7 @@ export class AuthGuard implements CanActivate {
         id: String(user.id),
       };
     } catch {
+      if (isPublic) return true;
       throw new UnauthorizedException();
     }
 

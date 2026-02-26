@@ -35,6 +35,13 @@ export const updateCampaignValidationSchema = campaignValidationSchema
   })
   .partial() satisfies ZodType<Partial<UpdateCampaignDto>>;
 
+export const updateCampaignStatusValidationSchema: ZodType<{
+  status: 'pending' | 'confirmed' | 'rejected';
+}> = z.object({
+  status: z.enum(['pending', 'confirmed', 'rejected']),
+});
+
 export const campaignPaginationSchema = paginationSchema.extend({
   title: z.string().min(1).max(255).optional(),
+  status: z.enum(['pending', 'confirmed', 'rejected']).optional(),
 }) satisfies ZodType<CampaignQuery>;

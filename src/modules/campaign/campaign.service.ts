@@ -7,6 +7,7 @@ import { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto';
 import {
   Prisma,
   CampaignCategory,
+  CampaignStatus,
   PaymentStatus,
   PrismaClient,
 } from '@prisma/client';
@@ -99,14 +100,44 @@ export class CampaignService {
     return this.enrichCampaign(campaign, user.id);
   }
 
+  // UPDATE CAMPAIGN STATUS
+  async updateStatus(
+    id: string,
+    status: CampaignStatus,
+  ): Promise<{ id: string; status: CampaignStatus }> {
+    const campaign = await this.prismaService.campaign.findUnique({
+      where: { id },
+    });
+
+    if (!campaign) {
+      throw new NotFoundException(`Campaign with ID ${id} not found`);
+    }
+
+    if (campaign.isDeleted) {
+      throw new NotFoundException(`Campaign is deleted and cannot be updated`);
+    }
+
+    return this.prismaService.campaign.update({
+      where: { id },
+      data: { status },
+      select: { id: true, status: true },
+    });
+  }
+
   // GET ALL ACTIVE CAMPAIGNS (Feed + Pagination)
-  async findAll(page: number, limit: number, userId?: string) {
+  async findAll(
+    page: number,
+    limit: number,
+    userId?: string,
+    status?: CampaignStatus,
+  ) {
     const skip = (page - 1) * limit;
 
     const campaigns = await this.prismaService.campaign.findMany({
       where: {
         isDeleted: false,
         isActive: true,
+        ...(status && { status }),
       },
       take: limit,
       skip: skip,
@@ -125,6 +156,7 @@ export class CampaignService {
     page: number,
     limit: number,
     userId?: string,
+    status?: CampaignStatus,
   ) {
     const skip = (page - 1) * limit;
 
@@ -133,6 +165,7 @@ export class CampaignService {
         category: category,
         isDeleted: false,
         isActive: true,
+        ...(status && { status }),
       },
       take: limit,
       skip: skip,
@@ -146,11 +179,16 @@ export class CampaignService {
   }
 
   // GET BY CREATOR (Profile)
-  async findByCreator(creatorId: string, userId?: string) {
+  async findByCreator(
+    creatorId: string,
+    userId?: string,
+    status?: CampaignStatus,
+  ) {
     const campaigns = await this.prismaService.campaign.findMany({
       where: {
         creatorId: creatorId,
         isDeleted: false,
+        ...(status && { status }),
       },
       include: this.getInclude(userId),
       orderBy: { createdAt: 'desc' },
