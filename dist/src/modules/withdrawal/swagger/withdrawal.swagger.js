@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.WithdrawalStatusUpdatedResponse = exports.UpdateWithdrawalStatusBody = exports.InsufficientBalanceResponse = exports.BadRequestResponse = exports.WithdrawalCannotCancelResponse = exports.StripeAccountExistsResponse = exports.WithdrawalNotFoundResponse = exports.StripeAccountNotFoundResponse = exports.NotFoundResponse = exports.ForbiddenResponse = exports.UnauthorizedResponse = exports.WithdrawalCancelledResponse = exports.WithdrawalDetailResponse = exports.WithdrawalListResponse = exports.WithdrawalCreatedResponse = exports.StripeAccountStatusResponse = exports.StripeOnboardingLinkResponse = exports.StripeConnectCreatedResponse = exports.BalanceResponse = exports.CreateWithdrawalBody = exports.WithdrawalIdParam = void 0;
+exports.PlatformNetProfitResponse = exports.PlatformNetProfitToQuery = exports.PlatformNetProfitFromQuery = exports.PlatformNetProfitOperation = exports.WithdrawalStatusUpdatedResponse = exports.UpdateWithdrawalStatusBody = exports.InsufficientBalanceResponse = exports.BadRequestResponse = exports.WithdrawalCannotCancelResponse = exports.StripeAccountExistsResponse = exports.WithdrawalNotFoundResponse = exports.StripeAccountNotFoundResponse = exports.NotFoundResponse = exports.ForbiddenResponse = exports.UnauthorizedResponse = exports.WithdrawalCancelledResponse = exports.WithdrawalDetailResponse = exports.WithdrawalListResponse = exports.WithdrawalCreatedResponse = exports.StripeAccountStatusResponse = exports.StripeOnboardingLinkResponse = exports.StripeConnectCreatedResponse = exports.BalanceResponse = exports.CreateWithdrawalBody = exports.WithdrawalIdParam = void 0;
+const swagger_1 = require("@nestjs/swagger");
 exports.WithdrawalIdParam = {
     name: 'id',
     description: 'Withdrawal ID',
@@ -249,4 +250,36 @@ exports.WithdrawalStatusUpdatedResponse = {
         },
     },
 };
+exports.PlatformNetProfitOperation = (0, swagger_1.ApiOperation)({
+    summary: 'Get platform net profit',
+    description: 'Returns platform net profit based on PAID withdrawals only (sum of platformFeeStars). Optional date range filters by paidAt.',
+});
+exports.PlatformNetProfitFromQuery = (0, swagger_1.ApiQuery)({
+    name: 'from',
+    required: false,
+    type: String,
+    example: '2026-02-01',
+    description: 'Start date (inclusive). Filter is applied on paidAt.',
+});
+exports.PlatformNetProfitToQuery = (0, swagger_1.ApiQuery)({
+    name: 'to',
+    required: false,
+    type: String,
+    example: '2026-02-29',
+    description: 'End date (inclusive). Filter is applied on paidAt.',
+});
+exports.PlatformNetProfitResponse = (0, swagger_1.ApiResponse)({
+    status: 200,
+    description: 'Platform net profit returned successfully.',
+    schema: {
+        example: {
+            from: '2026-02-01T00:00:00.000Z',
+            to: '2026-02-29T23:59:59.999Z',
+            currency: 'usd',
+            paidWithdrawalsCount: 12,
+            platformNetProfitStars: 340,
+            platformNetProfitAmountInMinor: 170000,
+        },
+    },
+});
 //# sourceMappingURL=withdrawal.swagger.js.map

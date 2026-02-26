@@ -1,6 +1,9 @@
 import {
   ApiBodyOptions,
+  ApiOperation,
   ApiParamOptions,
+  ApiQuery,
+  ApiResponse,
   ApiResponseOptions,
 } from '@nestjs/swagger';
 
@@ -272,3 +275,40 @@ export const WithdrawalStatusUpdatedResponse: ApiResponseOptions = {
     },
   },
 };
+
+export const PlatformNetProfitOperation = ApiOperation({
+  summary: 'Get platform net profit',
+  description:
+    'Returns platform net profit based on PAID withdrawals only (sum of platformFeeStars). Optional date range filters by paidAt.',
+});
+
+export const PlatformNetProfitFromQuery = ApiQuery({
+  name: 'from',
+  required: false,
+  type: String,
+  example: '2026-02-01',
+  description: 'Start date (inclusive). Filter is applied on paidAt.',
+});
+
+export const PlatformNetProfitToQuery = ApiQuery({
+  name: 'to',
+  required: false,
+  type: String,
+  example: '2026-02-29',
+  description: 'End date (inclusive). Filter is applied on paidAt.',
+});
+
+export const PlatformNetProfitResponse = ApiResponse({
+  status: 200,
+  description: 'Platform net profit returned successfully.',
+  schema: {
+    example: {
+      from: '2026-02-01T00:00:00.000Z',
+      to: '2026-02-29T23:59:59.999Z',
+      currency: 'usd',
+      paidWithdrawalsCount: 12,
+      platformNetProfitStars: 340,
+      platformNetProfitAmountInMinor: 170000,
+    },
+  },
+});

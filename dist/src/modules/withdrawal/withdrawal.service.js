@@ -433,6 +433,36 @@ let WithdrawalService = class WithdrawalService {
         });
         return withdrawals;
     }
+    async getPlatformNetProfit(from, to) {
+        if (from && to && from > to) {
+            throw new common_1.BadRequestException('Invalid date range');
+        }
+        const where = {
+            paidAt: { not: null },
+        };
+        if (from || to) {
+            where.paidAt = {
+                not: null,
+                ...(from ? { gte: from } : {}),
+                ...(to ? { lte: to } : {}),
+            };
+        }
+        const agg = await this.prismaService.withdrawal.aggregate({
+            where,
+            _sum: { platformFeeStars: true },
+            _count: { _all: true },
+        });
+        const stars = agg._sum.platformFeeStars ?? 0;
+        const amountInMinor = stars * this.getStarValueInMinor();
+        return {
+            from: from?.toISOString(),
+            to: to?.toISOString(),
+            currency: this.getCurrency(),
+            paidWithdrawalsCount: agg._count._all,
+            platformNetProfitStars: stars,
+            platformNetProfitAmountInMinor: amountInMinor,
+        };
+    }
 };
 exports.WithdrawalService = WithdrawalService;
 exports.WithdrawalService = WithdrawalService = __decorate([

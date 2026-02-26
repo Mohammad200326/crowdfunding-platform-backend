@@ -11,7 +11,8 @@ import {
 } from './dto/withdrawal.dto';
 import { DatabaseService } from '../database/database.service';
 import { StripeService } from '../stripe/stripe.service';
-import { WithdrawalStatus } from '@prisma/client';
+import { Prisma, WithdrawalStatus } from '@prisma/client';
+import { PlatformNetProfitResponseDto } from './utils/withdrawal.validation';
 
 @Injectable()
 export class WithdrawalService {
@@ -662,5 +663,44 @@ export class WithdrawalService {
     });
 
     return withdrawals as unknown as WithdrawalResponseDto[];
+  }
+
+  async getPlatformNetProfit(
+    from?: Date,
+    to?: Date,
+  ): Promise<PlatformNetProfitResponseDto> {
+    if (from && to && from > to) {
+      throw new BadRequestException('Invalid date range');
+    }
+
+    const where: Prisma.WithdrawalWhereInput = {
+      paidAt: { not: null },
+    };
+
+    if (from || to) {
+      where.paidAt = {
+        not: null,
+        ...(from ? { gte: from } : {}),
+        ...(to ? { lte: to } : {}),
+      };
+    }
+
+    const agg = await this.prismaService.withdrawal.aggregate({
+      where,
+      _sum: { platformFeeStars: true },
+      _count: { _all: true },
+    });
+
+    const stars = agg._sum.platformFeeStars ?? 0;
+    const amountInMinor = stars * this.getStarValueInMinor();
+
+    return {
+      from: from?.toISOString(),
+      to: to?.toISOString(),
+      currency: this.getCurrency(),
+      paidWithdrawalsCount: agg._count._all,
+      platformNetProfitStars: stars,
+      platformNetProfitAmountInMinor: amountInMinor,
+    };
   }
 }

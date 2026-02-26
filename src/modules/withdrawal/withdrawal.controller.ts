@@ -7,6 +7,7 @@ import {
   Delete,
   Patch,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -24,7 +25,7 @@ import type {
 import { User } from 'src/utils/decorators/user.decorator';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
-import { withdrawalSchema } from './utils/withdrawal.validation';
+import { PlatformProfitQuerySchema, withdrawalSchema } from './utils/withdrawal.validation';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { Roles } from 'src/utils/decorators/roles.decorator';
 import {
@@ -48,6 +49,10 @@ import {
   InsufficientBalanceResponse,
   UpdateWithdrawalStatusBody,
   WithdrawalStatusUpdatedResponse,
+  PlatformNetProfitOperation,
+  PlatformNetProfitFromQuery,
+  PlatformNetProfitToQuery,
+  PlatformNetProfitResponse,
 } from './swagger/withdrawal.swagger';
 
 @ApiTags('Withdrawal')
@@ -204,6 +209,22 @@ export class WithdrawalController {
   @ApiResponse(ForbiddenResponse)
   findAll(@User() user: UserResponseDTO['userData']) {
     return this.withdrawalService.findAllByUser(user.id);
+  }
+
+  @Get('platform-net-profit')
+  @Roles(['ADMIN'])
+  @PlatformNetProfitOperation
+  @PlatformNetProfitFromQuery
+  @PlatformNetProfitToQuery
+  @PlatformNetProfitResponse
+  platformNetProfit(
+    @Query(new ZodValidationPipe(PlatformProfitQuerySchema))
+    q: {
+      from?: Date;
+      to?: Date;
+    },
+  ) {
+    return this.withdrawalService.getPlatformNetProfit(q.from, q.to);
   }
 
   /**
