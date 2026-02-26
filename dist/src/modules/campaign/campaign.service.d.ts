@@ -10,6 +10,7 @@ export declare class CampaignService {
     private readonly campaignIncludes;
     private readonly donationsInclude;
     private enrichCampaign;
+    private getInclude;
     create(createCampaignDto: CreateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<Omit<{
         donations: {
             stars: number;
@@ -41,6 +42,11 @@ export declare class CampaignService {
             lastName: string;
             country: string | null;
         };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -60,10 +66,12 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-    }, "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
+        numberOfContributions: number;
+        isLikedByMe: boolean;
     }>;
-    findAll(page: number, limit: number): Promise<(Omit<{
+    findAll(page: number, limit: number, userId?: string): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -94,6 +102,11 @@ export declare class CampaignService {
             lastName: string;
             country: string | null;
         };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -113,10 +126,12 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-    }, "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
+        numberOfContributions: number;
+        isLikedByMe: boolean;
     })[]>;
-    findByCategory(category: CampaignCategory, page: number, limit: number): Promise<(Omit<{
+    findByCategory(category: CampaignCategory, page: number, limit: number, userId?: string): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -147,6 +162,11 @@ export declare class CampaignService {
             lastName: string;
             country: string | null;
         };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -166,10 +186,12 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-    }, "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
+        numberOfContributions: number;
+        isLikedByMe: boolean;
     })[]>;
-    findByCreator(creatorId: string): Promise<(Omit<{
+    findByCreator(creatorId: string, userId?: string): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -200,6 +222,11 @@ export declare class CampaignService {
             lastName: string;
             country: string | null;
         };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -219,10 +246,12 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-    }, "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
+        numberOfContributions: number;
+        isLikedByMe: boolean;
     })[]>;
-    findOne(id: string): Promise<Omit<{
+    findOne(id: string, userId?: string): Promise<Omit<{
         donations: {
             stars: number;
         }[];
@@ -253,6 +282,11 @@ export declare class CampaignService {
             lastName: string;
             country: string | null;
         };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -272,8 +306,10 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-    }, "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
+        numberOfContributions: number;
+        isLikedByMe: boolean;
     }>;
     toggleLike(campaignId: string, userId: string): Promise<{
         liked: boolean;
@@ -313,6 +349,11 @@ export declare class CampaignService {
             lastName: string;
             country: string | null;
         };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -332,7 +373,9 @@ export declare class CampaignService {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-    }, "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
+        numberOfContributions: number;
+        isLikedByMe: boolean;
     }>;
 }

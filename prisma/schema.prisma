@@ -10,6 +10,7 @@ datasource db {
 enum UserRole {
   DONOR
   CAMPAIGN_CREATOR
+  ADMIN
 }
 
 enum CampaignCategory {
@@ -187,6 +188,7 @@ model CampaignUpdate {
   campaignId  String   @map("campign_id") @db.Char(36)
   title       String   @db.Text
   description String   @db.Text
+    status             CampaignStatus     @default(pending)
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
   campaign    Campaign @relation(fields: [campaignId], references: [id])

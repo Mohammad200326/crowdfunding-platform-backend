@@ -39,11 +39,24 @@ let CampaignService = class CampaignService {
             select: { stars: true },
         },
     };
-    enrichCampaign(campaign) {
-        const { donations, ...rest } = campaign;
+    enrichCampaign(campaign, userId) {
+        const { donations, likes, ...rest } = campaign;
         return {
             ...rest,
             raisedStars: donations.reduce((sum, d) => sum + d.stars, 0),
+            numberOfContributions: donations.length,
+            isLikedByMe: userId
+                ? (likes ?? []).some((l) => l.userId === userId)
+                : false,
+        };
+    }
+    getInclude(userId) {
+        return {
+            ...this.campaignIncludes,
+            ...this.donationsInclude,
+            likes: userId
+                ? { where: { userId }, select: { userId: true } }
+                : false,
         };
     }
     async create(createCampaignDto, user, file) {
@@ -58,11 +71,11 @@ let CampaignService = class CampaignService {
         }
         const campaign = await this.prismaService.campaign.create({
             data: dataPayload,
-            include: { ...this.campaignIncludes, ...this.donationsInclude },
+            include: this.getInclude(user.id),
         });
-        return this.enrichCampaign(campaign);
+        return this.enrichCampaign(campaign, user.id);
     }
-    async findAll(page, limit) {
+    async findAll(page, limit, userId) {
         const skip = (page - 1) * limit;
         const campaigns = await this.prismaService.campaign.findMany({
             where: {
@@ -71,14 +84,14 @@ let CampaignService = class CampaignService {
             },
             take: limit,
             skip: skip,
-            include: { ...this.campaignIncludes, ...this.donationsInclude },
+            include: this.getInclude(userId),
             orderBy: {
                 createdAt: 'desc',
             },
         });
-        return campaigns.map((c) => this.enrichCampaign(c));
+        return campaigns.map((c) => this.enrichCampaign(c, userId));
     }
-    async findByCategory(category, page, limit) {
+    async findByCategory(category, page, limit, userId) {
         const skip = (page - 1) * limit;
         const campaigns = await this.prismaService.campaign.findMany({
             where: {
@@ -88,33 +101,33 @@ let CampaignService = class CampaignService {
             },
             take: limit,
             skip: skip,
-            include: { ...this.campaignIncludes, ...this.donationsInclude },
+            include: this.getInclude(userId),
             orderBy: {
                 createdAt: 'desc',
             },
         });
-        return campaigns.map((c) => this.enrichCampaign(c));
+        return campaigns.map((c) => this.enrichCampaign(c, userId));
     }
-    async findByCreator(creatorId) {
+    async findByCreator(creatorId, userId) {
         const campaigns = await this.prismaService.campaign.findMany({
             where: {
                 creatorId: creatorId,
                 isDeleted: false,
             },
-            include: { ...this.campaignIncludes, ...this.donationsInclude },
+            include: this.getInclude(userId),
             orderBy: { createdAt: 'desc' },
         });
-        return campaigns.map((c) => this.enrichCampaign(c));
+        return campaigns.map((c) => this.enrichCampaign(c, userId));
     }
-    async findOne(id) {
+    async findOne(id, userId) {
         const campaign = await this.prismaService.campaign.findUnique({
             where: { id },
-            include: { ...this.campaignIncludes, ...this.donationsInclude },
+            include: this.getInclude(userId),
         });
         if (!campaign) {
             throw new common_1.NotFoundException(`Campaign with ID ${id} not found`);
         }
-        return this.enrichCampaign(campaign);
+        return this.enrichCampaign(campaign, userId);
     }
     async toggleLike(campaignId, userId) {
         const campaign = await this.prismaService.campaign.findUnique({
@@ -197,8 +210,8 @@ let CampaignService = class CampaignService {
         return this.enrichCampaign(await this.prismaService.campaign.update({
             where: { id },
             data: dataPayload,
-            include: { ...this.campaignIncludes, ...this.donationsInclude },
-        }));
+            include: this.getInclude(user.id),
+        }), user.id);
     }
 };
 exports.CampaignService = CampaignService;
