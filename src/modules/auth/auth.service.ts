@@ -40,7 +40,43 @@ export class AuthService {
     });
 
     // Validate (Generic error for safety)
-    if (!user || !(await this.verifyPassword(dto.password, user.password))) {
+    if (
+      !user ||
+      user.role === 'ADMIN' ||
+      !(await this.verifyPassword(dto.password, user.password))) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Generate Token
+    const payload = { sub: user.id, email: user.email, role: user.role };
+    const token = await this.jwtService.signAsync(payload);
+
+    return {
+      user: {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        country: user.country,
+      },
+      token,
+    };
+  }
+
+  // LOGIN
+  async adminLogin(dto: LoginDTO) {
+    // Find User by email
+    const user = await this.databaseService.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    // Validate (Generic error for safety)
+    if (
+      !user ||
+      user.role !== 'ADMIN' ||
+      !(await this.verifyPassword(dto.password, user.password))
+    ) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
