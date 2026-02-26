@@ -1,7 +1,8 @@
-import 'dotenv/config';
-import * as argon from 'argon2';
-import { UserRole } from '@prisma/client';
-import { DatabaseService } from '../src/modules/database/database.service';
+require('dotenv').config();
+
+const argon = require('argon2');
+const { UserRole } = require('@prisma/client');
+const { DatabaseService } = require('../src/modules/database/database.service');
 
 async function run() {
   const prisma = new DatabaseService();
