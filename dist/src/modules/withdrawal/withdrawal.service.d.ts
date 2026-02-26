@@ -2,6 +2,7 @@ import { CreateWithdrawalDto, WithdrawalResponseDto, WithdrawalBalanceDto } from
 import { DatabaseService } from '../database/database.service';
 import { StripeService } from '../stripe/stripe.service';
 import { WithdrawalStatus } from '@prisma/client';
+import { PlatformNetProfitResponseDto } from './utils/withdrawal.validation';
 export declare class WithdrawalService {
     private readonly prismaService;
     private readonly stripeService;
@@ -49,4 +50,5 @@ export declare class WithdrawalService {
     cancel(id: string, userId: string): Promise<WithdrawalResponseDto>;
     updateStatus(id: string, status: WithdrawalStatus, notes?: string): Promise<WithdrawalResponseDto>;
     findAll(status?: WithdrawalStatus): Promise<WithdrawalResponseDto[]>;
+    getPlatformNetProfit(from?: Date, to?: Date): Promise<PlatformNetProfitResponseDto>;
 }

@@ -42,6 +42,10 @@ export declare class WithdrawalController {
     findAllWithdrawals(): Promise<import("./dto/withdrawal.dto").WithdrawalResponseDto[]>;
     findByCreator(creatorId: string): Promise<import("./dto/withdrawal.dto").WithdrawalResponseDto[]>;
     findAll(user: UserResponseDTO['userData']): Promise<import("./dto/withdrawal.dto").WithdrawalResponseDto[]>;
+    platformNetProfit(q: {
+        from?: Date;
+        to?: Date;
+    }): Promise<import("./utils/withdrawal.validation").PlatformNetProfitResponseDto>;
     findOne(id: string, user: UserResponseDTO['userData']): Promise<import("./dto/withdrawal.dto").WithdrawalResponseDto>;
     updateStatus(id: string, updateDto: UpdateWithdrawalStatusDto): Promise<import("./dto/withdrawal.dto").WithdrawalResponseDto>;
     cancel(id: string, user: UserResponseDTO['userData']): Promise<import("./dto/withdrawal.dto").WithdrawalResponseDto>;

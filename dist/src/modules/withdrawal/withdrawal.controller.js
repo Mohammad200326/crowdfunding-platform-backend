@@ -48,6 +48,9 @@ let WithdrawalController = class WithdrawalController {
     findAll(user) {
         return this.withdrawalService.findAllByUser(user.id);
     }
+    platformNetProfit(q) {
+        return this.withdrawalService.getPlatformNetProfit(q.from, q.to);
+    }
     findOne(id, user) {
         return this.withdrawalService.findOne(id, user.id);
     }
@@ -173,6 +176,18 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], WithdrawalController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('platform-net-profit'),
+    (0, roles_decorator_1.Roles)(['ADMIN']),
+    withdrawal_swagger_1.PlatformNetProfitOperation,
+    withdrawal_swagger_1.PlatformNetProfitFromQuery,
+    withdrawal_swagger_1.PlatformNetProfitToQuery,
+    withdrawal_swagger_1.PlatformNetProfitResponse,
+    __param(0, (0, common_1.Query)(new zod_validation_pipe_1.ZodValidationPipe(withdrawal_validation_1.PlatformProfitQuerySchema))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], WithdrawalController.prototype, "platformNetProfit", null);
 __decorate([
     (0, common_1.Get)(':id'),
     (0, roles_decorator_1.Roles)(['CAMPAIGN_CREATOR']),

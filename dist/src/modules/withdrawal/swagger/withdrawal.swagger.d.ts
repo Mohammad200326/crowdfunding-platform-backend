@@ -20,3 +20,7 @@ export declare const BadRequestResponse: ApiResponseOptions;
 export declare const InsufficientBalanceResponse: ApiResponseOptions;
 export declare const UpdateWithdrawalStatusBody: ApiBodyOptions;
 export declare const WithdrawalStatusUpdatedResponse: ApiResponseOptions;
+export declare const PlatformNetProfitOperation: MethodDecorator;
+export declare const PlatformNetProfitFromQuery: MethodDecorator & ClassDecorator;
+export declare const PlatformNetProfitToQuery: MethodDecorator & ClassDecorator;
+export declare const PlatformNetProfitResponse: MethodDecorator & ClassDecorator;
