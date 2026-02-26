@@ -1,0 +1,10 @@
+export declare type Nullable<T = unknown> = T | null | undefined;
+export declare const nonNullableArray: <T>(arr: Nullable<T>[]) => T[];
+export declare function extractFields<T extends object, K extends keyof T>(obj: T, keys: K[]): Pick<T, K>;
+export declare function cleanObject<T extends object>(obj: T): Partial<T>;
+export declare function removeFields<T extends object, K extends keyof T>(obj: T, keys: K[]): Omit<T, K>;
+export declare function addArrayItemIfNotIncluded<T>(array: T[], newItem: T, optionalFindFunction?: (_: T) => boolean): T[];
+export declare function sumOfArrayLengths(...arrays: unknown[][]): number;
+export declare function isArrayWithLength(array?: unknown[]): boolean;
+export declare function arrayHasMatches(array1: string[], array2: string[]): boolean;
+export declare function chunkArray<T>(array: T[], size: number): T[][];
