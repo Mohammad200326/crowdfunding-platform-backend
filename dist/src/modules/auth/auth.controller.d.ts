@@ -9,8 +9,8 @@ export declare class AuthController {
     registerDonor(registerDonorDto: registerDonorDTO): Promise<{
         user: {
             donorProfile: null;
-            email: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;
@@ -41,8 +41,8 @@ export declare class AuthController {
                 id: string;
             } | null;
             preferences: import("@prisma/client").$Enums.CampaignCategory[];
-            email: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;
@@ -62,7 +62,18 @@ export declare class AuthController {
             firstName: string;
             lastName: string;
             email: string;
-            role: import("@prisma/client").$Enums.UserRole;
+            role: "DONOR" | "CAMPAIGN_CREATOR";
+            country: string | null;
+        };
+        token: string;
+    }>;
+    adminLogin(dto: LoginDTO): Promise<{
+        user: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            email: string;
+            role: "ADMIN";
             country: string | null;
         };
         token: string;

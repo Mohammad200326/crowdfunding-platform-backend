@@ -9,11 +9,11 @@ export declare class DonorController {
     constructor(donorService: DonorService);
     create(createDonorDto: CreateDonorDto): string;
     findAll(query: PaginationQueryType): Promise<import("src/types/util.types").PaginatedResult<Omit<{
-        email: string;
-        password: string;
         id: string;
+        email: string;
         firstName: string;
         lastName: string;
+        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;
@@ -27,8 +27,8 @@ export declare class DonorController {
     }, "password">>>;
     findOne(id: string): import("@prisma/client").Prisma.Prisma__DonorClient<({
         user: {
-            email: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
             dateOfBirth: Date | null;

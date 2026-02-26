@@ -33,10 +33,10 @@ export declare class CampaignCreatorService {
     private readonly logger;
     constructor(db: DatabaseService);
     createForUser(input: CreateCreatorInput, tx?: Tx): Promise<{
-        type: import("@prisma/client").$Enums.CreatorType;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        type: import("@prisma/client").$Enums.CreatorType;
         userId: string;
         institutionName: string | null;
         institutionCountry: string | null;
@@ -73,10 +73,10 @@ export declare class CampaignCreatorService {
             donorIdentityId: string | null;
         }[];
     } & {
-        type: import("@prisma/client").$Enums.CreatorType;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        type: import("@prisma/client").$Enums.CreatorType;
         userId: string;
         institutionName: string | null;
         institutionCountry: string | null;
@@ -95,8 +95,8 @@ export declare class CampaignCreatorService {
     findAll(page?: number, limit?: number): Promise<{
         data: ({
             user: {
-                email: string;
                 id: string;
+                email: string;
                 firstName: string;
                 lastName: string;
                 role: import("@prisma/client").$Enums.UserRole;
@@ -121,10 +121,10 @@ export declare class CampaignCreatorService {
                 donorIdentityId: string | null;
             }[];
         } & {
-            type: import("@prisma/client").$Enums.CreatorType;
             id: string;
             createdAt: Date;
             updatedAt: Date;
+            type: import("@prisma/client").$Enums.CreatorType;
             userId: string;
             institutionName: string | null;
             institutionCountry: string | null;
@@ -149,11 +149,11 @@ export declare class CampaignCreatorService {
     }>;
     findOne(id: string): Promise<{
         user: {
-            email: string;
-            password: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
+            password: string;
             dateOfBirth: Date | null;
             role: import("@prisma/client").$Enums.UserRole;
             country: string | null;
@@ -184,10 +184,10 @@ export declare class CampaignCreatorService {
             donorIdentityId: string | null;
         }[];
     } & {
-        type: import("@prisma/client").$Enums.CreatorType;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        type: import("@prisma/client").$Enums.CreatorType;
         userId: string;
         institutionName: string | null;
         institutionCountry: string | null;
@@ -205,11 +205,11 @@ export declare class CampaignCreatorService {
     }>;
     findByUserId(userId: string): Promise<{
         user: {
-            email: string;
-            password: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
+            password: string;
             dateOfBirth: Date | null;
             role: import("@prisma/client").$Enums.UserRole;
             country: string | null;
@@ -240,10 +240,10 @@ export declare class CampaignCreatorService {
             donorIdentityId: string | null;
         }[];
     } & {
-        type: import("@prisma/client").$Enums.CreatorType;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        type: import("@prisma/client").$Enums.CreatorType;
         userId: string;
         institutionName: string | null;
         institutionCountry: string | null;
@@ -261,11 +261,11 @@ export declare class CampaignCreatorService {
     }>;
     update(id: string, dto: UpdateCampaignCreatorDto): Promise<({
         user: {
-            email: string;
-            password: string;
             id: string;
+            email: string;
             firstName: string;
             lastName: string;
+            password: string;
             dateOfBirth: Date | null;
             role: import("@prisma/client").$Enums.UserRole;
             country: string | null;
@@ -296,10 +296,10 @@ export declare class CampaignCreatorService {
             donorIdentityId: string | null;
         }[];
     } & {
-        type: import("@prisma/client").$Enums.CreatorType;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        type: import("@prisma/client").$Enums.CreatorType;
         userId: string;
         institutionName: string | null;
         institutionCountry: string | null;

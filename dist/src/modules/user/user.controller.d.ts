@@ -5,11 +5,11 @@ export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
     create(createUserDto: CreateUserDto, avatar?: Express.Multer.File): Promise<{
-        email: string;
-        password: string;
         id: string;
+        email: string;
         firstName: string;
         lastName: string;
+        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;
@@ -22,8 +22,8 @@ export declare class UserController {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     }>;
     findAll(): Promise<{
-        email: string;
         id: string;
+        email: string;
         firstName: string;
         lastName: string;
         role: import("@prisma/client").$Enums.UserRole;
@@ -35,8 +35,8 @@ export declare class UserController {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     }[]>;
     findOne(id: string): Promise<{
-        email: string;
         id: string;
+        email: string;
         firstName: string;
         lastName: string;
         role: import("@prisma/client").$Enums.UserRole;
@@ -49,11 +49,11 @@ export declare class UserController {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     } | null>;
     update(id: string, updateUserDto: UpdateUserDto, avatar?: Express.Multer.File): Promise<{
-        email: string;
-        password: string;
         id: string;
+        email: string;
         firstName: string;
         lastName: string;
+        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;
@@ -66,11 +66,11 @@ export declare class UserController {
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
     }>;
     remove(id: string): Promise<{
-        email: string;
-        password: string;
         id: string;
+        email: string;
         firstName: string;
         lastName: string;
+        password: string;
         dateOfBirth: Date | null;
         role: import("@prisma/client").$Enums.UserRole;
         country: string | null;

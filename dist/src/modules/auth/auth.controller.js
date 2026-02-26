@@ -41,6 +41,9 @@ let AuthController = class AuthController {
     async login(dto) {
         return this.authService.login(dto);
     }
+    async adminLogin(dto) {
+        return this.authService.adminLogin(dto);
+    }
     async forgot(forgotPasswordDTO) {
         return this.passwordResetService.forgot(forgotPasswordDTO.email);
     }
@@ -101,6 +104,18 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)('login/admin'),
+    (0, public_decorator_1.IsPublic)(true),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({ summary: 'Login with email and password' }),
+    (0, swagger_1.ApiBody)({ type: auth_swagger_dto_1.LoginRequestDto }),
+    (0, swagger_1.ApiOkResponse)({ type: auth_swagger_dto_1.LoginResponseDto }),
+    __param(0, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(auth_dto_1.LoginSchema))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "adminLogin", null);
 __decorate([
     (0, common_1.Post)('password/forgot'),
     (0, public_decorator_1.IsPublic)(true),
