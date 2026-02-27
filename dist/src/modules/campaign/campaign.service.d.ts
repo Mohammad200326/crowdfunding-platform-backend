@@ -32,6 +32,7 @@ export declare class CampaignService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -92,6 +93,7 @@ export declare class CampaignService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -152,6 +154,7 @@ export declare class CampaignService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -212,6 +215,7 @@ export declare class CampaignService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -272,6 +276,7 @@ export declare class CampaignService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -339,6 +344,7 @@ export declare class CampaignService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;

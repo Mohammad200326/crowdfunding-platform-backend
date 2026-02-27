@@ -47,6 +47,7 @@ export declare class DonorService {
                 creatorId: string | null;
                 bankAccountId: string | null;
                 donorIdentityId: string | null;
+                creatorIdentityId: string | null;
             }[];
         } & {
             id: string;

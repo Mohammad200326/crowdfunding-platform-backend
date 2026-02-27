@@ -44,6 +44,7 @@ export class FileService {
     userId: string,
     kind: AssetKind,
     donorIdentityId?: string,
+    creatorIdentityId?: string,
   ): Prisma.AssetUncheckedCreateInput {
     return {
       fileId: file.fileId!,
@@ -53,6 +54,7 @@ export class FileService {
       fileType: file.mimetype,
       kind,
       donorIdentityId: donorIdentityId ?? null,
+      creatorIdentityId: creatorIdentityId ?? null,
     };
   }
 

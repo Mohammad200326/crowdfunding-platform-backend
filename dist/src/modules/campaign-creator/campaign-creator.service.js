@@ -185,7 +185,11 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
     async findOne(id) {
         const creator = await this.db.campaignCreator.findUnique({
             where: { id },
-            include: { user: true, assets: true },
+            include: {
+                user: { omit: { password: true } },
+                assets: true,
+                identity: true,
+            },
         });
         if (!creator || creator.user.isDeleted) {
             throw new common_1.NotFoundException('Creator not found');

@@ -81,7 +81,7 @@ let FileService = class FileService {
         };
         return imageKitStorage;
     }
-    createFileAssetData(file, userId, kind, donorIdentityId) {
+    createFileAssetData(file, userId, kind, donorIdentityId, creatorIdentityId) {
         return {
             fileId: file.fileId,
             fileSizeInKB: Math.floor(file.size / 1024),
@@ -90,6 +90,7 @@ let FileService = class FileService {
             fileType: file.mimetype,
             kind,
             donorIdentityId: donorIdentityId ?? null,
+            creatorIdentityId: creatorIdentityId ?? null,
         };
     }
     deleteFileFromImageKit(fileId) {

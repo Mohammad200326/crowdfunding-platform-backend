@@ -26,6 +26,7 @@ export declare class CampaignController {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -86,6 +87,7 @@ export declare class CampaignController {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -146,6 +148,7 @@ export declare class CampaignController {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -206,6 +209,7 @@ export declare class CampaignController {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -266,6 +270,7 @@ export declare class CampaignController {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;
@@ -326,6 +331,7 @@ export declare class CampaignController {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
         _count: {
             likes: number;

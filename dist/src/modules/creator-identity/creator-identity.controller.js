@@ -12,57 +12,57 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DonorIdentityController = void 0;
+exports.CreatorIdentityController = void 0;
 const common_1 = require("@nestjs/common");
-const donor_identity_service_1 = require("./donor-identity.service");
+const creator_identity_service_1 = require("./creator-identity.service");
 const platform_express_1 = require("@nestjs/platform-express");
 const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
-const donor_identity_dto_1 = require("./dto/donor-identity.dto");
+const creator_identity_dto_1 = require("./dto/creator-identity.dto");
 const swagger_1 = require("@nestjs/swagger");
-const donor_identity_swagger_dto_1 = require("./dto/donor-identity.swagger.dto");
+const creator_identity_swagger_dto_1 = require("./dto/creator-identity.swagger.dto");
 const user_decorator_1 = require("../../utils/decorators/user.decorator");
-let DonorIdentityController = class DonorIdentityController {
-    donorIdentityService;
-    constructor(donorIdentityService) {
-        this.donorIdentityService = donorIdentityService;
+let CreatorIdentityController = class CreatorIdentityController {
+    creatorIdentityService;
+    constructor(creatorIdentityService) {
+        this.creatorIdentityService = creatorIdentityService;
     }
     create(dto, user, files) {
-        return this.donorIdentityService.create(dto, user, files);
+        return this.creatorIdentityService.create(dto, user, files);
     }
-    getByDonorId(donorId) {
-        return this.donorIdentityService.getByDonorId(donorId);
+    getByCreatorId(creatorId) {
+        return this.creatorIdentityService.getByCreatorId(creatorId);
     }
-    update(donorId, dto, files) {
-        return this.donorIdentityService.updateByDonorId(donorId, dto, files);
+    update(creatorId, dto, files) {
+        return this.creatorIdentityService.updateByCreatorId(creatorId, dto, files);
     }
     remove(id) {
-        return this.donorIdentityService.remove(id);
+        return this.creatorIdentityService.remove(id);
     }
 };
-exports.DonorIdentityController = DonorIdentityController;
+exports.CreatorIdentityController = CreatorIdentityController;
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
-    (0, swagger_1.ApiBody)({ type: donor_identity_swagger_dto_1.CreateDonorIdentityFormDto }),
+    (0, swagger_1.ApiBody)({ type: creator_identity_swagger_dto_1.CreateCreatorIdentityFormDto }),
     (0, swagger_1.ApiCreatedResponse)({
         schema: {
             type: 'object',
             properties: {
                 message: {
                     type: 'string',
-                    example: 'Donor identity created successfully',
+                    example: 'Creator identity created successfully',
                 },
-                donorIdentity: {
+                creatorIdentity: {
                     type: 'object',
                     properties: {
                         id: { type: 'string', format: 'uuid' },
-                        donorId: { type: 'string', format: 'uuid' },
+                        creatorId: { type: 'string', format: 'uuid' },
                         createdAt: { type: 'string', format: 'date-time' },
                     },
-                    required: ['id', 'donorId', 'createdAt'],
+                    required: ['id', 'creatorId', 'createdAt'],
                 },
             },
-            required: ['message', 'donorIdentity'],
+            required: ['message', 'creatorIdentity'],
         },
     }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileFieldsInterceptor)([
@@ -70,32 +70,32 @@ __decorate([
         { name: 'idBack', maxCount: 1 },
         { name: 'selfieWithId', maxCount: 1 },
     ])),
-    __param(0, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(donor_identity_dto_1.CreateDonorIdentitySchema))),
+    __param(0, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(creator_identity_dto_1.CreateCreatorIdentitySchema))),
     __param(1, (0, user_decorator_1.User)()),
     __param(2, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object, Object]),
     __metadata("design:returntype", void 0)
-], DonorIdentityController.prototype, "create", null);
+], CreatorIdentityController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)(':donorId'),
-    (0, swagger_1.ApiOkResponse)({ type: donor_identity_swagger_dto_1.GetDonorIdentityByDonorResponseDto }),
-    __param(0, (0, common_1.Param)('donorId')),
+    (0, common_1.Get)(':creatorId'),
+    (0, swagger_1.ApiOkResponse)({ type: creator_identity_swagger_dto_1.GetCreatorIdentityByCreatorResponseDto }),
+    __param(0, (0, common_1.Param)('creatorId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], DonorIdentityController.prototype, "getByDonorId", null);
+], CreatorIdentityController.prototype, "getByCreatorId", null);
 __decorate([
-    (0, common_1.Patch)(':donorId'),
+    (0, common_1.Patch)(':creatorId'),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
-    (0, swagger_1.ApiBody)({ type: donor_identity_swagger_dto_1.UpdateDonorIdentityFormDto }),
+    (0, swagger_1.ApiBody)({ type: creator_identity_swagger_dto_1.UpdateCreatorIdentityFormDto }),
     (0, swagger_1.ApiOkResponse)({
         schema: {
             type: 'object',
             properties: {
                 message: {
                     type: 'string',
-                    example: 'Donor identity updated successfully',
+                    example: 'Creator identity updated successfully',
                 },
             },
             required: ['message'],
@@ -106,24 +106,24 @@ __decorate([
         { name: 'idBack', maxCount: 1 },
         { name: 'selfieWithId', maxCount: 1 },
     ])),
-    __param(0, (0, common_1.Param)('donorId')),
-    __param(1, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(donor_identity_dto_1.UpdateDonorIdentitySchema))),
+    __param(0, (0, common_1.Param)('creatorId')),
+    __param(1, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(creator_identity_dto_1.UpdateCreatorIdentitySchema))),
     __param(2, (0, common_1.UploadedFiles)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
-], DonorIdentityController.prototype, "update", null);
+], CreatorIdentityController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], DonorIdentityController.prototype, "remove", null);
-exports.DonorIdentityController = DonorIdentityController = __decorate([
-    (0, swagger_1.ApiTags)('Donor Identity'),
+], CreatorIdentityController.prototype, "remove", null);
+exports.CreatorIdentityController = CreatorIdentityController = __decorate([
+    (0, swagger_1.ApiTags)('Creator Identity'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
-    (0, common_1.Controller)('donor-identity'),
-    __metadata("design:paramtypes", [donor_identity_service_1.DonorIdentityService])
-], DonorIdentityController);
-//# sourceMappingURL=donor-identity.controller.js.map
+    (0, common_1.Controller)('creator-identity'),
+    __metadata("design:paramtypes", [creator_identity_service_1.CreatorIdentityService])
+], CreatorIdentityController);
+//# sourceMappingURL=creator-identity.controller.js.map

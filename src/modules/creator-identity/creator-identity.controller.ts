@@ -9,19 +9,19 @@ import {
   UseInterceptors,
   UploadedFiles,
 } from '@nestjs/common';
-import { DonorIdentityService } from './donor-identity.service';
+import { CreatorIdentityService } from './creator-identity.service';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import {
-  CreateDonorIdentitySchema,
-  UpdateDonorIdentitySchema,
-} from './dto/donor-identity.dto';
+  CreateCreatorIdentitySchema,
+  UpdateCreatorIdentitySchema,
+} from './dto/creator-identity.dto';
 import type {
-  CreateDonorIdentityDTO,
-  DonorIdentityUpdateFiles,
-  UpdateDonorIdentityDTO,
-  UpdateDonorIdentityResponse,
-} from './dto/donor-identity.dto';
+  CreateCreatorIdentityDTO,
+  CreatorIdentityUpdateFiles,
+  UpdateCreatorIdentityDTO,
+  UpdateCreatorIdentityResponse,
+} from './dto/creator-identity.dto';
 import {
   ApiBody,
   ApiConsumes,
@@ -31,41 +31,43 @@ import {
   ApiBearerAuth,
 } from '@nestjs/swagger';
 import {
-  CreateDonorIdentityFormDto,
-  GetDonorIdentityByDonorResponseDto,
-  UpdateDonorIdentityFormDto,
-} from './dto/donor-identity.swagger.dto';
+  CreateCreatorIdentityFormDto,
+  GetCreatorIdentityByCreatorResponseDto,
+  UpdateCreatorIdentityFormDto,
+} from './dto/creator-identity.swagger.dto';
 import { User } from 'src/utils/decorators/user.decorator';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 
-@ApiTags('Donor Identity')
+@ApiTags('Creator Identity')
 @ApiBearerAuth('access-token')
-@Controller('donor-identity')
-export class DonorIdentityController {
-  constructor(private readonly donorIdentityService: DonorIdentityService) {}
+@Controller('creator-identity')
+export class CreatorIdentityController {
+  constructor(
+    private readonly creatorIdentityService: CreatorIdentityService,
+  ) {}
 
   @Post()
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ type: CreateDonorIdentityFormDto })
+  @ApiBody({ type: CreateCreatorIdentityFormDto })
   @ApiCreatedResponse({
     schema: {
       type: 'object',
       properties: {
         message: {
           type: 'string',
-          example: 'Donor identity created successfully',
+          example: 'Creator identity created successfully',
         },
-        donorIdentity: {
+        creatorIdentity: {
           type: 'object',
           properties: {
             id: { type: 'string', format: 'uuid' },
-            donorId: { type: 'string', format: 'uuid' },
+            creatorId: { type: 'string', format: 'uuid' },
             createdAt: { type: 'string', format: 'date-time' },
           },
-          required: ['id', 'donorId', 'createdAt'],
+          required: ['id', 'creatorId', 'createdAt'],
         },
       },
-      required: ['message', 'donorIdentity'],
+      required: ['message', 'creatorIdentity'],
     },
   })
   @UseInterceptors(
@@ -76,8 +78,8 @@ export class DonorIdentityController {
     ]),
   )
   create(
-    @Body(new ZodValidationPipe(CreateDonorIdentitySchema))
-    dto: CreateDonorIdentityDTO,
+    @Body(new ZodValidationPipe(CreateCreatorIdentitySchema))
+    dto: CreateCreatorIdentityDTO,
     @User() user: UserResponseDTO['userData'],
     @UploadedFiles()
     files: {
@@ -86,25 +88,25 @@ export class DonorIdentityController {
       selfieWithId: Express.Multer.File[];
     },
   ) {
-    return this.donorIdentityService.create(dto, user, files);
+    return this.creatorIdentityService.create(dto, user, files);
   }
 
-  @Get(':donorId')
-  @ApiOkResponse({ type: GetDonorIdentityByDonorResponseDto })
-  getByDonorId(@Param('donorId') donorId: string) {
-    return this.donorIdentityService.getByDonorId(donorId);
+  @Get(':creatorId')
+  @ApiOkResponse({ type: GetCreatorIdentityByCreatorResponseDto })
+  getByCreatorId(@Param('creatorId') creatorId: string) {
+    return this.creatorIdentityService.getByCreatorId(creatorId);
   }
 
-  @Patch(':donorId')
+  @Patch(':creatorId')
   @ApiConsumes('multipart/form-data')
-  @ApiBody({ type: UpdateDonorIdentityFormDto })
+  @ApiBody({ type: UpdateCreatorIdentityFormDto })
   @ApiOkResponse({
     schema: {
       type: 'object',
       properties: {
         message: {
           type: 'string',
-          example: 'Donor identity updated successfully',
+          example: 'Creator identity updated successfully',
         },
       },
       required: ['message'],
@@ -118,16 +120,16 @@ export class DonorIdentityController {
     ]),
   )
   update(
-    @Param('donorId') donorId: string,
-    @Body(new ZodValidationPipe(UpdateDonorIdentitySchema))
-    dto: UpdateDonorIdentityDTO,
-    @UploadedFiles() files: DonorIdentityUpdateFiles,
-  ): Promise<UpdateDonorIdentityResponse> {
-    return this.donorIdentityService.updateByDonorId(donorId, dto, files);
+    @Param('creatorId') creatorId: string,
+    @Body(new ZodValidationPipe(UpdateCreatorIdentitySchema))
+    dto: UpdateCreatorIdentityDTO,
+    @UploadedFiles() files: CreatorIdentityUpdateFiles,
+  ): Promise<UpdateCreatorIdentityResponse> {
+    return this.creatorIdentityService.updateByCreatorId(creatorId, dto, files);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.donorIdentityService.remove(id);
+    return this.creatorIdentityService.remove(id);
   }
 }
