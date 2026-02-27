@@ -3,7 +3,7 @@ import type { UpdateCampaignCreatorDto } from './dto/update-campaign-creator.dto
 export declare class CampaignCreatorController {
     private readonly service;
     constructor(service: CampaignCreatorService);
-    findAll(page?: number, limit?: number): Promise<{
+    findAll(page?: number, limit?: number, type?: 'INDIVIDUAL' | 'INSTITUTION'): Promise<{
         data: ({
             user: {
                 email: string;

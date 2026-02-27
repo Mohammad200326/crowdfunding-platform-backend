@@ -24,8 +24,8 @@ let CampaignCreatorController = class CampaignCreatorController {
     constructor(service) {
         this.service = service;
     }
-    findAll(page, limit) {
-        return this.service.findAll(Number(page) || 1, Number(limit) || 10);
+    findAll(page, limit, type) {
+        return this.service.findAll(Number(page) || 1, Number(limit) || 10, type);
     }
     findOne(id) {
         return this.service.findOne(id);
@@ -45,7 +45,7 @@ __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({
         summary: 'Get all creators',
-        description: 'Returns paginated list of all active campaign creators',
+        description: 'Returns paginated list of all active campaign creators with optional type filter',
     }),
     (0, swagger_1.ApiQuery)({
         name: 'page',
@@ -60,6 +60,12 @@ __decorate([
         type: Number,
         example: 10,
         description: 'Items per page (default: 10)',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'type',
+        required: false,
+        enum: ['INDIVIDUAL', 'INSTITUTION'],
+        description: 'Filter by creator type (INDIVIDUAL OR INSTITUTION)',
     }),
     (0, swagger_1.ApiOkResponse)({
         description: 'List of creators with pagination',
@@ -87,8 +93,9 @@ __decorate([
     }),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Query)('limit')),
+    __param(2, (0, common_1.Query)('type')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number]),
+    __metadata("design:paramtypes", [Number, Number, String]),
     __metadata("design:returntype", void 0)
 ], CampaignCreatorController.prototype, "findAll", null);
 __decorate([

@@ -93,7 +93,7 @@ export declare class CampaignCreatorService {
         institutionRepresentativeSocialMedia: string | null;
         stripeAccountId: string | null;
     }>;
-    findAll(page?: number, limit?: number): Promise<{
+    findAll(page?: number, limit?: number, type?: 'INDIVIDUAL' | 'INSTITUTION'): Promise<{
         data: ({
             user: {
                 email: string;

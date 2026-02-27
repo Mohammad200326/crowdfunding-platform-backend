@@ -150,11 +150,14 @@ let CampaignCreatorService = CampaignCreatorService_1 = class CampaignCreatorSer
         this.logger.log(`Created ${dto.type} creator for user ${userId}`);
         return creator;
     }
-    async findAll(page = 1, limit = 10) {
+    async findAll(page = 1, limit = 10, type) {
         const skip = (page - 1) * limit;
         const whereClause = {
             user: { isDeleted: false },
         };
+        if (type) {
+            whereClause.type = type;
+        }
         const [creators, total] = await Promise.all([
             this.db.campaignCreator.findMany({
                 skip,
