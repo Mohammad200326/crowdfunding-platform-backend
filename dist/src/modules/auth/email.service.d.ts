@@ -1,6 +1,5 @@
 export declare class EmailService {
-    private readonly apiKey;
-    private readonly from;
+    private transporter;
     constructor();
     sendOtp(email: string, otp: string): Promise<{
         success: boolean;

@@ -284,9 +284,14 @@ __decorate([
     __metadata("design:type", String)
 ], ResetPasswordDto.prototype, "password", void 0);
 class ExpiresInResponseDto {
+    otp;
     expiresIn;
 }
 exports.ExpiresInResponseDto = ExpiresInResponseDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 12345, description: 'OTP of 5 digits' }),
+    __metadata("design:type", Number)
+], ExpiresInResponseDto.prototype, "otp", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 900, description: 'Seconds until OTP expires' }),
     __metadata("design:type", Number)

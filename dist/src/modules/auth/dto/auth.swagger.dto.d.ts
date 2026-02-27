@@ -63,6 +63,7 @@ export declare class ResetPasswordDto {
     password: string;
 }
 export declare class ExpiresInResponseDto {
+    otp: number;
     expiresIn: number;
 }
 export declare class LoginRequestDto {
