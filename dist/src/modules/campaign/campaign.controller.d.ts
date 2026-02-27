@@ -6,35 +6,24 @@ export declare class CampaignController {
     private readonly campaignService;
     constructor(campaignService: CampaignService);
     create(createCampaignDto: CreateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<Omit<{
-        likes: {
-            createdAt: Date;
-            userId: string;
-            campaignId: string;
-        }[];
-        creator: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            country: string | null;
-        };
         donations: {
             stars: number;
         }[];
         assets: {
+            url: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            creatorId: string | null;
-            userId: string | null;
-            campaignId: string | null;
-            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileId: string;
-            url: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileType: string;
             fileSizeInKB: number;
             kind: import("@prisma/client").$Enums.AssetKind;
             ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
             campaignUpdateId: string | null;
+            creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
             creatorIdentityId: string | null;
@@ -42,6 +31,17 @@ export declare class CampaignController {
         _count: {
             likes: number;
         };
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -50,9 +50,10 @@ export declare class CampaignController {
         createdAt: Date;
         updatedAt: Date;
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
-        creatorId: string;
-        title: string;
         description: string;
+        creatorId: string;
+        isActive: boolean;
+        title: string;
         longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
@@ -60,42 +61,30 @@ export declare class CampaignController {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-        isActive: boolean;
-    }, "likes" | "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
         numberOfContributions: number;
         isLikedByMe: boolean;
     }>;
     findAll(page: number, limit: number, status?: CampaignStatus, dateFrom?: string, dateTo?: string, user?: UserResponseDTO['userData']): Promise<(Omit<{
-        likes: {
-            createdAt: Date;
-            userId: string;
-            campaignId: string;
-        }[];
-        creator: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            country: string | null;
-        };
         donations: {
             stars: number;
         }[];
         assets: {
+            url: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            creatorId: string | null;
-            userId: string | null;
-            campaignId: string | null;
-            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileId: string;
-            url: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileType: string;
             fileSizeInKB: number;
             kind: import("@prisma/client").$Enums.AssetKind;
             ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
             campaignUpdateId: string | null;
+            creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
             creatorIdentityId: string | null;
@@ -103,6 +92,17 @@ export declare class CampaignController {
         _count: {
             likes: number;
         };
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -111,9 +111,10 @@ export declare class CampaignController {
         createdAt: Date;
         updatedAt: Date;
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
-        creatorId: string;
-        title: string;
         description: string;
+        creatorId: string;
+        isActive: boolean;
+        title: string;
         longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
@@ -121,42 +122,30 @@ export declare class CampaignController {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-        isActive: boolean;
-    }, "likes" | "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
         numberOfContributions: number;
         isLikedByMe: boolean;
     })[]>;
     findByCategory(category: CampaignCategory, page: number, limit: number, status?: CampaignStatus, user?: UserResponseDTO['userData']): Promise<(Omit<{
-        likes: {
-            createdAt: Date;
-            userId: string;
-            campaignId: string;
-        }[];
-        creator: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            country: string | null;
-        };
         donations: {
             stars: number;
         }[];
         assets: {
+            url: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            creatorId: string | null;
-            userId: string | null;
-            campaignId: string | null;
-            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileId: string;
-            url: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileType: string;
             fileSizeInKB: number;
             kind: import("@prisma/client").$Enums.AssetKind;
             ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
             campaignUpdateId: string | null;
+            creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
             creatorIdentityId: string | null;
@@ -164,6 +153,17 @@ export declare class CampaignController {
         _count: {
             likes: number;
         };
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -172,9 +172,10 @@ export declare class CampaignController {
         createdAt: Date;
         updatedAt: Date;
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
-        creatorId: string;
-        title: string;
         description: string;
+        creatorId: string;
+        isActive: boolean;
+        title: string;
         longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
@@ -182,42 +183,30 @@ export declare class CampaignController {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-        isActive: boolean;
-    }, "likes" | "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
         numberOfContributions: number;
         isLikedByMe: boolean;
     })[]>;
     findByCreator(creatorId: string, status?: CampaignStatus, user?: UserResponseDTO['userData']): Promise<(Omit<{
-        likes: {
-            createdAt: Date;
-            userId: string;
-            campaignId: string;
-        }[];
-        creator: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            country: string | null;
-        };
         donations: {
             stars: number;
         }[];
         assets: {
+            url: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            creatorId: string | null;
-            userId: string | null;
-            campaignId: string | null;
-            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileId: string;
-            url: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileType: string;
             fileSizeInKB: number;
             kind: import("@prisma/client").$Enums.AssetKind;
             ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
             campaignUpdateId: string | null;
+            creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
             creatorIdentityId: string | null;
@@ -225,6 +214,17 @@ export declare class CampaignController {
         _count: {
             likes: number;
         };
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -233,9 +233,10 @@ export declare class CampaignController {
         createdAt: Date;
         updatedAt: Date;
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
-        creatorId: string;
-        title: string;
         description: string;
+        creatorId: string;
+        isActive: boolean;
+        title: string;
         longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
@@ -243,42 +244,30 @@ export declare class CampaignController {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-        isActive: boolean;
-    }, "likes" | "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
         numberOfContributions: number;
         isLikedByMe: boolean;
     })[]>;
     findOne(id: string, user?: UserResponseDTO['userData']): Promise<Omit<{
-        likes: {
-            createdAt: Date;
-            userId: string;
-            campaignId: string;
-        }[];
-        creator: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            country: string | null;
-        };
         donations: {
             stars: number;
         }[];
         assets: {
+            url: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            creatorId: string | null;
-            userId: string | null;
-            campaignId: string | null;
-            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileId: string;
-            url: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileType: string;
             fileSizeInKB: number;
             kind: import("@prisma/client").$Enums.AssetKind;
             ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
             campaignUpdateId: string | null;
+            creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
             creatorIdentityId: string | null;
@@ -286,6 +275,17 @@ export declare class CampaignController {
         _count: {
             likes: number;
         };
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -294,9 +294,10 @@ export declare class CampaignController {
         createdAt: Date;
         updatedAt: Date;
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
-        creatorId: string;
-        title: string;
         description: string;
+        creatorId: string;
+        isActive: boolean;
+        title: string;
         longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
@@ -304,42 +305,30 @@ export declare class CampaignController {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-        isActive: boolean;
-    }, "likes" | "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
         numberOfContributions: number;
         isLikedByMe: boolean;
     }>;
     update(id: string, updatePayload: UpdateCampaignDto, user: UserResponseDTO['userData'], file?: Express.Multer.File): Promise<Omit<{
-        likes: {
-            createdAt: Date;
-            userId: string;
-            campaignId: string;
-        }[];
-        creator: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            country: string | null;
-        };
         donations: {
             stars: number;
         }[];
         assets: {
+            url: string;
             id: string;
             createdAt: Date;
             updatedAt: Date;
-            creatorId: string | null;
-            userId: string | null;
-            campaignId: string | null;
-            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileId: string;
-            url: string;
+            storageProviderName: import("@prisma/client").$Enums.StorageProviderName;
             fileType: string;
             fileSizeInKB: number;
             kind: import("@prisma/client").$Enums.AssetKind;
             ownerId: string;
+            userId: string | null;
+            campaignId: string | null;
             campaignUpdateId: string | null;
+            creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
             creatorIdentityId: string | null;
@@ -347,6 +336,17 @@ export declare class CampaignController {
         _count: {
             likes: number;
         };
+        creator: {
+            id: string;
+            firstName: string;
+            lastName: string;
+            country: string | null;
+        };
+        likes: {
+            createdAt: Date;
+            userId: string;
+            campaignId: string;
+        }[];
     } & {
         id: string;
         notes: string | null;
@@ -355,9 +355,10 @@ export declare class CampaignController {
         createdAt: Date;
         updatedAt: Date;
         verificationStatus: import("@prisma/client").$Enums.VerificationStatus;
-        creatorId: string;
-        title: string;
         description: string;
+        creatorId: string;
+        isActive: boolean;
+        title: string;
         longDescription: string | null;
         category: import("@prisma/client").$Enums.CampaignCategory;
         goal: number;
@@ -365,8 +366,7 @@ export declare class CampaignController {
         endDate: Date;
         motivationMessage: string;
         status: import("@prisma/client").$Enums.CampaignStatus;
-        isActive: boolean;
-    }, "likes" | "donations"> & {
+    }, "donations" | "likes"> & {
         raisedStars: number;
         numberOfContributions: number;
         isLikedByMe: boolean;
