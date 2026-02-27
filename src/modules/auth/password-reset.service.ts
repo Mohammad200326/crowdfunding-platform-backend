@@ -33,7 +33,7 @@ export class PasswordResetService {
         email,
         'forgot_password',
       );
-      await this.emailService.sendOtp(email, otp);
+      // await this.emailService.sendOtp(email, otp);
       return { otp, expiresIn };
     }
     return { message: 'Email not found!' };
