@@ -16,6 +16,7 @@ exports.CampaignUpdateController = void 0;
 const common_1 = require("@nestjs/common");
 const platform_express_1 = require("@nestjs/platform-express");
 const swagger_1 = require("@nestjs/swagger");
+const client_1 = require("@prisma/client");
 const campaign_update_service_1 = require("./campaign-update.service");
 const campaign_update_dto_1 = require("./dto/campaign-update.dto");
 const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
@@ -30,8 +31,8 @@ let CampaignUpdateController = class CampaignUpdateController {
     async create(createDto, user, files) {
         return this.campaignUpdateService.create(createDto, user.id, files);
     }
-    async findAll() {
-        return this.campaignUpdateService.findAll();
+    async findAll(status) {
+        return this.campaignUpdateService.findAll(status);
     }
     async findOne(id) {
         const update = await this.campaignUpdateService.findOne(id);
@@ -40,8 +41,8 @@ let CampaignUpdateController = class CampaignUpdateController {
         }
         return update;
     }
-    async findByCampaign(campaignId) {
-        return this.campaignUpdateService.findByCampaign(campaignId);
+    async findByCampaign(campaignId, status) {
+        return this.campaignUpdateService.findByCampaign(campaignId, status);
     }
     async update(id, updateDto, user, files) {
         return this.campaignUpdateService.update(id, updateDto, user.id, files);
@@ -91,9 +92,16 @@ __decorate([
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get all campaign updates' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'status',
+        enum: client_1.CampaignStatus,
+        required: false,
+        description: 'Filter by campaign update status',
+    }),
     (0, swagger_1.ApiOkResponse)({ description: 'List of all campaign updates' }),
+    __param(0, (0, common_1.Query)('status')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], CampaignUpdateController.prototype, "findAll", null);
 __decorate([
@@ -110,12 +118,19 @@ __decorate([
     (0, common_1.Get)('campaign/:campaignId'),
     (0, swagger_1.ApiOperation)({ summary: 'Get all updates for a specific campaign' }),
     (0, swagger_1.ApiParam)({ name: 'campaignId', type: 'string', format: 'uuid' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'status',
+        enum: client_1.CampaignStatus,
+        required: false,
+        description: 'Filter by campaign update status',
+    }),
     (0, swagger_1.ApiOkResponse)({
         description: 'List of campaign updates for the specified campaign',
     }),
     __param(0, (0, common_1.Param)('campaignId', common_1.ParseUUIDPipe)),
+    __param(1, (0, common_1.Query)('status')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], CampaignUpdateController.prototype, "findByCampaign", null);
 __decorate([

@@ -130,14 +130,25 @@ export class CampaignService {
     limit: number,
     userId?: string,
     status?: CampaignStatus,
+    dateFrom?: string,
+    dateTo?: string,
   ) {
     const skip = (page - 1) * limit;
+
+    const createdAtFilter: Prisma.DateTimeFilter = {};
+    if (dateFrom) createdAtFilter.gte = new Date(dateFrom);
+    if (dateTo) {
+      const end = new Date(dateTo);
+      end.setUTCHours(23, 59, 59, 999);
+      createdAtFilter.lte = end;
+    }
 
     const campaigns = await this.prismaService.campaign.findMany({
       where: {
         isDeleted: false,
         isActive: true,
         ...(status && { status }),
+        ...((dateFrom || dateTo) && { createdAt: createdAtFilter }),
       },
       take: limit,
       skip: skip,

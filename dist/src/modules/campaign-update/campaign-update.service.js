@@ -68,7 +68,7 @@ let CampaignUpdateService = class CampaignUpdateService {
         });
         return update;
     }
-    async findByCampaign(campaignId) {
+    async findByCampaign(campaignId, status) {
         const campaign = await this.prismaService.campaign.findUnique({
             where: { id: campaignId },
             select: { id: true, isDeleted: true },
@@ -77,7 +77,10 @@ let CampaignUpdateService = class CampaignUpdateService {
             throw new common_1.NotFoundException('Campaign not found');
         }
         return this.prismaService.campaignUpdate.findMany({
-            where: { campaignId },
+            where: {
+                campaignId,
+                ...(status && { status }),
+            },
             include: {
                 assets: true,
             },
@@ -86,8 +89,11 @@ let CampaignUpdateService = class CampaignUpdateService {
             },
         });
     }
-    async findAll() {
+    async findAll(status) {
         return this.prismaService.campaignUpdate.findMany({
+            where: {
+                ...(status && { status }),
+            },
             include: {
                 assets: true,
             },

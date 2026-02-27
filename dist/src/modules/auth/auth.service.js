@@ -197,7 +197,13 @@ let AuthService = class AuthService {
                 });
             }
             let creator = null;
-            if (dto.type === 'INSTITUTION') {
+            if (dto.type === 'INDIVIDUAL') {
+                creator = await this.campaignCreatorService.createForUser({
+                    userId: user.id,
+                    type: 'INDIVIDUAL',
+                }, tx);
+            }
+            else if (dto.type === 'INSTITUTION') {
                 creator = await this.campaignCreatorService.createForUser({
                     userId: user.id,
                     type: 'INSTITUTION',

@@ -279,10 +279,18 @@ export class AuthService {
           skipDuplicates: true,
         });
       }
-      // 2) create creator profile (optional) - only if INSTITUTION
+      // 2) create creator profile - for both INDIVIDUAL and INSTITUTION
       let creator: { id: string } | null = null;
 
-      if (dto.type === 'INSTITUTION') {
+      if (dto.type === 'INDIVIDUAL') {
+        creator = await this.campaignCreatorService.createForUser(
+          {
+            userId: user.id,
+            type: 'INDIVIDUAL',
+          },
+          tx,
+        );
+      } else if (dto.type === 'INSTITUTION') {
         creator = await this.campaignCreatorService.createForUser(
           {
             userId: user.id,

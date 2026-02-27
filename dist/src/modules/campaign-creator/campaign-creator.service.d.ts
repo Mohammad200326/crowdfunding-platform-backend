@@ -71,6 +71,7 @@ export declare class CampaignCreatorService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
     } & {
         type: import("@prisma/client").$Enums.CreatorType;
@@ -119,6 +120,7 @@ export declare class CampaignCreatorService {
                 creatorId: string | null;
                 bankAccountId: string | null;
                 donorIdentityId: string | null;
+                creatorIdentityId: string | null;
             }[];
         } & {
             type: import("@prisma/client").$Enums.CreatorType;
@@ -150,7 +152,6 @@ export declare class CampaignCreatorService {
     findOne(id: string): Promise<{
         user: {
             email: string;
-            password: string;
             id: string;
             firstName: string;
             lastName: string;
@@ -182,7 +183,18 @@ export declare class CampaignCreatorService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
+        identity: {
+            id: string;
+            notes: string | null;
+            createdAt: Date;
+            updatedAt: Date;
+            creatorId: string;
+            fullNameOnId: string;
+            idNumber: string | null;
+            reviewedAt: Date | null;
+        } | null;
     } & {
         type: import("@prisma/client").$Enums.CreatorType;
         id: string;
@@ -238,6 +250,7 @@ export declare class CampaignCreatorService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
     } & {
         type: import("@prisma/client").$Enums.CreatorType;
@@ -294,6 +307,7 @@ export declare class CampaignCreatorService {
             creatorId: string | null;
             bankAccountId: string | null;
             donorIdentityId: string | null;
+            creatorIdentityId: string | null;
         }[];
     } & {
         type: import("@prisma/client").$Enums.CreatorType;

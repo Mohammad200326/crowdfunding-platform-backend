@@ -20,7 +20,6 @@ const zod_validation_pipe_1 = require("../../pipes/zod-validation.pipe");
 const donor_identity_dto_1 = require("./dto/donor-identity.dto");
 const swagger_1 = require("@nestjs/swagger");
 const donor_identity_swagger_dto_1 = require("./dto/donor-identity.swagger.dto");
-const public_decorator_1 = require("../../utils/decorators/public.decorator");
 const user_decorator_1 = require("../../utils/decorators/user.decorator");
 let DonorIdentityController = class DonorIdentityController {
     donorIdentityService;
@@ -125,7 +124,6 @@ exports.DonorIdentityController = DonorIdentityController = __decorate([
     (0, swagger_1.ApiTags)('Donor Identity'),
     (0, swagger_1.ApiBearerAuth)('access-token'),
     (0, common_1.Controller)('donor-identity'),
-    (0, public_decorator_1.IsPublic)(true),
     __metadata("design:paramtypes", [donor_identity_service_1.DonorIdentityService])
 ], DonorIdentityController);
 //# sourceMappingURL=donor-identity.controller.js.map

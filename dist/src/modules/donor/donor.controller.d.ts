@@ -60,6 +60,7 @@ export declare class DonorController {
                 creatorId: string | null;
                 bankAccountId: string | null;
                 donorIdentityId: string | null;
+                creatorIdentityId: string | null;
             }[];
         } & {
             id: string;

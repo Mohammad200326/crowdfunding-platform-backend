@@ -35,14 +35,12 @@ import {
   GetDonorIdentityByDonorResponseDto,
   UpdateDonorIdentityFormDto,
 } from './dto/donor-identity.swagger.dto';
-import { IsPublic } from 'src/utils/decorators/public.decorator';
 import { User } from 'src/utils/decorators/user.decorator';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 
 @ApiTags('Donor Identity')
 @ApiBearerAuth('access-token')
 @Controller('donor-identity')
-@IsPublic(true)
 export class DonorIdentityController {
   constructor(private readonly donorIdentityService: DonorIdentityService) {}
 
