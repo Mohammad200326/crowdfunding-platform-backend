@@ -44,46 +44,49 @@ import {
 export class CampaignCreatorController {
   constructor(private readonly service: CampaignCreatorService) {}
 
-  //  POST /campaign-creator
-  // @Post()
-  // @HttpCode(HttpStatus.CREATED)
-  // @ApiOperation({
-  //   summary: 'Create creator profile',
-  //   description:
-  //     'Registers a user as a campaign creator. ' +
-  //     'INDIVIDUAL type auto-fills institution fields from user data. ' +
-  //     'INSTITUTION type accepts optional institution details (missing fields saved as N/A).',
-  // })
-  // @ApiBody({
-  //   description:
-  //     'Use type INDIVIDUAL for personal accounts or INSTITUTION for organizations',
-  //   schema: {
-  //     oneOf: [
-  //       { $ref: getSchemaPath(CreateIndividualCreatorDto) },
-  //       { $ref: getSchemaPath(CreateInstitutionCreatorDto) },
-  //     ],
-  //   },
-  // })
-  // @ApiCreatedResponse({
-  //   description: 'Creator profile created successfully',
-  //   type: CampaignCreatorResponseDto,
-  // })
-  // @ApiBadRequestResponse({ description: 'Invalid input or assets not found' })
-  // @ApiConflictResponse({
-  //   description: 'Creator profile already exists for this user',
-  // })
-  // create(
-  //   @Body(new ZodValidationPipe(CreateCampaignCreatorSchema))
-  //   dto: CreateCampaignCreatorDto,
-  // ) {
-  //   return this.service.create(dto);
-  // }
+  /* //  POST /campaign-creator
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Create creator profile',
+    description:
+      'Registers a user as a campaign creator. ' +
+      'INDIVIDUAL type auto-fills institution fields from user data. ' +
+      'INSTITUTION type accepts optional institution details (missing fields saved as N/A).',
+  })
+  @ApiBody({
+    description:
+      'Use type INDIVIDUAL for personal accounts or INSTITUTION for organizations',
+    schema: {
+      oneOf: [
+        { $ref: getSchemaPath(CreateIndividualCreatorDto) },
+        { $ref: getSchemaPath(CreateInstitutionCreatorDto) },
+      ],
+    },
+  })
+  @ApiCreatedResponse({
+    description: 'Creator profile created successfully',
+    type: CampaignCreatorResponseDto,
+  })
+  @ApiBadRequestResponse({ description: 'Invalid input or assets not found' })
+  @ApiConflictResponse({
+    description: 'Creator profile already exists for this user',
+  })
+  create(
+    @Body(new ZodValidationPipe(CreateCampaignCreatorSchema))
+    dto: CreateCampaignCreatorDto,
+  ) {
+    return this.service.create(dto);
+  } */
 
   //  GET /campaign-creator
+
   @Get()
   @ApiOperation({
     summary: 'Get all creators',
-    description: 'Returns paginated list of all active campaign creators',
+    description:
+      'Returns paginated list of all active campaign creators with optional type filter',
   })
   @ApiQuery({
     name: 'page',
@@ -98,6 +101,12 @@ export class CampaignCreatorController {
     type: Number,
     example: 10,
     description: 'Items per page (default: 10)',
+  })
+  @ApiQuery({
+    name: 'type',
+    required: false,
+    enum: ['INDIVIDUAL', 'INSTITUTION'],
+    description: 'Filter by creator type (INDIVIDUAL OR INSTITUTION)',
   })
   @ApiOkResponse({
     description: 'List of creators with pagination',
@@ -123,8 +132,12 @@ export class CampaignCreatorController {
       },
     },
   })
-  findAll(@Query('page') page?: number, @Query('limit') limit?: number) {
-    return this.service.findAll(Number(page) || 1, Number(limit) || 10);
+  findAll(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+    @Query('type') type?: 'INDIVIDUAL' | 'INSTITUTION',
+  ) {
+    return this.service.findAll(Number(page) || 1, Number(limit) || 10, type);
   }
 
   //  GET /campaign-creator/:id

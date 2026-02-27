@@ -286,12 +286,16 @@ export class CampaignCreatorService {
     return creator;
   }
 
-  async findAll(page = 1, limit = 10) {
+  async findAll(page = 1, limit = 10, type?: 'INDIVIDUAL' | 'INSTITUTION') {
     const skip = (page - 1) * limit;
 
     const whereClause: Prisma.CampaignCreatorWhereInput = {
       user: { isDeleted: false },
     };
+
+    if (type) {
+      whereClause.type = type;
+    }
 
     const [creators, total] = await Promise.all([
       this.db.campaignCreator.findMany({
