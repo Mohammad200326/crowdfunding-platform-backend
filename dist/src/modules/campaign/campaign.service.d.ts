@@ -76,7 +76,7 @@ export declare class CampaignService {
         id: string;
         status: CampaignStatus;
     }>;
-    findAll(page: number, limit: number, userId?: string, status?: CampaignStatus): Promise<(Omit<{
+    findAll(page: number, limit: number, userId?: string, status?: CampaignStatus, dateFrom?: string, dateTo?: string): Promise<(Omit<{
         donations: {
             stars: number;
         }[];

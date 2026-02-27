@@ -78,6 +78,18 @@ export class CampaignController {
     required: false,
     description: 'Filter by campaign status',
   })
+  @ApiQuery({
+    name: 'dateFrom',
+    required: false,
+    description: 'Filter campaigns created on or after this date (ISO 8601)',
+    example: '2025-01-01',
+  })
+  @ApiQuery({
+    name: 'dateTo',
+    required: false,
+    description: 'Filter campaigns created on or before this date (ISO 8601)',
+    example: '2025-12-31',
+  })
   @ApiOkResponse({
     description: 'List of all active and non-deleted campaigns',
     type: [CampaignResponseDto],
@@ -86,9 +98,18 @@ export class CampaignController {
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
     @Query('status') status?: CampaignStatus,
+    @Query('dateFrom') dateFrom?: string,
+    @Query('dateTo') dateTo?: string,
     @User() user?: UserResponseDTO['userData'],
   ) {
-    return this.campaignService.findAll(page, limit, user?.id, status);
+    return this.campaignService.findAll(
+      page,
+      limit,
+      user?.id,
+      status,
+      dateFrom,
+      dateTo,
+    );
   }
 
   // GET BY CATEGORY

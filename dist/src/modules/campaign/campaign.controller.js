@@ -33,8 +33,8 @@ let CampaignController = class CampaignController {
     create(createCampaignDto, user, file) {
         return this.campaignService.create(createCampaignDto, user, file);
     }
-    findAll(page, limit, status, user) {
-        return this.campaignService.findAll(page, limit, user?.id, status);
+    findAll(page, limit, status, dateFrom, dateTo, user) {
+        return this.campaignService.findAll(page, limit, user?.id, status, dateFrom, dateTo);
     }
     findByCategory(category, page, limit, status, user) {
         return this.campaignService.findByCategory(category, page, limit, user?.id, status);
@@ -77,6 +77,24 @@ __decorate([
     (0, common_1.Get)(),
     (0, public_decorator_1.IsPublic)(true),
     (0, swagger_1.ApiOperation)({ summary: 'Get all active campaigns (Feed)' }),
+    (0, swagger_1.ApiQuery)({
+        name: 'status',
+        enum: client_1.CampaignStatus,
+        required: false,
+        description: 'Filter by campaign status',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'dateFrom',
+        required: false,
+        description: 'Filter campaigns created on or after this date (ISO 8601)',
+        example: '2025-01-01',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'dateTo',
+        required: false,
+        description: 'Filter campaigns created on or before this date (ISO 8601)',
+        example: '2025-12-31',
+    }),
     (0, swagger_1.ApiOkResponse)({
         description: 'List of all active and non-deleted campaigns',
         type: [campaign_swagger_dto_1.CampaignResponseDto],
@@ -84,9 +102,11 @@ __decorate([
     __param(0, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
     __param(1, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(10), common_1.ParseIntPipe)),
     __param(2, (0, common_1.Query)('status')),
-    __param(3, (0, user_decorator_1.User)()),
+    __param(3, (0, common_1.Query)('dateFrom')),
+    __param(4, (0, common_1.Query)('dateTo')),
+    __param(5, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, String, Object]),
+    __metadata("design:paramtypes", [Number, Number, String, String, String, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "findAll", null);
 __decorate([
@@ -97,6 +117,12 @@ __decorate([
         name: 'category',
         enum: client_1.CampaignCategory,
         description: 'The category to filter by',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'status',
+        enum: client_1.CampaignStatus,
+        required: false,
+        description: 'Filter by campaign status',
     }),
     (0, swagger_1.ApiOkResponse)({
         description: 'Filtered campaigns',
@@ -117,6 +143,12 @@ __decorate([
     (0, swagger_1.ApiParam)({
         name: 'creatorId',
         description: 'UUID of the Campaign Creator (User ID)',
+    }),
+    (0, swagger_1.ApiQuery)({
+        name: 'status',
+        enum: client_1.CampaignStatus,
+        required: false,
+        description: 'Filter by campaign status',
     }),
     (0, swagger_1.ApiOkResponse)({
         description: 'List of campaigns by creator',
