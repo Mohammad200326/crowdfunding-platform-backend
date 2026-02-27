@@ -180,6 +180,9 @@ export class ResetPasswordDto {
 }
 
 export class ExpiresInResponseDto {
+  @ApiProperty({ example: 12345, description: 'OTP of 5 digits' })
+  otp!: number;
+
   @ApiProperty({ example: 900, description: 'Seconds until OTP expires' })
   expiresIn!: number;
 }

@@ -13,10 +13,12 @@ export declare class PasswordResetService {
     private readonly PURPOSE;
     constructor(userService: UserService, otpService: OtpService, authService: AuthService, emailService: EmailService, redis: Redis);
     forgot(emailRaw: string): Promise<{
+        otp: string;
         expiresIn: number;
         message?: undefined;
     } | {
         message: string;
+        otp?: undefined;
         expiresIn?: undefined;
     }>;
     verify(emailRaw: string, otp: string): Promise<{

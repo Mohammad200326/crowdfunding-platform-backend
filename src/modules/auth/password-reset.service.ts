@@ -34,7 +34,7 @@ export class PasswordResetService {
         'forgot_password',
       );
       await this.emailService.sendOtp(email, otp);
-      return { expiresIn };
+      return { otp, expiresIn };
     }
     return { message: 'Email not found!' };
   }
