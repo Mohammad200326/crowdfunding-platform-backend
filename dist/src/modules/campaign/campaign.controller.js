@@ -33,14 +33,14 @@ let CampaignController = class CampaignController {
     create(createCampaignDto, user, file) {
         return this.campaignService.create(createCampaignDto, user, file);
     }
-    findAll(page, limit, user) {
-        return this.campaignService.findAll(page, limit, user?.id);
+    findAll(page, limit, status, user) {
+        return this.campaignService.findAll(page, limit, user?.id, status);
     }
-    findByCategory(category, page, limit, user) {
-        return this.campaignService.findByCategory(category, page, limit, user?.id);
+    findByCategory(category, page, limit, status, user) {
+        return this.campaignService.findByCategory(category, page, limit, user?.id, status);
     }
-    findByCreator(creatorId, user) {
-        return this.campaignService.findByCreator(creatorId, user?.id);
+    findByCreator(creatorId, status, user) {
+        return this.campaignService.findByCreator(creatorId, user?.id, status);
     }
     findOne(id, user) {
         return this.campaignService.findOne(id, user?.id);
@@ -50,6 +50,9 @@ let CampaignController = class CampaignController {
     }
     toggleLike(id, user) {
         return this.campaignService.toggleLike(id, user.id);
+    }
+    updateStatus(id, body) {
+        return this.campaignService.updateStatus(id, body.status);
     }
     remove(id) {
         return this.campaignService.softDelete(id);
@@ -80,9 +83,10 @@ __decorate([
     }),
     __param(0, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
     __param(1, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(10), common_1.ParseIntPipe)),
-    __param(2, (0, user_decorator_1.User)()),
+    __param(2, (0, common_1.Query)('status')),
+    __param(3, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, Number, Object]),
+    __metadata("design:paramtypes", [Number, Number, String, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "findAll", null);
 __decorate([
@@ -101,9 +105,10 @@ __decorate([
     __param(0, (0, common_1.Param)('category', new common_1.ParseEnumPipe(client_1.CampaignCategory))),
     __param(1, (0, common_1.Query)('page', new common_1.DefaultValuePipe(1), common_1.ParseIntPipe)),
     __param(2, (0, common_1.Query)('limit', new common_1.DefaultValuePipe(10), common_1.ParseIntPipe)),
-    __param(3, (0, user_decorator_1.User)()),
+    __param(3, (0, common_1.Query)('status')),
+    __param(4, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Number, Number, Object]),
+    __metadata("design:paramtypes", [String, Number, Number, String, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "findByCategory", null);
 __decorate([
@@ -118,9 +123,10 @@ __decorate([
         type: [campaign_swagger_dto_1.CampaignResponseDto],
     }),
     __param(0, (0, common_1.Param)('creatorId', common_1.ParseUUIDPipe)),
-    __param(1, (0, user_decorator_1.User)()),
+    __param(1, (0, common_1.Query)('status')),
+    __param(2, (0, user_decorator_1.User)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "findByCreator", null);
 __decorate([
@@ -181,6 +187,37 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", void 0)
 ], CampaignController.prototype, "toggleLike", null);
+__decorate([
+    (0, common_1.Patch)(':id/status'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({ summary: 'Update campaign status' }),
+    (0, swagger_1.ApiParam)({ name: 'id', description: 'Campaign UUID' }),
+    (0, swagger_1.ApiBody)({
+        schema: {
+            type: 'object',
+            properties: {
+                status: { type: 'string', enum: ['pending', 'confirmed', 'rejected'] },
+            },
+            required: ['status'],
+        },
+    }),
+    (0, swagger_1.ApiOkResponse)({
+        description: 'Campaign status updated',
+        schema: {
+            type: 'object',
+            properties: {
+                id: { type: 'string' },
+                status: { type: 'string', enum: ['pending', 'confirmed', 'rejected'] },
+            },
+        },
+    }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Campaign not found' }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseUUIDPipe)),
+    __param(1, (0, common_1.Body)(new zod_validation_pipe_1.ZodValidationPipe(camaign_validation_1.updateCampaignStatusValidationSchema))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], CampaignController.prototype, "updateStatus", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),

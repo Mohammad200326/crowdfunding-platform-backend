@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
   UseInterceptors,
   UploadedFiles,
   ParseUUIDPipe,
@@ -21,10 +22,12 @@ import {
   ApiConsumes,
   ApiBody,
   ApiParam,
+  ApiQuery,
   ApiOkResponse,
   ApiCreatedResponse,
   ApiNoContentResponse,
 } from '@nestjs/swagger';
+import { CampaignStatus } from '@prisma/client';
 import { CampaignUpdateService } from './campaign-update.service';
 import {
   CreateCampaignUpdateSchema,
@@ -84,9 +87,17 @@ export class CampaignUpdateController {
 
   @Get()
   @ApiOperation({ summary: 'Get all campaign updates' })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign update status',
+  })
   @ApiOkResponse({ description: 'List of all campaign updates' })
-  async findAll(): Promise<CampaignUpdateWithAssetsDto[]> {
-    return this.campaignUpdateService.findAll();
+  async findAll(
+    @Query('status') status?: CampaignStatus,
+  ): Promise<CampaignUpdateWithAssetsDto[]> {
+    return this.campaignUpdateService.findAll(status);
   }
 
   @Get(':id')
@@ -106,13 +117,20 @@ export class CampaignUpdateController {
   @Get('campaign/:campaignId')
   @ApiOperation({ summary: 'Get all updates for a specific campaign' })
   @ApiParam({ name: 'campaignId', type: 'string', format: 'uuid' })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign update status',
+  })
   @ApiOkResponse({
     description: 'List of campaign updates for the specified campaign',
   })
   async findByCampaign(
     @Param('campaignId', ParseUUIDPipe) campaignId: string,
+    @Query('status') status?: CampaignStatus,
   ): Promise<CampaignUpdateWithAssetsDto[]> {
-    return this.campaignUpdateService.findByCampaign(campaignId);
+    return this.campaignUpdateService.findByCampaign(campaignId, status);
   }
 
   @Patch(':id')

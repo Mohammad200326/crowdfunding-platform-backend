@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z, ZodType } from 'zod';
 export declare const campaignValidationSchema: z.ZodObject<{
     title: z.ZodString;
     description: z.ZodString;
@@ -50,8 +50,16 @@ export declare const updateCampaignValidationSchema: z.ZodObject<{
     isActive: z.ZodOptional<z.ZodOptional<z.ZodCoercedBoolean<unknown>>>;
     isDeleted: z.ZodOptional<z.ZodOptional<z.ZodCoercedBoolean<unknown>>>;
 }, z.core.$strip>;
+export declare const updateCampaignStatusValidationSchema: ZodType<{
+    status: 'pending' | 'confirmed' | 'rejected';
+}>;
 export declare const campaignPaginationSchema: z.ZodObject<{
     page: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
     limit: z.ZodDefault<z.ZodCoercedNumber<unknown>>;
     title: z.ZodOptional<z.ZodString>;
+    status: z.ZodOptional<z.ZodEnum<{
+        pending: "pending";
+        confirmed: "confirmed";
+        rejected: "rejected";
+    }>>;
 }, z.core.$strip>;

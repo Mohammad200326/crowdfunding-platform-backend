@@ -30,13 +30,12 @@ let AuthGuard = class AuthGuard {
             context.getHandler(),
             context.getClass(),
         ]);
-        if (isPublic) {
-            return true;
-        }
         const req = context.switchToHttp().getRequest();
         const authHeader = req.headers.authorization;
         const jwt = authHeader?.split(' ')[1];
         if (!jwt) {
+            if (isPublic)
+                return true;
             throw new common_1.UnauthorizedException();
         }
         try {
@@ -50,6 +49,8 @@ let AuthGuard = class AuthGuard {
             };
         }
         catch {
+            if (isPublic)
+                return true;
             throw new common_1.UnauthorizedException();
         }
         return true;

@@ -1,7 +1,7 @@
 import { CampaignService } from './campaign.service';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 import type { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto';
-import { CampaignCategory } from '@prisma/client';
+import { CampaignCategory, CampaignStatus } from '@prisma/client';
 export declare class CampaignController {
     private readonly campaignService;
     constructor(campaignService: CampaignService);
@@ -66,7 +66,7 @@ export declare class CampaignController {
         numberOfContributions: number;
         isLikedByMe: boolean;
     }>;
-    findAll(page: number, limit: number, user?: UserResponseDTO['userData']): Promise<(Omit<{
+    findAll(page: number, limit: number, status?: CampaignStatus, user?: UserResponseDTO['userData']): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -127,7 +127,7 @@ export declare class CampaignController {
         numberOfContributions: number;
         isLikedByMe: boolean;
     })[]>;
-    findByCategory(category: CampaignCategory, page: number, limit: number, user?: UserResponseDTO['userData']): Promise<(Omit<{
+    findByCategory(category: CampaignCategory, page: number, limit: number, status?: CampaignStatus, user?: UserResponseDTO['userData']): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -188,7 +188,7 @@ export declare class CampaignController {
         numberOfContributions: number;
         isLikedByMe: boolean;
     })[]>;
-    findByCreator(creatorId: string, user?: UserResponseDTO['userData']): Promise<(Omit<{
+    findByCreator(creatorId: string, status?: CampaignStatus, user?: UserResponseDTO['userData']): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -373,6 +373,12 @@ export declare class CampaignController {
     }>;
     toggleLike(id: string, user: UserResponseDTO['userData']): Promise<{
         liked: boolean;
+    }>;
+    updateStatus(id: string, body: {
+        status: CampaignStatus;
+    }): Promise<{
+        id: string;
+        status: CampaignStatus;
     }>;
     remove(id: string): Promise<{
         id: string;

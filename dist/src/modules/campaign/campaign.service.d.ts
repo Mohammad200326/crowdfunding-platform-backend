@@ -1,5 +1,5 @@
 import { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto';
-import { CampaignCategory } from '@prisma/client';
+import { CampaignCategory, CampaignStatus } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { FileService } from '../file/file.service';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
@@ -72,7 +72,11 @@ export declare class CampaignService {
         numberOfContributions: number;
         isLikedByMe: boolean;
     }>;
-    findAll(page: number, limit: number, userId?: string): Promise<(Omit<{
+    updateStatus(id: string, status: CampaignStatus): Promise<{
+        id: string;
+        status: CampaignStatus;
+    }>;
+    findAll(page: number, limit: number, userId?: string, status?: CampaignStatus): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -133,7 +137,7 @@ export declare class CampaignService {
         numberOfContributions: number;
         isLikedByMe: boolean;
     })[]>;
-    findByCategory(category: CampaignCategory, page: number, limit: number, userId?: string): Promise<(Omit<{
+    findByCategory(category: CampaignCategory, page: number, limit: number, userId?: string, status?: CampaignStatus): Promise<(Omit<{
         donations: {
             stars: number;
         }[];
@@ -194,7 +198,7 @@ export declare class CampaignService {
         numberOfContributions: number;
         isLikedByMe: boolean;
     })[]>;
-    findByCreator(creatorId: string, userId?: string): Promise<(Omit<{
+    findByCreator(creatorId: string, userId?: string, status?: CampaignStatus): Promise<(Omit<{
         donations: {
             stars: number;
         }[];

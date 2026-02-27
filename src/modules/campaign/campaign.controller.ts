@@ -23,6 +23,7 @@ import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe';
 import {
   campaignValidationSchema,
   updateCampaignValidationSchema,
+  updateCampaignStatusValidationSchema,
 } from './utils/camaign.validation';
 import { UserResponseDTO } from '../auth/dto/auth.dto';
 import { User } from 'src/utils/decorators/user.decorator';
@@ -35,6 +36,7 @@ import {
   ApiTags,
   ApiBearerAuth,
   ApiParam,
+  ApiQuery,
   ApiResponse,
 } from '@nestjs/swagger';
 import {
@@ -43,7 +45,7 @@ import {
   updateCampaignApiBody,
 } from './dto/campaign.swagger.dto';
 import type { CreateCampaignDto, UpdateCampaignDto } from './dto/campaign.dto'; // Ensure this import exists
-import { CampaignCategory } from '@prisma/client';
+import { CampaignCategory, CampaignStatus } from '@prisma/client';
 import { IsPublic } from 'src/utils/decorators/public.decorator';
 
 @ApiTags('Campaigns')
@@ -70,6 +72,12 @@ export class CampaignController {
   @Get()
   @IsPublic(true)
   @ApiOperation({ summary: 'Get all active campaigns (Feed)' })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign status',
+  })
   @ApiOkResponse({
     description: 'List of all active and non-deleted campaigns',
     type: [CampaignResponseDto],
@@ -77,9 +85,10 @@ export class CampaignController {
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('status') status?: CampaignStatus,
     @User() user?: UserResponseDTO['userData'],
   ) {
-    return this.campaignService.findAll(page, limit, user?.id);
+    return this.campaignService.findAll(page, limit, user?.id, status);
   }
 
   // GET BY CATEGORY
@@ -91,6 +100,12 @@ export class CampaignController {
     enum: CampaignCategory,
     description: 'The category to filter by',
   })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign status',
+  })
   @ApiOkResponse({
     description: 'Filtered campaigns',
     type: [CampaignResponseDto],
@@ -100,9 +115,16 @@ export class CampaignController {
     category: CampaignCategory,
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('status') status?: CampaignStatus,
     @User() user?: UserResponseDTO['userData'],
   ) {
-    return this.campaignService.findByCategory(category, page, limit, user?.id);
+    return this.campaignService.findByCategory(
+      category,
+      page,
+      limit,
+      user?.id,
+      status,
+    );
   }
 
   // GET BY CREATOR
@@ -112,15 +134,22 @@ export class CampaignController {
     name: 'creatorId',
     description: 'UUID of the Campaign Creator (User ID)',
   })
+  @ApiQuery({
+    name: 'status',
+    enum: CampaignStatus,
+    required: false,
+    description: 'Filter by campaign status',
+  })
   @ApiOkResponse({
     description: 'List of campaigns by creator',
     type: [CampaignResponseDto],
   })
   findByCreator(
     @Param('creatorId', ParseUUIDPipe) creatorId: string,
+    @Query('status') status?: CampaignStatus,
     @User() user?: UserResponseDTO['userData'],
   ) {
-    return this.campaignService.findByCreator(creatorId, user?.id);
+    return this.campaignService.findByCreator(creatorId, user?.id, status);
   }
 
   @Get(':id')
@@ -180,6 +209,38 @@ export class CampaignController {
     @User() user: UserResponseDTO['userData'],
   ) {
     return this.campaignService.toggleLike(id, user.id);
+  }
+
+  @Patch(':id/status')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Update campaign status' })
+  @ApiParam({ name: 'id', description: 'Campaign UUID' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', enum: ['pending', 'confirmed', 'rejected'] },
+      },
+      required: ['status'],
+    },
+  })
+  @ApiOkResponse({
+    description: 'Campaign status updated',
+    schema: {
+      type: 'object',
+      properties: {
+        id: { type: 'string' },
+        status: { type: 'string', enum: ['pending', 'confirmed', 'rejected'] },
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'Campaign not found' })
+  updateStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(new ZodValidationPipe(updateCampaignStatusValidationSchema))
+    body: { status: CampaignStatus },
+  ) {
+    return this.campaignService.updateStatus(id, body.status);
   }
 
   @Delete(':id')
