@@ -102,10 +102,11 @@ The system is built around key entities such as:
 
 ## 👥 Team
 
+- **Mohammad Iyad Al Khudary (Team Lead)**
+- Abdelqader Anwar Safi
+- Omar Nazeeh Qalalweh    
 - Osama Ibrahim Zuraid  
-- Abdelqader Anwar Safi  
-- Omar Nazeeh Qalalweh  
-- **Mohammad Iyad Al Khudary (Team Lead)**  
+ 
 
 ---
 
